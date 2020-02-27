@@ -8,18 +8,21 @@ public class Vertex {
     private ArrayList<Edge> outgoing_edges;
 
     //Class constructor
-    public Vertex(int identifier, ArrayList<Edge> in, ArrayList<Edge> out) {
+    public Vertex(int identifier) {
         this.id = identifier;
-        this.ingoing_edges = in;
-        this.outgoing_edges = out;
+        //this.ingoing_edges = in;
+        //this.outgoing_edges = out;
     }
 
     //Functions for Vertex
-
-
+    public void addIngoingEdges(Edge x){
+        ingoing_edges.add(x);
+    }
+    public void addOutgoingEdges(Edge x){
+        outgoing_edges.add(x);
+    }
 
     //Setters and Getters
-
     public int getId() {
         return id;
     }
@@ -30,7 +33,7 @@ public class Vertex {
 
     public ArrayList<Edge> getIngoing_edges() {
         return ingoing_edges;
-    } // Basically FS()
+    }
 
     public void setIngoing_edges(ArrayList<Edge> ingoing_edges) {
         this.ingoing_edges = ingoing_edges;
@@ -42,5 +45,5 @@ public class Vertex {
 
     public void setOutgoing_edges(ArrayList<Edge> outgoing_edges) {
         this.outgoing_edges = outgoing_edges;
-    } //Basically BS()
+    }
 }

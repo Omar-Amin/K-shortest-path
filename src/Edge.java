@@ -8,15 +8,17 @@ public class Edge {
     private Vertex head;
 
     //Constructor
-    public Edge(int identifier, ArrayList<Vertex> ingoing, Vertex outgoing){
+    public Edge(int identifier){
         this.id = identifier;
         this.cost = 1; // Skal nok ændres, magter bare ikke til vi skal skrive en random cost ind hver gang
-        this.tail = ingoing;
-        this.head = outgoing;
+        //this.tail = ingoing;
+        //this.head = outgoing;
     }
 
     //Functions for Edge
-
+    public void addToTail(Vertex x){
+        tail.add(x);
+    }
 
     // Getter and setters for Edge
     public int getId() {
