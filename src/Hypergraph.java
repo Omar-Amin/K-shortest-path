@@ -27,7 +27,7 @@ public class Hypergraph {
     }
 
     //Functions for Hypergraph
-    public void setupHypergraph(int[][] matrix){
+    private void setupHypergraph(int[][] matrix){
         // Vertices on rows, edges on columns
         for (int row = 0; row < amountOfVertices; row++) {
             for (int col = 0; col < amountOfEdges; col++) {
