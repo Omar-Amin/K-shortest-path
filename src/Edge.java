@@ -4,7 +4,7 @@ public class Edge {
     //Class attributes
     private int id;
     private int cost;
-    private ArrayList<Vertex> tail;
+    private ArrayList<Vertex> tail = new ArrayList<>();
     private Vertex head;
 
     //Constructor

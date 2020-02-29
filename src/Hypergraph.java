@@ -4,21 +4,21 @@ public class Hypergraph {
     //Class attributes
     private int amountOfEdges;
     private int amountOfVertices;
-    private ArrayList<Edge> Edges;
-    private ArrayList<Vertex> Vertices;
+    private ArrayList<Edge> Edges = new ArrayList<>();
+    private ArrayList<Vertex> Vertices = new ArrayList<>();
 
     //Constructor
-    public Hypergraph(int[][] matrix, int numEdges, int numVertices){
+    public Hypergraph(int[][] matrix){
         //Generate edges and vertices from matrix
-        this.amountOfEdges = numEdges;
-        this.amountOfVertices = numVertices;
+        this.amountOfEdges = matrix[0].length;
+        this.amountOfVertices = matrix.length;
 
         //Give edges and verticies an identifier number, and add to lists
-        for (int id = 0; id < numEdges-1; id++) {
+        for (int id = 0; id < amountOfEdges; id++) {
             Edge temp = new Edge(id);
             Edges.add(temp);
         }
-        for (int id = 0; id <= numVertices-1; id++) {
+        for (int id = 0; id < amountOfVertices; id++) {
             Vertex temp = new Vertex(id);
             Vertices.add(temp);
         }
@@ -28,11 +28,9 @@ public class Hypergraph {
 
     //Functions for Hypergraph
     public void setupHypergraph(int[][] matrix){
-        int tempEdgeNum = amountOfEdges;
-        int tempVertexNum = amountOfVertices;
         // Vertices on rows, edges on columns
-        for (int row = 0; row <= tempVertexNum-1; row++) {
-            for (int col = 0; col <= tempEdgeNum-1; col++) {
+        for (int row = 0; row < amountOfVertices; row++) {
+            for (int col = 0; col < amountOfEdges; col++) {
                 if (matrix[row][col] == -1){ // -1 indicates outgoing edges
                     Vertices.get(row).addOutgoingEdges(Edges.get(col));
                     Edges.get(col).addToTail(Vertices.get(row));
@@ -42,13 +40,28 @@ public class Hypergraph {
                     if (Edges.get(col).getHead() != null) {
                         //Så har der været lavet et head før, og der må have været sket en fejl
                         // Eller en fejl i givene graf, kast error
+                        throw new IllegalArgumentException("Wrong graph input");
                     }
                     Edges.get(col).setHead(Vertices.get(row));
                 }
-                else{ // 0 indicates no edges
+                else{ // 0 indicates no edges (kan slettes)
                     continue;
                 }
             }
+        }
+    }
+
+    public void printHypergraph(){
+        for (Edge edge:Edges) {
+            System.out.println("Edge id: " + (edge.getId()+1));
+            System.out.println("Edge out-going: " + (edge.getHead().getId()+1));
+            String s = "";
+            for (Vertex vertex :edge.getTail()) {
+                s += (vertex.getId()+1) + ", ";
+            }
+            s = s.substring(0,s.length()-2);
+            System.out.println("Edge in-going " + s);
+            System.out.println("____________________");
         }
     }
 

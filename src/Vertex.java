@@ -4,8 +4,8 @@ public class Vertex {
 
     // Class attributes
     private int id;
-    private ArrayList<Edge> ingoing_edges;
-    private ArrayList<Edge> outgoing_edges;
+    private ArrayList<Edge> ingoing_edges = new ArrayList<>();
+    private ArrayList<Edge> outgoing_edges = new ArrayList<>();
 
     //Class constructor
     public Vertex(int identifier) {
