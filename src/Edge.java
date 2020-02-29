@@ -11,8 +11,6 @@ public class Edge {
     public Edge(int identifier){
         this.id = identifier;
         this.cost = 1; // Skal nok ændres, magter bare ikke til vi skal skrive en random cost ind hver gang
-        //this.tail = ingoing;
-        //this.head = outgoing;
     }
 
     //Functions for Edge

@@ -4,14 +4,13 @@ public class Vertex {
 
     // Class attributes
     private int id;
+    private int cost;
     private ArrayList<Edge> ingoing_edges = new ArrayList<>();
     private ArrayList<Edge> outgoing_edges = new ArrayList<>();
 
     //Class constructor
     public Vertex(int identifier) {
         this.id = identifier;
-        //this.ingoing_edges = in;
-        //this.outgoing_edges = out;
     }
 
     //Functions for Vertex
@@ -45,5 +44,13 @@ public class Vertex {
 
     public void setOutgoing_edges(ArrayList<Edge> outgoing_edges) {
         this.outgoing_edges = outgoing_edges;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 }
