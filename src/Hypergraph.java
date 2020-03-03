@@ -42,6 +42,11 @@ public class Hypergraph {
 
         for (int row = 0; row < amountOfVertices; row++) {
             for (int col = 0; col < amountOfEdges; col++) {
+                // skip checking rules since 0 means nothing goes in or out
+                if(matrix[row][col] == 0){
+                    continue;
+                }
+
                 if (matrix[row][col] == -1){ // -1 indicates outgoing edges
                     Vertices.get(row).addOutgoingEdges(Edges.get(col));
                     Edges.get(col).addToTail(Vertices.get(row));
@@ -54,6 +59,7 @@ public class Hypergraph {
                     }
                     Edges.get(col).setHead(Vertices.get(row));
                 }
+
                 // checker for each the edges, it must contain at least one tail and
                 // only one head, which is done by checking an boolean array and if
                 // all edges hold the rule then it is a valid graph
@@ -62,9 +68,7 @@ public class Hypergraph {
                     edgesChecked++;
                     currentlyChecked[col] = true;
                 }
-                else{ // 0 indicates no edges (kan slettes)
-                    continue;
-                }
+
             }
         }
 
