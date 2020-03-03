@@ -37,7 +37,6 @@ public class Hypergraph {
      * @param matrix: The graph represented as a matrix.
      * */
     private void setupHypergraph(int[][] matrix){
-        boolean checker = false;
         int edgesChecked = 0;
         boolean[] currentlyChecked = new boolean[amountOfEdges];
 
