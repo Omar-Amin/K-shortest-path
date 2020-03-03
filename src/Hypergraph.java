@@ -50,8 +50,6 @@ public class Hypergraph {
                     // if a head already exist, it means that the edge has more than
                     // two heads, which doesn't make it a b-graph
                     if (Edges.get(col).getHead() != null) {
-                        //Så har der været lavet et head før, og der må have været sket en fejl
-                        // Eller en fejl i givene graf, kast error
                         throw new IllegalArgumentException("Wrong graph input, not a B-hypergraph");
                     }
                     Edges.get(col).setHead(Vertices.get(row));
