@@ -9,6 +9,7 @@ public class Vertex {
     private ArrayList<Edge> outgoing_edges = new ArrayList<>();
 
     //Class constructor
+    //TODO: In the future add a cost to the object input
     public Vertex(int identifier) {
         this.id = identifier;
     }
