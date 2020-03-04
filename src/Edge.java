@@ -4,6 +4,7 @@ public class Edge {
     //Class attributes
     private int id;
     private int cost;
+    private int kj; // number of nodes belonging to the tail of this edge
     private ArrayList<Vertex> tail = new ArrayList<>();
     private Vertex head = null;
 
@@ -51,4 +52,8 @@ public class Edge {
     public void setHead(Vertex head) {
         this.head = head;
     }
+
+    public int getKj() { return kj; }
+
+    public void setKj(int kj) { this.kj = kj; }
 }
