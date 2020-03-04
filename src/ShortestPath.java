@@ -57,9 +57,6 @@ public class ShortestPath {
             if (vertex.getPredecessor() != null) { // If the vertex doesn't have a predecessor it hasn't been visited.
                 getPath(source, vertex);
             }
-            else {
-                return;
-            }
         }
     }
 }
