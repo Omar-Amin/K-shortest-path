@@ -6,8 +6,9 @@ public class ShortestPath {
     //Hypergraph er det samme som hyperpath
     //Class attributes
     private PriorityQueue<Vertex> pq = new PriorityQueue<>();
+    private ArrayList<Edge> path = new ArrayList<>();
 
-    private Hypergraph SBT(Hypergraph hypergraph, Vertex source, Vertex target){
+    private ArrayList<Edge> SBT(Hypergraph hypergraph, Vertex source, Vertex target){
         for (Vertex vertex : hypergraph.getVertices()) {
             vertex.setCost(Integer.MAX_VALUE);
         }
@@ -22,19 +23,20 @@ public class ShortestPath {
                 edge.setKj(edge.getKj()+1); //legal?
                 if (edge.getKj() == edge.getTail().size()) {
                     if (u == target) {
-                        // Vi har fundet vores target, returner path
+                        getPath(source, u); // Array of a path of edges, perhaps return it?
+                        return path;
                     }
                     int f = costFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if (!pq.contains(y)){ // if pq doesn't contain head of current edge
                         pq.add(y);
                     }
-                    y.setCost(edge.getCost() + f);
+                    y.setCost(f);
                     y.setPredecessor(edge);
                 }
             }
         }
-        return hypergraph;
+        throw new IllegalArgumentException("Couldn't find a path from source to target");
     }
 
     private int costFunction(Edge edge){
@@ -46,28 +48,18 @@ public class ShortestPath {
         return edgeCost + edgeTailCost;
     }
 
-    private ArrayList<Edge> getPath(Vertex source, Vertex target){
-        ArrayList<Edge> path = new ArrayList<>();
-        Vertex tempTarget = target;
-        while (true) {
-            for (Edge edge : source.getOutgoing_edges()) {
-                if (target.getPredecessor() == edge) {
-                    return path;
-                }
-            }
-            path.add(target.getPredecessor());
+    private void getPath(Vertex source, Vertex target){
+        path.add(target.getPredecessor());
+        if (target == source) {
+            return;
         }
-    }
-
-    private Vertex getCheapestVertex(Edge edge){
-        Vertex cheapestVert = new Vertex(Integer.MAX_VALUE); // Skal give den et ID...
-        cheapestVert.setCost(Integer.MAX_VALUE);
-        for (Vertex vertex : edge.getTail()){
-            if (vertex.getCost() < cheapestVert.getCost()) {
-                cheapestVert = vertex;
+        for (Vertex vertex : target.getPredecessor().getTail()) {
+            if (vertex.getPredecessor() != null) { // If the vertex doesn't have a predecessor it hasn't been visited.
+                getPath(source, vertex);
+            }
+            else {
+                return;
             }
         }
-        return cheapestVert;
     }
-
 }
