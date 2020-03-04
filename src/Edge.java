@@ -13,7 +13,7 @@ public class Edge {
     //TODO: Add a cost in the near future (as argument to the object)
     public Edge(int identifier){
         this.id = identifier;
-        this.cost = 1; // Skal nok ændres, magter bare ikke til vi skal skrive en random cost ind hver gang
+        this.cost = 0; // Skal nok ændres, magter bare ikke til vi skal skrive en random cost ind hver gang
     }
 
     //Functions for Edge

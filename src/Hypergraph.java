@@ -47,10 +47,10 @@ public class Hypergraph {
                     continue;
                 }
 
-                if (matrix[row][col] == -1){ // -1 indicates outgoing edges
+                if (matrix[row][col] < 0){ // -1 indicates outgoing edges
                     Vertices.get(row).addOutgoingEdges(Edges.get(col));
                     Edges.get(col).addToTail(Vertices.get(row));
-                } else if (matrix[row][col] == 1) { // 1 indicates ingoing edges
+                } else if (matrix[row][col] > 0) { // 1 indicates ingoing edges
                     Vertices.get(row).addIngoingEdges(Edges.get(col));
                     // if a head already exist, it means that the edge has more than
                     // two heads, which doesn't make it a b-graph
@@ -58,6 +58,10 @@ public class Hypergraph {
                         throw new IllegalArgumentException("Wrong graph input, not a B-hypergraph");
                     }
                     Edges.get(col).setHead(Vertices.get(row));
+                    if(Edges.get(col).getCost() == 0){
+                        Edges.get(col).setCost(matrix[row][col]);
+
+                    }
                 }
 
                 // checker for each the edges, it must contain at least one tail and

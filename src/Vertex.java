@@ -13,6 +13,7 @@ public class Vertex {
     //TODO: In the future add a cost to the object input
     public Vertex(int identifier) {
         this.id = identifier;
+        this.cost = 0;
     }
 
     //Functions for Vertex
