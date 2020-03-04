@@ -15,18 +15,19 @@ public class ShortestPath {
         for (Edge edge : hypergraph.getEdges()) {
             edge.setKj(0);
         }
+        source.setCost(0);
         queue.add(source);
         while (queue.size() > 0) {
             Vertex u = queue.poll(); //Retrieves and removes first element
-            for (Edge ingoingEdge : u.getIngoing_edges()) {
-                ingoingEdge.setKj(ingoingEdge.getKj()+1); //legal?
-                if (ingoingEdge.getKj() == ingoingEdge.getTail().size()) {
+            for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
+                edge.setKj(edge.getKj()+1); //legal?
+                if (edge.getKj() == edge.getTail().size()) {
                     int f = 0; // Some cost function
-                    Vertex y = ingoingEdge.getHead();
+                    Vertex y = edge.getHead();
                     if (!queue.contains(y)){ // if queue doesn't contain head of current edge
                         queue.add(y);
                     }
-                    y.setCost(ingoingEdge.getCost() + f);
+                    y.setCost(edge.getCost() + f);
                     // Predecessor of y should be updated
                 }
             }
