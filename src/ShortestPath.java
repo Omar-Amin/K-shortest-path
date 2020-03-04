@@ -1,9 +1,6 @@
 import java.util.PriorityQueue;
 
 public class ShortestPath {
-    public ShortestPath(Hypergraph h, Vertex source){
-        SBT(h);
-    }
     //Hypergraph er det samme som hyperpath
     //Class attributes
     private PriorityQueue<Vertex> queue;
