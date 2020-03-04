@@ -5,6 +5,7 @@ public class Vertex {
     // Class attributes
     private int id;
     private int cost;
+    private Edge predecessor;
     private ArrayList<Edge> ingoing_edges = new ArrayList<>();
     private ArrayList<Edge> outgoing_edges = new ArrayList<>();
 
@@ -54,4 +55,8 @@ public class Vertex {
     public void setCost(int cost) {
         this.cost = cost;
     }
+
+    public Edge getPredecessor() { return predecessor; }
+
+    public void setPredecessor(Edge predecessor) { this.predecessor = predecessor; }
 }

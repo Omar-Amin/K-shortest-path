@@ -5,6 +5,7 @@ public class Edge {
     private int id;
     private int cost;
     private int kj; // number of nodes belonging to the tail of this edge
+    private Vertex predecessor;
     private ArrayList<Vertex> tail = new ArrayList<>();
     private Vertex head = null;
 
@@ -56,4 +57,8 @@ public class Edge {
     public int getKj() { return kj; }
 
     public void setKj(int kj) { this.kj = kj; }
+
+    public Vertex getPredecessor() { return predecessor; }
+
+    public void setPredecessor(Vertex predecessor) { this.predecessor = predecessor; }
 }

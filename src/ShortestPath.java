@@ -1,9 +1,11 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class ShortestPath {
     //Hypergraph er det samme som hyperpath
     //Class attributes
-    private PriorityQueue<Vertex> queue;
+    private PriorityQueue<Vertex> pq = new PriorityQueue<>();
 
     private Hypergraph SBT(Hypergraph hypergraph, Vertex source, Vertex target){
         for (Vertex vertex : hypergraph.getVertices()) {
@@ -13,22 +15,59 @@ public class ShortestPath {
             edge.setKj(0);
         }
         source.setCost(0);
-        queue.add(source);
-        while (queue.size() > 0) {
-            Vertex u = queue.poll(); //Retrieves and removes first element
+        pq.add(source);
+        while (pq.size() > 0) {
+            Vertex u = pq.poll(); //Retrieves and removes first element
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
                 edge.setKj(edge.getKj()+1); //legal?
                 if (edge.getKj() == edge.getTail().size()) {
-                    int f = 0; // Some cost function
+                    if (u == target) {
+                        // Vi har fundet vores target, returner path
+                    }
+                    int f = costFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
-                    if (!queue.contains(y)){ // if queue doesn't contain head of current edge
-                        queue.add(y);
+                    if (!pq.contains(y)){ // if pq doesn't contain head of current edge
+                        pq.add(y);
                     }
                     y.setCost(edge.getCost() + f);
-                    // Predecessor of y should be updated
+                    y.setPredecessor(edge);
                 }
             }
         }
         return hypergraph;
     }
+
+    private int costFunction(Edge edge){
+        int edgeCost = edge.getCost();
+        int edgeTailCost = 0;
+        for (Vertex v : edge.getTail()) {
+            edgeTailCost =+ v.getCost();
+        }
+        return edgeCost + edgeTailCost;
+    }
+
+    private ArrayList<Edge> getPath(Vertex source, Vertex target){
+        ArrayList<Edge> path = new ArrayList<>();
+        Vertex tempTarget = target;
+        while (true) {
+            for (Edge edge : source.getOutgoing_edges()) {
+                if (target.getPredecessor() == edge) {
+                    return path;
+                }
+            }
+            path.add(target.getPredecessor());
+        }
+    }
+
+    private Vertex getCheapestVertex(Edge edge){
+        Vertex cheapestVert = new Vertex(Integer.MAX_VALUE); // Skal give den et ID...
+        cheapestVert.setCost(Integer.MAX_VALUE);
+        for (Vertex vertex : edge.getTail()){
+            if (vertex.getCost() < cheapestVert.getCost()) {
+                cheapestVert = vertex;
+            }
+        }
+        return cheapestVert;
+    }
+
 }
