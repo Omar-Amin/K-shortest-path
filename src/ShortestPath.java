@@ -49,11 +49,13 @@ public class ShortestPath {
                 if (edge.getKj() == edge.getTail().size()) {
                     int f = costFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
-                    if (!pq.contains(y)){ // if pq doesn't contain head of current edge
-                        pq.add(y);
+                    if(y.getCost() > f){
+                        if (!pq.contains(y)){ // if pq doesn't contain head of current edge
+                            pq.add(y);
+                        }
+                        y.setCost(f);
+                        y.setPredecessor(edge);
                     }
-                    y.setCost(f);
-                    y.setPredecessor(edge);
                 }
             }
         }
