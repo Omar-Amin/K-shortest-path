@@ -7,27 +7,8 @@ public class Hypergraph {
     private ArrayList<Edge> Edges = new ArrayList<>();
     private ArrayList<Vertex> Vertices = new ArrayList<>();
 
-    /**
-     * Constructor for a hypergraph
-     *
-     * @param matrix: The graph represented as a matrix.
-     * */
-    public Hypergraph(int[][] matrix){
-        //Generate edges and vertices from matrix
-        this.amountOfEdges = matrix[0].length;
-        this.amountOfVertices = matrix.length;
-
-        //Give edges and verticies an identifier number, and add to lists
-        for (int id = 0; id < amountOfEdges; id++) {
-            Edge edge = new Edge(id);
-            Edges.add(edge);
-        }
-        for (int id = 0; id < amountOfVertices; id++) {
-            Vertex vertex = new Vertex(id);
-            Vertices.add(vertex);
-        }
-        //Set the vertices in and outgoing edges, and edges tail and head
-        setupHypergraph(matrix);
+    // constructor
+    public Hypergraph(){
     }
 
     /**
@@ -36,7 +17,7 @@ public class Hypergraph {
      *
      * @param matrix: The graph represented as a matrix.
      * */
-    private void setupHypergraph(int[][] matrix){
+    private Hypergraph setupHypergraph(int[][] matrix){
         int edgesChecked = 0;
         boolean[] currentlyChecked = new boolean[amountOfEdges];
 
@@ -79,6 +60,48 @@ public class Hypergraph {
         if(edgesChecked != amountOfEdges){
             throw new IllegalArgumentException("Wrong graph input, all edges must contain at least one edge and one head");
         }
+        return this;
+    }
+
+    /**
+     * Create hypergraph by taking a matrix as input
+     * @param matrix
+     * */
+    public Hypergraph matrixInput(int[][] matrix){
+        //Generate edges and vertices from matrix
+        this.amountOfEdges = matrix[0].length;
+        this.amountOfVertices = matrix.length;
+
+        //Give edges and verticies an identifier number, and add to lists
+        for (int id = 0; id < amountOfEdges; id++) {
+            Edge edge = new Edge(id);
+            Edges.add(edge);
+        }
+        for (int id = 0; id < amountOfVertices; id++) {
+            Vertex vertex = new Vertex(id);
+            Vertices.add(vertex);
+        }
+
+        return setupHypergraph(matrix);
+    }
+
+    /**
+     * Create hypergraph by taking a list of edges as input. Primarily used
+     * after finding the shortest path.
+     * @param edges: Has to be as type ArrayList<Edge>
+     * */
+    //TODO: Return error if it is not a valid path (check rojin's definition)
+    public Hypergraph edgesInput(ArrayList<Edge> edges){
+        this.Edges = edges;
+        for (int i = 0; i < edges.size()-1; i++) {
+            Edge edge = Edges.get(i);
+            for (Vertex v :edge.getTail()) {
+                if(!Vertices.contains(v)){
+                    Vertices.add(v);
+                }
+            }
+        }
+        return this;
     }
 
     /**

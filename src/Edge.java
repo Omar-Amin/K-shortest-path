@@ -4,7 +4,7 @@ public class Edge {
     //Class attributes
     private int id;
     private int cost;
-    private int kj; // number of nodes belonging to the tail of this edge
+    private int kj = 0; // number of nodes belonging to the tail of this edge
     private Vertex predecessor;
     private ArrayList<Vertex> tail = new ArrayList<>();
     private Vertex head = null;
