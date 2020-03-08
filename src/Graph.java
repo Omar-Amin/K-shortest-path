@@ -105,4 +105,25 @@ public class Graph {
         return edgeTable[edgeLookup[edge]];
     }
 
+    public int[] FS(int vertex){
+        int startIndex = vertexLookup[vertex];
+        int nextIndex;
+        if(vertex+1 < vertexLookup.length) nextIndex=vertexLookup[vertex+1];
+        else nextIndex = vertexTable.length;
+        int size = nextIndex - startIndex;
+        int ingoingEdges = vertexTable[startIndex];
+        int outgoingEdges = size - ingoingEdges - 1;
+        int[] ret = new int[outgoingEdges]; //Every edge got exactly one head.
+        startIndex += ingoingEdges+1;
+        int edge;
+        for(int i = 0; i<outgoingEdges;i++){
+            edge = vertexTable[startIndex+i];
+            ret[i] = head(edge);
+        }
+        return ret;
+    }
+    public int[] BS(){
+        return new int[2];
+    }
+
 }
