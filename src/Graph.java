@@ -1,10 +1,10 @@
-import java.util.ArrayList;
-
 public class Graph {
     int[] edgeLookup;
     int[] vertexLookup;
     int[] vertexTable;
     int[] edgeTable;
+
+    //Constructor for the graph class
     public Graph(int[][] Matrix){
         int verticesCount = Matrix.length;
         int edgesCount = Matrix[0].length;
@@ -53,19 +53,56 @@ public class Graph {
             for(int edge = 0; edge < edgesCount;edge++) {
                 int indicator =  Matrix[vertex][edge];
                 if(indicator == 1){
-                    vertexIndex = tempVertexTables[vertex][0][0];
+                    vertexIndex = tempVertexTables[vertex][0][0]++;
                     tempVertexTables[vertex][0][vertexIndex] = edge;
                     tempEdgeTables[edge][1] = vertex; //Head is always on index 1
-                    tempVertexTables[vertex][0][0]++;
                 } else if (indicator==-1){
-                    vertexIndex = tempVertexTables[vertex][1][0];
+                    vertexIndex = tempVertexTables[vertex][1][0]++;
                     tempVertexTables[vertex][1][vertexIndex] = edge;
-                    edgeIndex = tempEdgeTables[edge][0];
+                    edgeIndex = tempEdgeTables[edge][0]++;
                     tempEdgeTables[edge][edgeIndex] = vertex;
-                    tempEdgeTables[edge][0]++;
-                    tempVertexTables[vertex][1][0]++;
                 }
             }
         }
+        //Flatten the tempVertexTable
+        int writeIndex = 0;
+        vertexTable = new int[count+verticesCount];
+        for (int vertex = 0; vertex < verticesCount;vertex++) {
+            vertexLookup[vertex] = writeIndex;
+                vertexTable[writeIndex++] = tempVertexTables[vertex][0].length-1;
+            for(int i = 1; i < tempVertexTables[vertex][0].length;i++){
+                vertexTable[writeIndex++] = tempVertexTables[vertex][0][i];
+            }
+            for(int i = 1; i < tempVertexTables[vertex][1].length;i++){
+                vertexTable[writeIndex++] = tempVertexTables[vertex][1][i];
+            }
+        }
+        //Flatten the tempEdgeTable
+        writeIndex = 0;
+        edgeTable = new int[count];
+        for (int edge = 0; edge < edgesCount; edge++) {
+            edgeLookup[edge] = writeIndex;
+            for (int i = 1; i<tempEdgeTables[edge].length;i++){
+                edgeTable[writeIndex++] = tempEdgeTables[edge][i];
+            }
+        }
     }
+
+    public int[] tail(int edge){
+        int startIndex = edgeLookup[edge]+1; //First index is always 1 head
+        int nextIndex;
+        if(edge+1 < edgeLookup.length) nextIndex = edgeLookup[edge+1];
+        else nextIndex = edgeTable.length;
+        int size = nextIndex - startIndex;
+        int[] ret = new int[size];
+        for(int i = 0; i<size;i++){
+            ret[i] = edgeTable[startIndex+i];
+        }
+        return ret;
+    }
+
+    public int head(int edge){
+        return edgeTable[edgeLookup[edge]];
+    }
+
 }
