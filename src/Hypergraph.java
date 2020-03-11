@@ -24,7 +24,7 @@ public class Hypergraph {
         for (int row = 0; row < amountOfVertices; row++) {
             for (int col = 0; col < amountOfEdges; col++) {
                 // skip checking rules since 0 means nothing goes in or out
-                if(matrix[row][col] == 0){
+                if(matrix[row][col] == -2){
                     continue;
                 }
 
