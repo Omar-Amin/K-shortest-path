@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Graph {
     int[] edgeLookup;
     int[] vertexLookup;
@@ -10,80 +12,46 @@ public class Graph {
         int edgesCount = Matrix[0].length;
         vertexLookup = new int[verticesCount];
         edgeLookup = new int[edgesCount];
-        int[][][] tempVertexTables = new int[verticesCount][][];
-        int[][] tempEdgeTables = new int[edgesCount][];
         int[] edgeIndicatorCount = new int[edgesCount];
-        for(int i = 0; i<edgesCount;i++) edgeIndicatorCount[i] = 0;
-        int vertexInCount;
-        int vertexOutCount;
+        int[] vertexIngoingCount = new int[verticesCount];
         int count = 0;
-        //Parse the graph for generation of the int arrays
+        //Parse the graph matrix to count for generation of the int arrays
         for(int vertex = 0; vertex < verticesCount;vertex++){
-            vertexInCount = 0;
-            vertexOutCount = 0;
             for(int edge = 0; edge < edgesCount;edge++){
                 int indicator =  Matrix[vertex][edge];
                 if(indicator == 1){
-                    vertexInCount++;
-                    edgeIndicatorCount[edge]++;
                     count++;
+                    vertexIngoingCount[vertex]++;
                 }
                 else if (indicator==-1){
-                    vertexOutCount++;
-                    edgeIndicatorCount[edge]++;
                     count++;
+                    edgeIndicatorCount[edge]++;
                 }
             }
-            //Initialize the correct size of the tempVertexTable
-            tempVertexTables[vertex] = new int[2][];
-            tempVertexTables[vertex][0] = new int[vertexInCount+1]; //First index indicates the next index to write in the table
-            tempVertexTables[vertex][1] = new int[vertexOutCount+1];
-            tempVertexTables[vertex][0][0] = 1;
-            tempVertexTables[vertex][1][0] = 1;
-
-            //Initialize the correct size of the tempEdgeTable
-            for(int i = 0; i<edgesCount;i++){
-                tempEdgeTables[i] = new int[edgeIndicatorCount[i]+1]; //First index indicates the next index to write in the table
-                tempEdgeTables[i][0] = 2;
-            }
         }
-        int vertexIndex;
-        int edgeIndex;
-        for(int vertex = 0; vertex < verticesCount;vertex++){
-            for(int edge = 0; edge < edgesCount;edge++) {
-                int indicator =  Matrix[vertex][edge];
+        edgeTable = new int[count]; //[Head, Tail...]
+        vertexTable = new int[count+verticesCount]; //[IngoingCount]
+        for (int i = 1; i < edgesCount; i++) {
+            edgeLookup[i] = edgeLookup[i-1] + edgeIndicatorCount[i-1] + 1;
+        }
+        int ingoingCount,nextWrite;
+        int outgoingIndex = 0;
+        for(int vertex = 0; vertex < verticesCount;vertex++) {
+            vertexLookup[vertex] = outgoingIndex;
+            ingoingCount = vertexIngoingCount[vertex];
+            vertexTable[outgoingIndex] = ingoingCount;
+            outgoingIndex += ingoingCount+1;
+            for (int edge = 0; edge < edgesCount; edge++) {
+                int indicator = Matrix[vertex][edge];
                 if(indicator == 1){
-                    vertexIndex = tempVertexTables[vertex][0][0]++;
-                    tempVertexTables[vertex][0][vertexIndex] = edge;
-                    tempEdgeTables[edge][1] = vertex; //Head is always on index 1
-                } else if (indicator==-1){
-                    vertexIndex = tempVertexTables[vertex][1][0]++;
-                    tempVertexTables[vertex][1][vertexIndex] = edge;
-                    edgeIndex = tempEdgeTables[edge][0]++;
-                    tempEdgeTables[edge][edgeIndex] = vertex;
+                    edgeTable[edgeLookup[edge]] = vertex; //Only one head
+                    nextWrite = vertexLookup[vertex] + ingoingCount--;
+                    vertexTable[nextWrite] = edge;
+                } else if(indicator == -1){
+                      nextWrite = (edgeIndicatorCount[edge]--) + edgeLookup[edge];
+                    edgeTable[nextWrite] = vertex;
+                    vertexTable[outgoingIndex++] = edge;
                 }
-            }
-        }
-        //Flatten the tempVertexTable
-        int writeIndex = 0;
-        vertexTable = new int[count+verticesCount];
-        for (int vertex = 0; vertex < verticesCount;vertex++) {
-            vertexLookup[vertex] = writeIndex;
-                vertexTable[writeIndex++] = tempVertexTables[vertex][0].length-1;
-            for(int i = 1; i < tempVertexTables[vertex][0].length;i++){
-                vertexTable[writeIndex++] = tempVertexTables[vertex][0][i];
-            }
-            for(int i = 1; i < tempVertexTables[vertex][1].length;i++){
-                vertexTable[writeIndex++] = tempVertexTables[vertex][1][i];
-            }
-        }
-        //Flatten the tempEdgeTable
-        writeIndex = 0;
-        edgeTable = new int[count];
-        for (int edge = 0; edge < edgesCount; edge++) {
-            edgeLookup[edge] = writeIndex;
-            for (int i = 1; i<tempEdgeTables[edge].length;i++){
-                edgeTable[writeIndex++] = tempEdgeTables[edge][i];
             }
         }
     }
@@ -91,7 +59,7 @@ public class Graph {
     public int[] tail(int edge){
         int startIndex = edgeLookup[edge]+1; //First index is always 1 head
         int nextIndex;
-        if(edge+1 < edgeLookup.length) nextIndex = edgeLookup[edge+1];
+        if(edge+1 < edgeLookup.length) nextIndex = edgeLookup[edge+1]; //Avoid out of bounds on edgeLookup
         else nextIndex = edgeTable.length;
         int size = nextIndex - startIndex;
         int[] ret = new int[size];
@@ -122,8 +90,20 @@ public class Graph {
         }
         return ret;
     }
-    public int[] BS(){
-        return new int[2];
+    public Object[] BS(int vertex){
+        int startIndex = vertexLookup[vertex];
+        int ingoingEdges = vertexTable[startIndex];
+        ArrayList<Integer> ret = new ArrayList<>();
+        int[] tail;
+        int edge;
+        for (int i = 1; i < ingoingEdges+1; i++) {
+            edge = vertexTable[startIndex+i];
+            tail = tail(edge);
+            for (int V: tail) {
+                if(!ret.contains(V)) ret.add(V);
+            }
+        }
+        return ret.toArray();
     }
 
 }
