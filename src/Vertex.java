@@ -20,6 +20,7 @@ public class Vertex {
     public void addIngoingEdges(Edge x){
         ingoing_edges.add(x);
     }
+
     public void addOutgoingEdges(Edge x){
         outgoing_edges.add(x);
     }

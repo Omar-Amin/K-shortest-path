@@ -27,7 +27,6 @@ public class Hypergraph {
                 if(matrix[row][col] == -2){
                     continue;
                 }
-
                 if (matrix[row][col] < 0){ // -1 indicates outgoing edges
                     Vertices.get(row).addOutgoingEdges(Edges.get(col));
                     Edges.get(col).addToTail(Vertices.get(row));
@@ -44,7 +43,6 @@ public class Hypergraph {
 
                     }
                 }
-
                 // checker for each the edges, it must contain at least one tail and
                 // only one head, which is done by checking an boolean array and if
                 // all edges hold the rule then it is a valid graph
@@ -53,7 +51,6 @@ public class Hypergraph {
                     edgesChecked++;
                     currentlyChecked[col] = true;
                 }
-
             }
         }
 
@@ -65,7 +62,7 @@ public class Hypergraph {
 
     /**
      * Create hypergraph by taking a matrix as input
-     * @param matrix
+     * @param matrix: input matrix
      * */
     public Hypergraph matrixInput(int[][] matrix){
         //Generate edges and vertices from matrix
