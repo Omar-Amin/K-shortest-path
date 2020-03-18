@@ -21,8 +21,8 @@ public class Main {
                 {-2,-2,2,-1,-1,-1,-2,-2,-2,-2,-2}, //4
                 {-2,-2,-2,1,-2,-2,-2,-1,-2,-2,-2}, //5
                 {-2,-2,-2,-2,2,-2,-2,-2,-1,-2,-2}, //6
-                {-2,-2,-2,-2,-2,3,1,-2,-2,-1,-2}, //7
-                {-2,-2,-2,-2,-2,-2,-2,4,2,1,-1}, //8
+                {-2,-2,-2,-2,-2,3,4,-2,-2,-1,-2}, //7
+                {-2,-2,-2,-2,-2,-2,-2,4,3,1,-1}, //8
                 {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9
         /*        int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2},
@@ -38,10 +38,10 @@ public class Main {
         Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
         //hg.printHypergraph();
         ShortestPath sp = new ShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1));
-        //sp.printPath();
-        ArrayList<Edge> temp = sp.getShortestPath();
-        Hypergraph hg2 = new Hypergraph().edgesInput(temp);
-        hg2.printHypergraph();
+        sp.printPath();
+        //ArrayList<Edge> temp = sp.getShortestPath();
+        //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
+        //hg2.printHypergraph();
 
     }
 

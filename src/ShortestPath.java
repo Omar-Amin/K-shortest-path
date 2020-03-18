@@ -9,10 +9,10 @@ public class ShortestPath {
 
     public void printPath(){
         path.sort((o1, o2) -> o1.getId() - o2.getId());
-
+        System.out.println("Graph printed:");
         for (Edge edge :path) {
-            System.out.println(edge.getId()+1);
-            System.out.println("Cost: " + edge.getCost());
+            System.out.println("Edge id: " + (edge.getId()+1));
+            System.out.println("Cost of edge: " + edge.getCost());
         }
     }
 
