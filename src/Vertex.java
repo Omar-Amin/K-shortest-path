@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Vertex {
+public class Vertex implements Cloneable {
 
     // Class attributes
     private int id;
@@ -14,6 +14,14 @@ public class Vertex {
     public Vertex(int identifier) {
         this.id = identifier;
         this.cost = 0;
+    }
+
+    @Override
+    protected Vertex clone() throws CloneNotSupportedException {
+        Vertex v = (Vertex) super.clone();
+        v.outgoing_edges = (ArrayList<Edge>) outgoing_edges.clone();
+        v.ingoing_edges = (ArrayList<Edge>) ingoing_edges.clone();
+        return v;
     }
 
     //Functions for Vertex

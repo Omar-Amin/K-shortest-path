@@ -88,18 +88,34 @@ public class Hypergraph {
      * @param edges: Has to be as type ArrayList<Edge>
      * */
     //TODO: Return error if it is not a valid path (check rojin's definition)
-    public Hypergraph edgesInput(ArrayList<Edge> edges){
-        this.Edges = edges;
+    public Hypergraph edgesInput(ArrayList<Edge> edges) throws CloneNotSupportedException {
+        this.Edges = (ArrayList<Edge>) edges.clone();
 
-        for (int i = 0; i < edges.size(); i++) {
+        for (int i = 0; i < Edges.size(); i++) {
             Edge edge = Edges.get(i);
             for (Vertex v :edge.getTail()) {
-                if(!Vertices.contains(v)){
-                    Vertices.add(v);
+                Vertex v2 = (Vertex) v.clone();
+                boolean isInList = false;
+                for (int j = 0; j < Vertices.size(); j++) {
+                    if(v2.getId() == Vertices.get(j).getId()){
+                        isInList = true;
+                    }
+                }
+                if(!isInList){
+                    Vertices.add(v2);
                 }
             }
             if(!Vertices.contains(edge.getHead())){
-                Vertices.add(edge.getHead());
+                Vertex v2 = (Vertex) edge.getHead().clone();
+                boolean isInList = false;
+                for (int j = 0; j < Vertices.size(); j++) {
+                    if(v2.getId() == Vertices.get(j).getId()){
+                        isInList = true;
+                    }
+                }
+                if(!isInList){
+                    Vertices.add(v2);
+                }
             }
         }
 

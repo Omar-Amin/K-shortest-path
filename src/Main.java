@@ -3,7 +3,7 @@ import java.util.PriorityQueue;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CloneNotSupportedException {
        /* int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2}, //1
                 {1,-2,-1,-1,-2,-1,-2,-2,-1,-2,-2}, //2

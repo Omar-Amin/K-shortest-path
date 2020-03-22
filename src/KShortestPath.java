@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class KShortestPath {
 
-    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K){
+    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K) throws CloneNotSupportedException {
         // we should use "pair" class for our priority queue
         ShortestPath sp = new ShortestPath(H,H.getVertices().get(0),H.getVertices().get(H.getVertices().size()-1));
         ArrayList<Edge> hp = sp.getShortestPath();
@@ -15,13 +15,13 @@ public class KShortestPath {
 
     }
 
-    private ArrayList<Hypergraph> backBranching(Hypergraph hypergraph, Hypergraph hyperpath){
+    private ArrayList<Hypergraph> backBranching(Hypergraph hypergraph, Hypergraph hyperpath) throws CloneNotSupportedException {
         ArrayList<Hypergraph> setOfHypergraphs = new ArrayList<>();
         ArrayList<Edge> edgesFromPath = (ArrayList<Edge>) hyperpath.getEdges().clone();
         ArrayList<Vertex> verticesFromPath = (ArrayList<Vertex>) hyperpath.getVertices().clone();
         ArrayList<Edge> edgesFromGraph = (ArrayList<Edge>) hypergraph.getEdges().clone();
         for (int i = edgesFromPath.size()-1; i >= 0; i--) {
-            System.out.println(hyperpath.getVertices().size());
+            System.out.println(verticesFromPath.get(0).getOutgoing_edges().size());
 
             // we have to clone the edges, otherwise it will change the edges in our hypergraph
             Hypergraph newHypergraph = new Hypergraph().edgesInput(edgesFromGraph);
