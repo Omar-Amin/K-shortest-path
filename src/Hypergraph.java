@@ -90,14 +90,24 @@ public class Hypergraph {
     //TODO: Return error if it is not a valid path (check rojin's definition)
     public Hypergraph edgesInput(ArrayList<Edge> edges){
         this.Edges = edges;
-        for (int i = 0; i < edges.size()-1; i++) {
+
+        for (int i = 0; i < edges.size(); i++) {
             Edge edge = Edges.get(i);
             for (Vertex v :edge.getTail()) {
                 if(!Vertices.contains(v)){
                     Vertices.add(v);
                 }
             }
+            if(!Vertices.contains(edge.getHead())){
+                Vertices.add(edge.getHead());
+            }
         }
+
+        for (Vertex vertex :Vertices) {
+            vertex.getOutgoing_edges().removeIf(edge -> !edges.contains(edge));
+            vertex.getIngoing_edges().removeIf(edge -> !edges.contains(edge));
+        }
+
         return this;
     }
 

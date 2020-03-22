@@ -45,6 +45,7 @@ public class Main {
         };
 
         Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
+
         //hg.printHypergraph();
         KShortestPath kshortest = new KShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),2);
         kshortest.tempMethod();
