@@ -82,7 +82,7 @@ public class ShortestPath {
     }
 
     public ArrayList<Edge> getShortestPath(){
-        path.sort(((o1, o2) -> o2.getId()-o1.getId()));
+        path.sort((o1, o2) -> o1.getId() - o2.getId());
         return path;
     }
 
