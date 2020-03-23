@@ -11,6 +11,29 @@ public class Hypergraph {
     public Hypergraph(){
     }
 
+
+    /**
+     * Create hypergraph by taking a matrix as input
+     * @param matrix: input matrix
+     * */
+    public Hypergraph matrixInput(int[][] matrix){
+        //Generate edges and vertices from matrix
+        this.amountOfEdges = matrix[0].length;
+        this.amountOfVertices = matrix.length;
+
+        //Give edges and verticies an identifier number, and add to lists
+        for (int id = 0; id < amountOfEdges; id++) {
+            Edge edge = new Edge(id);
+            Edges.add(edge);
+        }
+        for (int id = 0; id < amountOfVertices; id++) {
+            Vertex vertex = new Vertex(id);
+            Vertices.add(vertex);
+        }
+
+        return setupHypergraph(matrix);
+    }
+
     /**
      * Setting up the hypergraph by adding in-going and out-going edges
      * for each edge object in the array.
@@ -61,28 +84,6 @@ public class Hypergraph {
     }
 
     /**
-     * Create hypergraph by taking a matrix as input
-     * @param matrix: input matrix
-     * */
-    public Hypergraph matrixInput(int[][] matrix){
-        //Generate edges and vertices from matrix
-        this.amountOfEdges = matrix[0].length;
-        this.amountOfVertices = matrix.length;
-
-        //Give edges and verticies an identifier number, and add to lists
-        for (int id = 0; id < amountOfEdges; id++) {
-            Edge edge = new Edge(id);
-            Edges.add(edge);
-        }
-        for (int id = 0; id < amountOfVertices; id++) {
-            Vertex vertex = new Vertex(id);
-            Vertices.add(vertex);
-        }
-
-        return setupHypergraph(matrix);
-    }
-
-    /**
      * Create hypergraph by taking a list of edges as input. Primarily used
      * after finding the shortest path.
      * @param edges: Has to be as type ArrayList<Edge>
@@ -112,7 +113,7 @@ public class Hypergraph {
 
     /**
      * Searches if the vertex exist, if it doesn't a new vertex is created.
-     * @param v: Vertex so search if it exist. 
+     * @param v: Vertex so search if it exist.
      * */
     private Vertex findVertex(Vertex v){
         for (Vertex vertex :Vertices) {
