@@ -8,7 +8,7 @@ public class KShortestPath {
         ArrayList<Edge> hp = sp.getShortestPath();
         Hypergraph hyperpath = new Hypergraph().edgesInput(hp);
 
-        //backBranching(H,hyperpath);
+        backBranching(H,hyperpath);
     }
 
     public void tempMethod(){
@@ -17,29 +17,27 @@ public class KShortestPath {
 
     private ArrayList<Hypergraph> backBranching(Hypergraph hypergraph, Hypergraph hyperpath) {
         ArrayList<Hypergraph> setOfHypergraphs = new ArrayList<>();
-        ArrayList<Edge> edgesFromPath = (ArrayList<Edge>) hyperpath.getEdges().clone();
-        ArrayList<Vertex> verticesFromPath = (ArrayList<Vertex>) hyperpath.getVertices().clone();
-        ArrayList<Edge> edgesFromGraph = (ArrayList<Edge>) hypergraph.getEdges().clone();
+        ArrayList<Edge> edgesFromPath = hyperpath.getEdges();
+        ArrayList<Edge> edgesFromGraph = hypergraph.getEdges();
+
         for (int i = edgesFromPath.size()-1; i >= 0; i--) {
-            System.out.println(verticesFromPath.get(0).getOutgoing_edges().size());
-
-            // we have to clone the edges, otherwise it will change the edges in our hypergraph
             Hypergraph newHypergraph = new Hypergraph().edgesInput(edgesFromGraph);
+            Hypergraph hyperpathClone = new Hypergraph().edgesInput(edgesFromPath);
 
-            Edge edg = edgesFromPath.get(i);
+            Edge edge = hyperpathClone.getEdges().get(i);
 
-            removeEdge(newHypergraph,edg);
-
-            newHypergraph.getEdges().remove(edgesFromPath.get(i));
+            removeEdge(newHypergraph,edge);
 
             // we can just remove it since it is the same object
-            for (int j = edgesFromPath.size()-1; j >= i+1 ; j--) {
-                fixEdge(newHypergraph,edgesFromPath.get(j).getHead());
+            for (int j = edgesFromPath.size()-1; j >= i+2 ; j--) {
+                newHypergraph.getVertices().get(hyperpathClone.getVertices().get(j).getId()).getIngoing_edges().clear();
             }
-            // I DONT UNDERSTAND ROJINS EXAMPLE, HOW ARE EDGES 7 AND 5 REMOVED?!?!?
+            for (int j = edgesFromPath.size()-1; j >= i+1 ; j--) {
+                fixEdge(newHypergraph,hyperpathClone.getEdges().get(j).getHead());
+            }
             // DEBUG
             //debugEdges(newHypergraph);
-            //debugVertices(hypergraph);
+            //debugVertices(newHypergraph);
             // DEBUG
         }
 
@@ -48,15 +46,37 @@ public class KShortestPath {
 
     private void removeEdge(Hypergraph hypergraph, Edge edge){
         for (Vertex vertice :edge.getTail()) {
-            hypergraph.getVertices().get(vertice.getId()).getOutgoing_edges().remove(edge);
+            ArrayList<Edge> outgoingEdges = hypergraph.getVertices().get(vertice.getId()).getOutgoing_edges();
+            for (int i = 0; i < outgoingEdges.size(); i++) {
+                if(outgoingEdges.get(i).getId() == edge.getId()){
+                    outgoingEdges.remove(i);
+                    break;
+                }
+            }
         }
-        hypergraph.getVertices().get(edge.getHead().getId()).getIngoing_edges().remove(edge);
+        ArrayList<Edge> ingoing_edges = hypergraph.getVertices().get(edge.getHead().getId()).getIngoing_edges();
+        for (int i = 0; i < ingoing_edges.size(); i++) {
+            if(ingoing_edges.get(i).getId() == edge.getId()){
+                ingoing_edges.remove(i);
+                break;
+            }
+        }
+
+        ArrayList<Edge> edges = hypergraph.getEdges();
+
+        for (int i = 0; i < edges.size(); i++) {
+            if(edges.get(i).getId() == edge.getId()){
+                edges.remove(i);
+                return;
+            }
+        }
     }
 
     private void fixEdge(Hypergraph hypergraph, Vertex vertex){
-        //hypergraph.getVertices().get(vertex.getId());
-        //System.out.println("Vertex ID: " + (vertex.getId()+1));
-        //System.out.println("Vertex size: " + vertex.getIngoing_edges().size());
+        ArrayList<Vertex> vertices = hypergraph.getVertices();
+        //TODO: Problem: The outgoing edges are not change, only the ingoing, fix later
+        vertices.get(vertex.getId()).setIngoing_edges(vertex.getIngoing_edges());
+
     }
 
     private void debugEdges(Hypergraph hypergraph){

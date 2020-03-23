@@ -118,7 +118,7 @@ public class Hypergraph {
     private Vertex findVertex(Vertex v){
         for (Vertex vertex :Vertices) {
             if(v.getId() == vertex.getId()){
-                return v;
+                return vertex;
             }
         }
         Vertex vertex = new Vertex(v.getId());
