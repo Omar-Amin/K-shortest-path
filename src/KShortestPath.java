@@ -2,20 +2,20 @@ import java.util.ArrayList;
 
 public class KShortestPath {
 
-    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K) throws CloneNotSupportedException {
+    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K)  {
         // we should use "pair" class for our priority queue
         ShortestPath sp = new ShortestPath(H,H.getVertices().get(0),H.getVertices().get(H.getVertices().size()-1));
         ArrayList<Edge> hp = sp.getShortestPath();
         Hypergraph hyperpath = new Hypergraph().edgesInput(hp);
 
-        backBranching(H,hyperpath);
+        //backBranching(H,hyperpath);
     }
 
     public void tempMethod(){
 
     }
 
-    private ArrayList<Hypergraph> backBranching(Hypergraph hypergraph, Hypergraph hyperpath) throws CloneNotSupportedException {
+    private ArrayList<Hypergraph> backBranching(Hypergraph hypergraph, Hypergraph hyperpath) {
         ArrayList<Hypergraph> setOfHypergraphs = new ArrayList<>();
         ArrayList<Edge> edgesFromPath = (ArrayList<Edge>) hyperpath.getEdges().clone();
         ArrayList<Vertex> verticesFromPath = (ArrayList<Vertex>) hyperpath.getVertices().clone();

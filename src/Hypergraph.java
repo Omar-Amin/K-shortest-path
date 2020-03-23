@@ -88,43 +88,41 @@ public class Hypergraph {
      * @param edges: Has to be as type ArrayList<Edge>
      * */
     //TODO: Return error if it is not a valid path (check rojin's definition)
-    public Hypergraph edgesInput(ArrayList<Edge> edges) throws CloneNotSupportedException {
-        this.Edges = (ArrayList<Edge>) edges.clone();
+    public Hypergraph edgesInput(ArrayList<Edge> edges){
 
-        for (int i = 0; i < Edges.size(); i++) {
-            Edge edge = Edges.get(i);
+        for (Edge edge :edges) {
+            ArrayList<Vertex> newTail = new ArrayList<>();
+            Edge newEdge = new Edge(edge.getId());
+            newEdge.setCost(edge.getCost());
             for (Vertex v :edge.getTail()) {
-                Vertex v2 = (Vertex) v.clone();
-                boolean isInList = false;
-                for (int j = 0; j < Vertices.size(); j++) {
-                    if(v2.getId() == Vertices.get(j).getId()){
-                        isInList = true;
-                    }
-                }
-                if(!isInList){
-                    Vertices.add(v2);
-                }
+                Vertex newVertex = findVertex(v);
+                newVertex.addOutgoingEdges(newEdge);
+                newTail.add(newVertex);
             }
-            if(!Vertices.contains(edge.getHead())){
-                Vertex v2 = (Vertex) edge.getHead().clone();
-                boolean isInList = false;
-                for (int j = 0; j < Vertices.size(); j++) {
-                    if(v2.getId() == Vertices.get(j).getId()){
-                        isInList = true;
-                    }
-                }
-                if(!isInList){
-                    Vertices.add(v2);
-                }
-            }
-        }
-
-        for (Vertex vertex :Vertices) {
-            vertex.getOutgoing_edges().removeIf(edge -> !edges.contains(edge));
-            vertex.getIngoing_edges().removeIf(edge -> !edges.contains(edge));
+            Vertex head = edge.getHead();
+            Vertex newVertex = findVertex(head);
+            newVertex.addIngoingEdges(newEdge);
+            newEdge.setHead(newVertex);
+            newEdge.setTail(newTail);
+            Edges.add(newEdge);
         }
 
         return this;
+    }
+
+    /**
+     * Searches if the vertex exist, if it doesn't a new vertex is created.
+     * @param v: Vertex so search if it exist. 
+     * */
+    private Vertex findVertex(Vertex v){
+        for (Vertex vertex :Vertices) {
+            if(v.getId() == vertex.getId()){
+                return v;
+            }
+        }
+        Vertex vertex = new Vertex(v.getId());
+        Vertices.add(vertex);
+        return vertex;
     }
 
     /**
