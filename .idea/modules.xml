@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/k-shortest-path.iml" filepath="$PROJECT_DIR$/k-shortest-path.iml" />
+      <module fileurl="file://$PROJECT_DIR$/K-shortest-path.iml" filepath="$PROJECT_DIR$/K-shortest-path.iml" />
     </modules>
   </component>
 </project>
