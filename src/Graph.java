@@ -89,28 +89,24 @@ public class Graph {
         int size = nextIndex - startIndex;
         int ingoingEdges = vertexTable[startIndex+1];
         int outgoingEdges = size - ingoingEdges - 2;
-        int[] ret = new int[outgoingEdges]; //Every edge got exactly one head.
+        int[] ret = new int[outgoingEdges];
         startIndex += ingoingEdges+2;
         int edge;
         for(int i = 0; i<outgoingEdges;i++){
             edge = vertexTable[startIndex+i];
-            ret[i] = head(edge);
+            ret[i] = edge;
         }
         return ret;
     }
-    public Object[] BS(int vertex){
+    public int[] BS(int vertex){
         int startIndex = vertexLookup[vertex];
         int ingoingEdges = vertexTable[startIndex+1];
-        ArrayList<Integer> ret = new ArrayList<>();
-        int[] tail;
+        int[] ret = new int[ingoingEdges];
         int edge;
-        for (int i = 1; i < ingoingEdges+1; i++) {
-            edge = vertexTable[startIndex+i];
-            tail = tail(edge);
-            for (int V: tail) {
-                if(!ret.contains(V)) ret.add(V);
-            }
+        for (int i = 0; i < ingoingEdges; i++) {
+            edge = vertexTable[startIndex+2+i];
+            ret[i] = edge;
         }
-        return ret.toArray();
+        return ret;
     }
 }

@@ -3,10 +3,13 @@ public class WeightingFunctions {
     public WeightingFunctions(Graph graph){
         this.graph = graph;
     }
+
+    
+
     public void valueFunction(){
         for (int i = 0; i < graph.vertexLookup.length; i++) {
             int vertex = graph.vertexTable[i];
-            
+
         }
         return;
     }
