@@ -28,10 +28,6 @@ public class KShortestPath {
 
             removeEdge(newHypergraph,edge);
 
-            // we can just remove it since it is the same object
-            for (int j = edgesFromPath.size()-1; j >= i+2 ; j--) {
-                newHypergraph.getVertices().get(hyperpathClone.getVertices().get(j).getId()).getIngoing_edges().clear();
-            }
             for (int j = edgesFromPath.size()-1; j >= i+1 ; j--) {
                 fixEdge(newHypergraph,hyperpathClone.getEdges().get(j).getHead());
             }
@@ -39,6 +35,7 @@ public class KShortestPath {
             //debugEdges(newHypergraph);
             //debugVertices(newHypergraph);
             // DEBUG
+            setOfHypergraphs.add(newHypergraph);
         }
 
         return setOfHypergraphs;
@@ -75,7 +72,42 @@ public class KShortestPath {
     private void fixEdge(Hypergraph hypergraph, Vertex vertex){
         ArrayList<Vertex> vertices = hypergraph.getVertices();
         //TODO: Problem: The outgoing edges are not change, only the ingoing, fix later
-        vertices.get(vertex.getId()).setIngoing_edges(vertex.getIngoing_edges());
+        ArrayList<Integer> vertexEdges = new ArrayList<>();
+        for (Edge e :vertex.getIngoing_edges()) {
+            vertexEdges.add(e.getId());
+        }
+        ArrayList<Integer> hyperEdges = new ArrayList<>();
+        // need to make this piece much prettier, just a temporary working solution
+        for (Vertex value : vertices) {
+            if (value.getId() == vertex.getId()) {
+                for (Edge e :value.getIngoing_edges()) {
+                    hyperEdges.add(e.getId());
+                }
+                ArrayList<Integer> difference = new ArrayList<>();
+                for (Integer i :hyperEdges) {
+                    if(!vertexEdges.contains(i)){
+                        difference.add(i);
+                    }
+                }
+                for (Integer i :difference) {
+                    for (Edge e :hypergraph.getEdges()) {
+                        if(e.getId() == i){
+                            for (Vertex v :e.getTail()) {
+                                for (int j = 0; j < v.getOutgoing_edges().size(); j++) {
+                                    if(v.getOutgoing_edges().get(j).getId() == i){
+                                        v.getOutgoing_edges().remove(j);
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                value.setIngoing_edges(vertex.getIngoing_edges());
+                break;
+            }
+        }
 
     }
 
