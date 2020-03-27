@@ -66,6 +66,20 @@ public class ShortestPath {
         return edgeCost + edgeTailCost;
     }
 
+    /**
+     * Minimum cost function.
+     * */
+    private int minCostFunction(Edge edge){
+        int edgeCost = edge.getCost();
+        int edgeTailCost = Integer.MAX_VALUE;
+        for (Vertex v : edge.getTail()) {
+            if(v.getCost() < edgeTailCost){
+                edgeTailCost = v.getCost();
+            }
+        }
+        return edgeCost + edgeTailCost;
+    }
+
     // not really good at finding a path maybe find a new method
     private void getPath(Vertex source, Vertex target){
         if(!path.contains(target.getPredecessor())){
