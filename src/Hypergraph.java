@@ -86,7 +86,7 @@ public class Hypergraph {
     /**
      * Create hypergraph by taking a list of edges as input. Primarily used
      * after finding the shortest path.
-     * @param edges: Has to be as type ArrayList<Edge>
+     * @param edges: Has to be as type ArrayList<Edge>  
      * */
     //TODO: Return error if it is not a valid path (check rojin's definition)
     public Hypergraph edgesInput(ArrayList<Edge> edges){
