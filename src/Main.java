@@ -14,7 +14,7 @@ public class Main {
                 {-2,-2,-2,-2,-2,1,1,-2,-2,-1,-2}, //7
                 {-2,-2,-2,-2,-2,-2,-2,1,1,1,-1}, //8
                 {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9*/
-       /*   int[][] hypergraph = {
+/*          int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2}, //1
                 {1,-2,-1,-1,-2,-1,-2,-2,-1,-2,-2}, //2
                 {-2,1,-1,-2,-2,-2,-1,-2,-2,-2,-2}, //3
@@ -23,7 +23,7 @@ public class Main {
                 {-2,-2,-2,-2,2,-2,-2,-2,-1,-2,-2}, //6
                 {-2,-2,-2,-2,-2,3,4,-2,-2,-1,-2}, //7
                 {-2,-2,-2,-2,-2,-2,-2,4,3,1,-1}, //8
-                {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9  */
+                {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9*/
         /*        int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2},
                 {1,-2,-1,-1,-2,-1,-2,-1,-2,-2},
@@ -44,7 +44,11 @@ public class Main {
                 {-2,-2,-2,-2,-2,-2,2,1}  //7
         };
 
-        Hypergraph hg = new Hypergraph().generateRandomHypergraph(10,3,3);
+        Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
+        Graph graph = new Graph().transformToGraph(hg);
+
+        ShortestPath shortestPath = new ShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1));
+        System.out.println("Our algorithm:" + shortestPath.getCost());
 
         //hg.printHypergraph();
         //KShortestPath kshortest = new KShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),2);

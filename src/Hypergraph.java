@@ -145,7 +145,10 @@ public class Hypergraph {
         }
     }
 
-    public Hypergraph generateRandomHypergraph(int maxNodes,int minNodes , int tailSize){
+    /**
+     * Generates random graph by some given input.
+     * */
+    public Hypergraph generateRandomHypergraph(int maxNodes,int minNodes , int tailSize, int maxCost){
         Random rand = new Random();
         int amountOfNodes = rand.nextInt((maxNodes - minNodes) + 1) + minNodes;
         int randTailsize = rand.nextInt((tailSize - 1) + 1) + 1;
@@ -157,7 +160,8 @@ public class Hypergraph {
         }
 
         for (int row = 1; row < amountOfNodes; row++) {
-            matrix[row][row-1] = 1;
+            int randCost = rand.nextInt((maxCost - 1) + 1) + 1;
+            matrix[row][row-1] = randCost;
         }
 
         for (int j = 0; j < randTailsize; j++) {

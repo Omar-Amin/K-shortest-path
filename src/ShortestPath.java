@@ -6,6 +6,7 @@ public class ShortestPath {
     //Class attributes
     private PriorityQueue<Vertex> pq = new PriorityQueue<>((o1, o2) -> o1.getCost() - o2.getCost());
     private ArrayList<Edge> path = new ArrayList<>();
+    private int cost = 0;
 
     public void printPath(){
         path.sort((o1, o2) -> o1.getId() - o2.getId());
@@ -29,13 +30,14 @@ public class ShortestPath {
         while (pq.size() > 0) {
             Vertex u = pq.poll(); //Retrieves and removes first element
             if (u.getId() == target.getId()) {
+                cost = u.getCost();
                 getPath(source, u); // Array of a path of edges, perhaps return it?
                 return path;
             }
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
                 edge.setKj(edge.getKj()+1);
                 if (edge.getKj() == edge.getTail().size()) {
-                    int f = costFunction(edge); // Some cost function
+                    int f = minCostFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         if (!pq.contains(y)){ // if pq doesn't contain head of current edge
@@ -98,6 +100,10 @@ public class ShortestPath {
     public ArrayList<Edge> getShortestPath(){
         path.sort((o1, o2) -> o1.getId() - o2.getId());
         return path;
+    }
+
+    public int getCost(){
+        return cost;
     }
 
 }
