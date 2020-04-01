@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class Hypergraph {
     //Class attributes
@@ -86,7 +88,7 @@ public class Hypergraph {
     /**
      * Create hypergraph by taking a list of edges as input. Primarily used
      * after finding the shortest path.
-     * @param edges: Has to be as type ArrayList<Edge>  
+     * @param edges: Has to be as type ArrayList<Edge>
      * */
     //TODO: Return error if it is not a valid path (check rojin's definition)
     public Hypergraph edgesInput(ArrayList<Edge> edges){
@@ -142,6 +144,31 @@ public class Hypergraph {
             System.out.println("____________________");
         }
     }
+
+    public Hypergraph generateRandomHypergraph(int maxNodes,int minNodes , int tailSize){
+        Random rand = new Random();
+        int amountOfNodes = rand.nextInt((maxNodes - minNodes) + 1) + minNodes;
+        int randTailsize = rand.nextInt((tailSize - 1) + 1) + 1;
+
+        int[][] matrix = new int[amountOfNodes][amountOfNodes-1];
+
+        for (int[] ints : matrix) {
+            Arrays.fill(ints, -2);
+        }
+
+        for (int row = 1; row < amountOfNodes; row++) {
+            matrix[row][row-1] = 1;
+        }
+
+        for (int j = 0; j < randTailsize; j++) {
+            for (int i = 0; i < amountOfNodes-(1+j); i++) {
+                matrix[i][i+j] = -1;
+            }
+        }
+
+        return matrixInput(matrix);
+    }
+
 
     //Getter and setters
     public int getAmountOfEdges() {

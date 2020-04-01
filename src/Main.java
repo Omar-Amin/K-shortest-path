@@ -3,7 +3,7 @@ import java.util.PriorityQueue;
 
 public class Main {
 
-    public static void main(String[] args) throws CloneNotSupportedException {
+    public static void main(String[] args) {
        /* int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2}, //1
                 {1,-2,-1,-1,-2,-1,-2,-2,-1,-2,-2}, //2
@@ -44,11 +44,11 @@ public class Main {
                 {-2,-2,-2,-2,-2,-2,2,1}  //7
         };
 
-        Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
+        Hypergraph hg = new Hypergraph().generateRandomHypergraph(10,3,3);
 
         //hg.printHypergraph();
-        KShortestPath kshortest = new KShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),2);
-        kshortest.tempMethod();
+        //KShortestPath kshortest = new KShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),2);
+        //kshortest.tempMethod();
         //ArrayList<Edge> temp = sp.getShortestPath();
         //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
         //hg2.printHypergraph();
