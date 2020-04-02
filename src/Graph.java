@@ -5,11 +5,11 @@ public class Graph {
     int[] vertexLookup;
     int[] vertexTable;
     int[] edgeTable;
-    private WeightingFunctions price;
 
     //Constructor for the graph class
-    public Graph(int[][] Matrix, int[] edgePrices){
-        price = new WeightingFunctions(this);
+    public Graph() {
+    }
+    public void matrixInput(int[][] Matrix, int[] edgePrices){
         int verticesCount = Matrix.length;
         int edgesCount = Matrix[0].length;
         if(edgesCount != edgePrices.length) {
@@ -56,11 +56,31 @@ public class Graph {
                     nextWrite = vertexLookup[vertex] + ingoingCount-- +1;
                     vertexTable[nextWrite] = edge;
                 } else if (indicator == -1) {
-                    nextWrite = (edgeIndicatorCount[edge]--) + edgeLookup[edge];
+                    nextWrite = (edgeIndicatorCount[edge]--) + edgeLookup[edge] + 1;
                     edgeTable[nextWrite] = vertex;
                     vertexTable[outgoingWriteIndex++] = edge;
                 }
             }
+        }
+    }
+
+    protected void edgesInput(int[][] edges, int[] edgePrices){
+        ArrayList<Integer> tempEdgeTable = new ArrayList<>();
+        int max = -1;
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
+            int head = edge[0];
+            tempEdgeTable.add(head);
+            if(head>max) max = head;
+            tempEdgeTable.add(edgePrices[i]);
+            for (int j = 1; j< edge.length; j++) {
+                int tail = edge[j];
+                tempEdgeTable.add(tail);
+                if(tail>max) max = tail;
+            }
+        }
+        for (int edge = 0; edge < edges.length; edge++) {
+
         }
     }
 
@@ -108,5 +128,16 @@ public class Graph {
             ret[i] = edge;
         }
         return ret;
+    }
+
+    public int getVertexCost(int vertex){
+        return vertexTable[vertexLookup[vertex]];
+    }
+    public int getEdgeCost(int edge){
+        return edgeTable[edgeLookup[edge]+1];
+    }
+
+    public void setVertexCost(int vertex, int newcost){
+        vertexTable[vertexLookup[vertex]] = newcost;
     }
 }
