@@ -1,4 +1,8 @@
+import com.sun.javafx.image.IntPixelGetter;
+import javafx.util.Pair;
+
 import java.lang.reflect.Array;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 public class ShortestPath {
@@ -17,13 +21,16 @@ public class ShortestPath {
         }
     }
 
-    public ShortestPath(Hypergraph hypergraph, Vertex source, Vertex target){
-        SBT(hypergraph,source,target);
+    public ShortestPath(Hypergraph hypergraph, Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
+        SBT(hypergraph,source,target,deletedEdges);
     }
 
-    private ArrayList<Edge> SBT(Hypergraph hypergraph, Vertex source, Vertex target){
+    private ArrayList<Edge> SBT(Hypergraph hypergraph, Vertex source, Vertex target,ArrayList<Edge> deletedEdges){
         for (Vertex vertex : hypergraph.getVertices()) {
             vertex.setCost(Integer.MAX_VALUE);
+        }
+        for (Edge edge : hypergraph.getEdges()) {
+            edge.setKj(0);
         }
         source.setCost(0);
         pq.add(source);
@@ -35,6 +42,9 @@ public class ShortestPath {
                 return path;
             }
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
+                if(deletedEdges.contains(edge)){
+                    continue;
+                }
                 edge.setKj(edge.getKj()+1);
                 if (edge.getKj() == edge.getTail().size()) {
                     int f = minCostFunction(edge); // Some cost function
@@ -98,9 +108,9 @@ public class ShortestPath {
         }
     }
 
-    public ArrayList<Edge> getShortestPath(){
+    public Pair<ArrayList<Edge>, Integer> getShortestPath(){
         path.sort((o1, o2) -> o1.getId() - o2.getId());
-        return path;
+        return new Pair<>(path,cost);
     }
 
     public int getCost(){
