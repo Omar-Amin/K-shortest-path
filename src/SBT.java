@@ -40,6 +40,8 @@ public class SBT {
                         if(!PQ.contains(y)){
                             int[] head = {y,f};
                             PQ.insert(head);
+                        } else {
+                            PQ.decreaseValue(y,f);
                         }
                         this.predecessor[y] = edge;
 
