@@ -40,9 +40,9 @@ public class ShortestPath {
                     int f = minCostFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
-                        if (!pq.contains(y)){ // if pq doesn't contain head of current edge
-                            pq.add(y);
-                        }
+                        // if pq doesn't contain head of current edge
+                        pq.remove(y); // remove in order to reposition in queue
+                        pq.add(y);
                         y.setCost(f);
                         y.setPredecessor(edge);
                     }
@@ -84,9 +84,10 @@ public class ShortestPath {
 
     // not really good at finding a path maybe find a new method
     private void getPath(Vertex source, Vertex target){
-        if(!path.contains(target.getPredecessor())){
-            path.add(target.getPredecessor());
+        if(path.contains(target.getPredecessor())){
+            return;
         }
+        path.add(target.getPredecessor());
         if (target == source) {
             return;
         }
