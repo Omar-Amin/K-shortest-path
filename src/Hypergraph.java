@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class Hypergraph {
     //Class attributes
-    private int amountOfEdges;
-    private int amountOfVertices;
+    private int amountOfEdges = 0;
+    private int amountOfVertices = 0;
     private ArrayList<Edge> Edges = new ArrayList<>();
     private ArrayList<Vertex> Vertices = new ArrayList<>();
 
@@ -20,16 +20,16 @@ public class Hypergraph {
      * */
     public Hypergraph matrixInput(int[][] matrix){
         //Generate edges and vertices from matrix
-        this.amountOfEdges = matrix[0].length;
-        this.amountOfVertices = matrix.length;
+        int edges = matrix[0].length;
+        int vertices = matrix.length;
 
         //Give edges and verticies an identifier number, and add to lists
-        for (int id = 0; id < amountOfEdges; id++) {
-            Edge edge = new Edge(id);
+        for (int id = 0; id < edges; id++) {
+            Edge edge = new Edge(amountOfEdges++);
             Edges.add(edge);
         }
-        for (int id = 0; id < amountOfVertices; id++) {
-            Vertex vertex = new Vertex(id);
+        for (int id = 0; id < vertices; id++) {
+            Vertex vertex = new Vertex(amountOfVertices++);
             Vertices.add(vertex);
         }
 
@@ -43,11 +43,14 @@ public class Hypergraph {
      * @param matrix: The graph represented as a matrix.
      * */
     private Hypergraph setupHypergraph(int[][] matrix){
-        int edgesChecked = 0;
-        boolean[] currentlyChecked = new boolean[amountOfEdges];
+        int edges = matrix[0].length;
+        int vertices = matrix.length;
 
-        for (int row = 0; row < amountOfVertices; row++) {
-            for (int col = 0; col < amountOfEdges; col++) {
+        int edgesChecked = 0;
+        boolean[] currentlyChecked = new boolean[edges];
+
+        for (int row = 0; row < vertices; row++) {
+            for (int col = 0; col < edges; col++) {
                 // skip checking rules since 0 means nothing goes in or out
                 if(matrix[row][col] == -2){
                     continue;
@@ -79,7 +82,7 @@ public class Hypergraph {
             }
         }
 
-        if(edgesChecked != amountOfEdges){
+        if(edgesChecked != edges){
             throw new IllegalArgumentException("Wrong graph input, all edges must contain at least one edge and one head");
         }
         return this;
