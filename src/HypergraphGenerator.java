@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 public class HypergraphGenerator {
 
+    private Hypergraph hypergraph;
+
     public HypergraphGenerator(int[][] metaGraph,int maxNodes,int minNodes , int tailSize, int maxCost){
         Hypergraph hg = new Hypergraph().generateRandomHypergraph(maxNodes,minNodes,tailSize,maxCost);
         ArrayList<Hypergraph> hyperEdges = new ArrayList<>();
@@ -15,5 +17,13 @@ public class HypergraphGenerator {
             hyperEdges.add(hypergraph);
         }
 
+        Hypergraph h2 = new Hypergraph();
+        h2.setAmountOfEdges(hyperEdges.get(hyperEdges.size()-1).getAmountOfEdges());
+        h2.setAmountOfVertices(hyperEdges.get(hyperEdges.size()-1).getAmountOfVertices());
+        this.hypergraph = h2.connectHyperedges(metaGraph,hyperEdges);
+    }
+
+    public Hypergraph getHypergraph() {
+        return hypergraph;
     }
 }

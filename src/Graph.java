@@ -9,12 +9,17 @@ public class Graph {
 
     }
 
-    public Graph transformToGraph(Hypergraph hypergraph){
+    public Graph transformToGraph(Hypergraph hypergraph,int source, int target){
         ArrayList<Vertex> vertices = hypergraph.getVertices();
         ArrayList<Edge> edges = hypergraph.getEdges();
+        for (int i = 0; i < vertices.size(); i++) {
+            nodes.add(null);
+        }
+        ArrayList<Integer> arrayList = new ArrayList<>();
+
         for (Vertex v :vertices) {
             Node n = new Node(v.getId());
-            nodes.add(n);
+            nodes.set(v.getId(),n);
         }
 
         for (Edge e :edges) {
@@ -27,15 +32,17 @@ public class Graph {
         }
 
         Dijkstra dijkstra = new Dijkstra();
-        dijkstra.computePaths(nodes.get(0));
-        List<Node> path = dijkstra.getShortestPathTo(nodes.get(nodes.size()-1));
-        System.out.println("Path: " + path);
+        dijkstra.computePaths(nodes.get(source));
+        List<Node> path = dijkstra.getShortestPathTo(nodes.get(target));
+        //System.out.println("Path: " + path);
 
-        for(Node n: path){
+/*        for(Node n: path){
             System.out.println("Node: " + (n.getValue()+1));
             System.out.println("Distance to " +
                     n + ": " + n.shortestDistance);
-        }
+        }*/
+        System.out.println("Distance to " +
+                path.get(path.size()-1).getValue() + ": " + path.get(path.size()-1).shortestDistance);
         return this;
     }
 

@@ -8,6 +8,8 @@ public class Hypergraph {
     private int amountOfVertices = 0;
     private ArrayList<Edge> Edges = new ArrayList<>();
     private ArrayList<Vertex> Vertices = new ArrayList<>();
+    private Vertex source;
+    private Vertex target;
 
     // constructor
     public Hypergraph(){
@@ -176,6 +178,52 @@ public class Hypergraph {
         return matrixInput(matrix);
     }
 
+    public Hypergraph connectHyperedges(int[][] metaGraph,ArrayList<Hypergraph> hyperedges){
+        int edges = metaGraph[0].length;
+        int vertices = metaGraph.length;
+
+        for (int i = 0; i < edges*2; i++) {
+            Edge edge = new Edge(amountOfEdges++);
+            edge.setCost(1);
+            Edges.add(edge);
+        }
+
+        for (int i = 0; i < vertices; i++) {
+            Vertex vertex = new Vertex(amountOfVertices++);
+            Vertices.add(vertex);
+        }
+
+        this.source = Vertices.get(0);
+        this.target = Vertices.get(vertices-1);
+
+
+        for (int row = 0; row < vertices; row++) {
+            for (int col = 0; col < edges; col++) {
+                if (metaGraph[row][col] == -1){
+                    Vertices.get(row).addOutgoingEdges(Edges.get(col));
+                    Edges.get(col).addToTail(Vertices.get(row));
+                    Edges.get(col).setHead(hyperedges.get(col).getVertices().get(0));
+                    hyperedges.get(col).getVertices().get(0).getIngoing_edges().add(Edges.get(col));
+                }
+                if(metaGraph[row][col] == 1){
+                    Vertices.get(row).addIngoingEdges(Edges.get(edges+col));
+                    Edges.get(edges+col).setHead(Vertices.get(row));
+                    int size = hyperedges.get(col).getVertices().size();
+                    Edges.get(edges+col).addToTail(hyperedges.get(col).getVertices().get(size-1));
+                    hyperedges.get(col).getVertices().get(size-1).getOutgoing_edges().add(Edges.get(col+edges));
+                }
+            }
+        }
+
+        for (Hypergraph h :hyperedges) {
+            Vertices.addAll(h.getVertices());
+            Edges.addAll(h.getEdges());
+        }
+
+
+        return this;
+    }
+
 
     //Getter and setters
     public int getAmountOfEdges() {
@@ -208,5 +256,13 @@ public class Hypergraph {
 
     public void setVertices(ArrayList<Vertex> vertices) {
         Vertices = vertices;
+    }
+
+    public Vertex getSource() {
+        return source;
+    }
+
+    public Vertex getTarget() {
+        return target;
     }
 }

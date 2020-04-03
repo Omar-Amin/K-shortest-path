@@ -43,6 +43,21 @@ public class Main {
                 {-2,-2,-2,-2,-2,1,-2,-1}, //6
                 {-2,-2,-2,-2,-2,-2,2,1}  //7
         };*/
+/*        int[][] metaGraph = {
+                {-1,-1,0,0},
+                {1,0,-1,0},
+                {0,1,0,-1},
+                {0,0,1,1}
+        };*/
+
+        int[][] metaGraph = {
+                {-1,-1,0,0,0,0,0,0},
+                {1,0,-1,0,0,-1,0,0},
+                {0,0,1,0,1,0,-1,0},
+                {0,1,0,-1,-1,0,0,0},
+                {0,0,0,1,0,1,0,-1},
+                {0,0,0,0,0,0,1,1}
+        };
 
         //Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
         //Hypergraph hg = new Hypergraph().generateRandomHypergraph(15000,15000,5,10);
@@ -60,7 +75,15 @@ public class Main {
         //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
         //hg2.printHypergraph();
 
-        HypergraphGenerator generator = new HypergraphGenerator(new int[4][4], 10,10,3,10);
+        for (int i = 0; i < 10; i++) {
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 5000,4000,5,1000);
+            Hypergraph testGenerated = generator.getHypergraph();
+            //testGenerated.printHypergraph();
+            ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Graph graph = new Graph().transformToGraph(testGenerated,testGenerated.getSource().getId(),testGenerated.getTarget().getId());
+            System.out.println(shortestPath.getCost());
+        }
+
 
     }
 
