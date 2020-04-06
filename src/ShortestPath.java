@@ -8,12 +8,13 @@ import java.util.*;
 public class ShortestPath {
     //Hypergraph er det samme som hyperpath
     //Class attributes
-    private PriorityQueue<Vertex> pq = new PriorityQueue<>(new Comparator<Vertex>() {
+/*    private PriorityQueue<Vertex> pq = new PriorityQueue<>(new Comparator<Vertex>() {
         @Override
         public int compare(Vertex o1, Vertex o2) {
             return Integer.compare(o1.getCost(), o2.getCost());
         }
-    });
+    });*/
+    private minPQ pq = new minPQ();
     private ArrayList<Edge> path = new ArrayList<>();
     private int cost = 0;
 
@@ -38,10 +39,10 @@ public class ShortestPath {
             edge.setKj(0);
         }
         source.setCost(0);
-        pq.add(source);
+        pq.insert(source);
         while (pq.size() > 0) {
-            debugPrintQueue();
-            Vertex u = pq.poll(); //Retrieves and removes first element
+            //debugPrintQueue();
+            Vertex u = pq.popMin(); //Retrieves and removes first element
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
                 if(deletedEdges.contains(edge)){
                     continue;
@@ -52,19 +53,24 @@ public class ShortestPath {
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
-                        pq.remove(y); // remove in order to reposition in queue
-                        pq.add(y);
                         y.setCost(f);
+                        if(pq.contains(y)){
+                            pq.decreaseValue(y.getId(),f);
+                        }else {
+                            pq.insert(y);
+                        }
                         y.setPredecessor(edge);
                     }
                 }
             }
         }
+
         if(target.getCost() != Integer.MAX_VALUE){
             cost = target.getCost();
             getPath(source, target); // Array of a path of edges, perhaps return it?
             return path;
         }
+
         throw new IllegalArgumentException("Couldn't find a path from source to target");
     }
 
@@ -123,8 +129,7 @@ public class ShortestPath {
         return cost;
     }
 
-    private void debugPrintQueue(){
-        //System.out.println("___Printing queue STARTS____");
+/*    private void debugPrintQueue(){
         ArrayList<Vertex> tmp = new ArrayList<>();
         while (pq.size() > 0){
             Vertex v = pq.poll();
@@ -133,6 +138,6 @@ public class ShortestPath {
             tmp.add(v);
         }
         pq.addAll(tmp);
-    }
+    }*/
 
 }

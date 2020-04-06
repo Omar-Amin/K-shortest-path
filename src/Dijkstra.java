@@ -55,10 +55,10 @@ public class Dijkstra{
             for(GEdge e: u.adjacencies){
 
                 Node v = e.target;
-                double weight = e.weight;
+                int weight = e.weight;
 
                 //relax(u,v,weight)
-                double distanceFromU = u.shortestDistance+weight;
+                int distanceFromU = u.shortestDistance+weight;
                 if(distanceFromU<v.shortestDistance){
 
 					/*remove v from queue for updating
@@ -94,11 +94,11 @@ class Node implements Comparable<Node>{
 
     public final int value;
     public ArrayList<GEdge> adjacencies = new ArrayList<>();
-    public double shortestDistance = Double.POSITIVE_INFINITY;
+    public int shortestDistance = Integer.MAX_VALUE;
     public Node parent;
 
     public Node(int val){
-        value = val;
+        this.value = val;
     }
 
     public int getValue() {
@@ -114,9 +114,9 @@ class Node implements Comparable<Node>{
 //define Edge
 class GEdge{
     public final Node target;
-    public final double weight;
-    public GEdge(Node targetNode, double weightVal){
-        target = targetNode;
-        weight = weightVal;
+    public final int weight;
+    public GEdge(Node targetNode, int weightVal){
+        this.target = targetNode;
+        this.weight = weightVal;
     }
 }

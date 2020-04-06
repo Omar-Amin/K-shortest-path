@@ -5,6 +5,7 @@ public class Graph {
 
     private ArrayList<Node> nodes = new ArrayList<>();
     private int shortestDistance = 0;
+    private int getPathSize;
 
     public Graph(){
 
@@ -13,7 +14,7 @@ public class Graph {
     public Graph transformToGraph(Hypergraph hypergraph,int source, int target){
         ArrayList<Vertex> vertices = hypergraph.getVertices();
         ArrayList<Edge> edges = hypergraph.getEdges();
-        for (int i = 0; i < vertices.size(); i++) {
+        for (int i = 0; i < hypergraph.getAmountOfVertices(); i++) {
             nodes.add(null);
         }
 
@@ -24,10 +25,8 @@ public class Graph {
 
         for (Edge e :edges) {
             Vertex v = e.getHead();
-            Node n = nodes.get(v.getId());
             for (Vertex v2 :e.getTail()) {
-                Node n1 = nodes.get(v2.getId());
-                n1.adjacencies.add(new GEdge(n,e.getCost()));
+                nodes.get(v2.getId()).adjacencies.add(new GEdge(nodes.get(v.getId()),e.getCost()));
             }
         }
 
@@ -37,15 +36,20 @@ public class Graph {
         //System.out.println("Path: " + path);
         for(Node n: path){
             if(n.shortestDistance > shortestDistance){
-                shortestDistance = (int) n.shortestDistance;
+                shortestDistance = n.shortestDistance;
             }
         }
+        getPathSize = path.size();
 
         return this;
     }
 
     public int getShortestDistance(){
         return shortestDistance;
+    }
+
+    public int getGetPathSize(){
+        return getPathSize;
     }
 
 }

@@ -198,12 +198,14 @@ public class Hypergraph {
 
         for (int row = 0; row < vertices; row++) {
             for (int col = 0; col < edges; col++) {
+                // connect for outgoing edges
                 if (metaGraph[row][col] == -1){
                     Vertices.get(row).addOutgoingEdges(Edges.get(col));
                     Edges.get(col).addToTail(Vertices.get(row));
                     Edges.get(col).setHead(hyperedges.get(col).getVertices().get(0));
                     hyperedges.get(col).getVertices().get(0).getIngoing_edges().add(Edges.get(col));
                 }
+                // connect for ingoing edges
                 if(metaGraph[row][col] == 1){
                     Vertices.get(row).addIngoingEdges(Edges.get(edges+col));
                     Edges.get(edges+col).setHead(Vertices.get(row));

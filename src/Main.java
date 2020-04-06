@@ -50,14 +50,25 @@ public class Main {
                 {0,0,1,1}
         };*/
 
-        int[][] metaGraph = {
+/*        int[][] metaGraph = {
                 {-1,-1,0,0,0,0,0,0},
                 {1,0,-1,0,0,-1,0,0},
                 {0,0,1,0,1,0,-1,0},
                 {0,1,0,-1,-1,0,0,0},
                 {0,0,0,1,0,1,0,-1},
                 {0,0,0,0,0,0,1,1}
-        };
+        };*/
+
+        int[][] metaGraph = {
+                {-1,-1,0,0,0,0,0,0,0,0,0}, //1
+                {1,0,-1,-1,0,-1,0,0,-1,0,0}, //2
+                {0,1,-1,0,0,0,-1,0,0,0,0}, //3
+                {0,0,1,-1,-1,-1,0,0,0,0,0}, //4
+                {0,0,0,1,0,0,0,-1,0,0,0}, //5
+                {0,0,0,0,1,0,0,0,-1,0,0}, //6
+                {0,0,0,0,0,1,1,0,0,-1,0}, //7
+                {0,0,0,0,0,0,0,1,1,1,-1}, //8
+                {0,0,0,0,0,0,0,0,0,0,1}}; //9
 
         //Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
         //Hypergraph hg = new Hypergraph().generateRandomHypergraph(15000,15000,5,10);
@@ -74,18 +85,20 @@ public class Main {
         //ArrayList<Edge> temp = sp.getShortestPath();
         //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
         //hg2.printHypergraph();
-
+        int counter = 0;
         for (int i = 0; i < 10000; i++) {
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 1000,500,5,1000);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 2,2,1,10);
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
             ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             Graph graph = new Graph().transformToGraph(testGenerated,testGenerated.getSource().getId(),testGenerated.getTarget().getId());
             if(graph.getShortestDistance() != shortestPath.getCost()){
+                counter++;
                 System.out.println("Graph: " + graph.getShortestDistance());
                 System.out.println("Hyper: " + shortestPath.getCost());
             }
         }
+        System.out.println(counter);
 
     }
 
