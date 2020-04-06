@@ -60,7 +60,7 @@ public class Hypergraph {
                 if (matrix[row][col] < 0){ // -1 indicates outgoing edges
                     Vertices.get(row).addOutgoingEdges(Edges.get(col));
                     Edges.get(col).addToTail(Vertices.get(row));
-                } else if (matrix[row][col] > 0) { // 1 indicates ingoing edges
+                } else if (matrix[row][col] >= 0) { // 1 indicates ingoing edges
                     Vertices.get(row).addIngoingEdges(Edges.get(col));
                     // if a head already exist, it means that the edge has more than
                     // two heads, which doesn't make it a b-graph
@@ -68,10 +68,7 @@ public class Hypergraph {
                         throw new IllegalArgumentException("Wrong graph input, not a B-hypergraph");
                     }
                     Edges.get(col).setHead(Vertices.get(row));
-                    if(Edges.get(col).getCost() == 0){
-                        Edges.get(col).setCost(matrix[row][col]);
-
-                    }
+                    Edges.get(col).setCost(matrix[row][col]);
                 }
                 // checker for each the edges, it must contain at least one tail and
                 // only one head, which is done by checking an boolean array and if
@@ -184,7 +181,7 @@ public class Hypergraph {
 
         for (int i = 0; i < edges*2; i++) {
             Edge edge = new Edge(amountOfEdges++);
-            edge.setCost(1);
+            edge.setCost(0);
             Edges.add(edge);
         }
 
@@ -195,6 +192,11 @@ public class Hypergraph {
 
         this.source = Vertices.get(0);
         this.target = Vertices.get(vertices-1);
+
+        for (Hypergraph h :hyperedges) {
+            Vertices.addAll(h.getVertices());
+            Edges.addAll(h.getEdges());
+        }
 
         for (int row = 0; row < vertices; row++) {
             for (int col = 0; col < edges; col++) {
@@ -214,11 +216,6 @@ public class Hypergraph {
                     hyperedges.get(col).getVertices().get(size-1).getOutgoing_edges().add(Edges.get(col+edges));
                 }
             }
-        }
-
-        for (Hypergraph h :hyperedges) {
-            Vertices.addAll(h.getVertices());
-            Edges.addAll(h.getEdges());
         }
 
         return this;

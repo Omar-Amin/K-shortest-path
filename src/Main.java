@@ -60,15 +60,14 @@ public class Main {
         };*/
 
         int[][] metaGraph = {
-                {-1,-1,0,0,0,0,0,0,0,0,0}, //1
-                {1,0,-1,-1,0,-1,0,0,-1,0,0}, //2
-                {0,1,-1,0,0,0,-1,0,0,0,0}, //3
-                {0,0,1,-1,-1,-1,0,0,0,0,0}, //4
-                {0,0,0,1,0,0,0,-1,0,0,0}, //5
-                {0,0,0,0,1,0,0,0,-1,0,0}, //6
-                {0,0,0,0,0,1,1,0,0,-1,0}, //7
-                {0,0,0,0,0,0,0,1,1,1,-1}, //8
-                {0,0,0,0,0,0,0,0,0,0,1}}; //9
+                {-1,-1,0,0,0,0,0,0,0,0,0,0}, //1
+                {1,0,-1,0,0,-1,0,0,0,0,0,0}, //2
+                {0,1,0,-1,-1,0,0,0,0,0,0,0}, //3
+                {0,0,1,1,0,0,-1,-1,-1,0,0,0}, //4
+                {0,0,0,0,0,1,1,0,0,0,-1,0}, //5
+                {0,0,0,0,0,0,0,0,1,-1,0,0}, //6
+                {0,0,0,0,1,0,0,0,0,0,0,-1}, //7
+                {0,0,0,0,0,0,0,1,0,1,1,1}}; //8
 
         //Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
         //Hypergraph hg = new Hypergraph().generateRandomHypergraph(15000,15000,5,10);
@@ -87,7 +86,7 @@ public class Main {
         //hg2.printHypergraph();
         int counter = 0;
         for (int i = 0; i < 10000; i++) {
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 2,2,1,10);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 50,25,5,10);
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
             ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
