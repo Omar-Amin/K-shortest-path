@@ -8,7 +8,12 @@ import java.util.*;
 public class ShortestPath {
     //Hypergraph er det samme som hyperpath
     //Class attributes
-    private PriorityQueue<Vertex> pq = new PriorityQueue<>((o1, o2) -> o1.getCost() - o2.getCost());
+    private PriorityQueue<Vertex> pq = new PriorityQueue<>(new Comparator<Vertex>() {
+        @Override
+        public int compare(Vertex o1, Vertex o2) {
+            return Integer.compare(o1.getCost(), o2.getCost());
+        }
+    });
     private ArrayList<Edge> path = new ArrayList<>();
     private int cost = 0;
 
@@ -35,12 +40,8 @@ public class ShortestPath {
         source.setCost(0);
         pq.add(source);
         while (pq.size() > 0) {
+            debugPrintQueue();
             Vertex u = pq.poll(); //Retrieves and removes first element
-            if (u.getId() == target.getId()) {
-                cost = u.getCost();
-                getPath(source, u); // Array of a path of edges, perhaps return it?
-                return path;
-            }
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
                 if(deletedEdges.contains(edge)){
                     continue;
@@ -58,6 +59,11 @@ public class ShortestPath {
                     }
                 }
             }
+        }
+        if(target.getCost() != Integer.MAX_VALUE){
+            cost = target.getCost();
+            getPath(source, target); // Array of a path of edges, perhaps return it?
+            return path;
         }
         throw new IllegalArgumentException("Couldn't find a path from source to target");
     }
@@ -115,6 +121,18 @@ public class ShortestPath {
 
     public int getCost(){
         return cost;
+    }
+
+    private void debugPrintQueue(){
+        //System.out.println("___Printing queue STARTS____");
+        ArrayList<Vertex> tmp = new ArrayList<>();
+        while (pq.size() > 0){
+            Vertex v = pq.poll();
+            //System.out.println("Vertex id: " + (v.getId()+1));
+            //System.out.println("Cost: " + v.getCost());
+            tmp.add(v);
+        }
+        pq.addAll(tmp);
     }
 
 }

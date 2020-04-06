@@ -196,7 +196,6 @@ public class Hypergraph {
         this.source = Vertices.get(0);
         this.target = Vertices.get(vertices-1);
 
-
         for (int row = 0; row < vertices; row++) {
             for (int col = 0; col < edges; col++) {
                 if (metaGraph[row][col] == -1){
@@ -219,7 +218,6 @@ public class Hypergraph {
             Vertices.addAll(h.getVertices());
             Edges.addAll(h.getEdges());
         }
-
 
         return this;
     }

@@ -75,15 +75,17 @@ public class Main {
         //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
         //hg2.printHypergraph();
 
-        for (int i = 0; i < 10; i++) {
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 5000,4000,5,1000);
+        for (int i = 0; i < 10000; i++) {
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 1000,500,5,1000);
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
             ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             Graph graph = new Graph().transformToGraph(testGenerated,testGenerated.getSource().getId(),testGenerated.getTarget().getId());
-            System.out.println(shortestPath.getCost());
+            if(graph.getShortestDistance() != shortestPath.getCost()){
+                System.out.println("Graph: " + graph.getShortestDistance());
+                System.out.println("Hyper: " + shortestPath.getCost());
+            }
         }
-
 
     }
 

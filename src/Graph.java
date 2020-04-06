@@ -4,6 +4,7 @@ import java.util.List;
 public class Graph {
 
     private ArrayList<Node> nodes = new ArrayList<>();
+    private int shortestDistance = 0;
 
     public Graph(){
 
@@ -15,7 +16,6 @@ public class Graph {
         for (int i = 0; i < vertices.size(); i++) {
             nodes.add(null);
         }
-        ArrayList<Integer> arrayList = new ArrayList<>();
 
         for (Vertex v :vertices) {
             Node n = new Node(v.getId());
@@ -35,15 +35,17 @@ public class Graph {
         dijkstra.computePaths(nodes.get(source));
         List<Node> path = dijkstra.getShortestPathTo(nodes.get(target));
         //System.out.println("Path: " + path);
+        for(Node n: path){
+            if(n.shortestDistance > shortestDistance){
+                shortestDistance = (int) n.shortestDistance;
+            }
+        }
 
-/*        for(Node n: path){
-            System.out.println("Node: " + (n.getValue()+1));
-            System.out.println("Distance to " +
-                    n + ": " + n.shortestDistance);
-        }*/
-        System.out.println("Distance to " +
-                path.get(path.size()-1).getValue() + ": " + path.get(path.size()-1).shortestDistance);
         return this;
+    }
+
+    public int getShortestDistance(){
+        return shortestDistance;
     }
 
 }
