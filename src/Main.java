@@ -59,7 +59,7 @@ public class Main {
                 {0,0,0,0,0,0,1,1}
         };*/
 
-        int[][] metaGraph = {
+        int[][] metaGraph3 = {
                 {-1,-1,0,0,0,0,0,0,0,0,0,0}, //1
                 {1,0,-1,0,0,-1,0,0,0,0,0,0}, //2
                 {0,1,0,-1,-1,0,0,0,0,0,0,0}, //3
@@ -86,7 +86,8 @@ public class Main {
         //hg2.printHypergraph();
         int counter = 0;
         for (int i = 0; i < 10000; i++) {
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 50,25,5,10);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 5,2,3,10,67);
+            // 67 for graph < hyper, 303 for graph > hyper
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
             ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
@@ -95,6 +96,7 @@ public class Main {
                 counter++;
                 System.out.println("Graph: " + graph.getShortestDistance());
                 System.out.println("Hyper: " + shortestPath.getCost());
+                break;
             }
         }
         System.out.println(counter);

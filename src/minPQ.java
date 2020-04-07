@@ -55,10 +55,15 @@ public class minPQ {
     }
 
     public Vertex popMin(){
-        if(size == 0) return null;
+        if(size == 0){
+            return null;
+        }
         Vertex ret = heap.get(0);
-        if(size > 1)heap.set(0,heap.remove(size-1));
-        else heap.remove(0);
+        if(size > 1){
+            heap.set(0,heap.remove(size-1));
+        } else {
+            heap.remove(0);
+        }
         size--;
         minHeapify(0);
         return ret;
@@ -92,4 +97,5 @@ public class minPQ {
     public int size(){
         return size;
     }
+
 }

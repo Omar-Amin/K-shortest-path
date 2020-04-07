@@ -4,8 +4,8 @@ public class HypergraphGenerator {
 
     private Hypergraph hypergraph;
 
-    public HypergraphGenerator(int[][] metaGraph,int maxNodes,int minNodes , int tailSize, int maxCost){
-        Hypergraph hg = new Hypergraph().generateRandomHypergraph(maxNodes,minNodes,tailSize,maxCost);
+    public HypergraphGenerator(int[][] metaGraph,int maxNodes,int minNodes , int tailSize, int maxCost, int seed){
+        Hypergraph hg = new Hypergraph().generateRandomHypergraph(maxNodes,minNodes,tailSize,maxCost, seed);
         ArrayList<Hypergraph> hyperEdges = new ArrayList<>();
         hyperEdges.add(hg);
 
@@ -13,7 +13,7 @@ public class HypergraphGenerator {
             Hypergraph hypergraph = new Hypergraph();
             hypergraph.setAmountOfVertices(hyperEdges.get(i-1).getAmountOfVertices());
             hypergraph.setAmountOfEdges(hyperEdges.get(i-1).getAmountOfEdges());
-            hypergraph.generateRandomHypergraph(maxNodes,minNodes , tailSize, maxCost);
+            hypergraph.generateRandomHypergraph(maxNodes,minNodes , tailSize, maxCost, seed+i);
             hyperEdges.add(hypergraph);
         }
 
