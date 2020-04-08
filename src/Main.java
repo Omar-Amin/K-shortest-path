@@ -43,21 +43,21 @@ public class Main {
                 {-2,-2,-2,-2,-2,1,-2,-1}, //6
                 {-2,-2,-2,-2,-2,-2,2,1}  //7
         };*/
-/*        int[][] metaGraph = {
+        int[][] metaGraph = {
                 {-1,-1,0,0},
                 {1,0,-1,0},
                 {0,1,0,-1},
                 {0,0,1,1}
-        };*/
+        };
 
-/*        int[][] metaGraph = {
-                {-1,-1,0,0,0,0,0,0},
-                {1,0,-1,0,0,-1,0,0},
-                {0,0,1,0,1,0,-1,0},
-                {0,1,0,-1,-1,0,0,0},
-                {0,0,0,1,0,1,0,-1},
-                {0,0,0,0,0,0,1,1}
-        };*/
+        int[][] metaGraph2 = {
+                {-1,-1,0,0,0,0,0}, //1
+                {1,0,-1,0,0,0,0}, //2
+                {0,1,0,-1,-1,0,0}, //3
+                {0,0,1,1,0,-1,0}, //4
+                {0,0,0,0,1,0,-1}, //5
+                {0,0,0,0,0,1,1} //6
+        };
 
         int[][] metaGraph3 = {
                 {-1,-1,0,0,0,0,0,0,0,0,0,0}, //1
@@ -86,18 +86,21 @@ public class Main {
         //hg2.printHypergraph();
         int counter = 0;
         for (int i = 0; i < 10000; i++) {
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 5,2,3,10,67);
-            // 67 for graph < hyper, 303 for graph > hyper
+            System.out.println(i);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph2, 50,25,5,10,-100);
+            // 59 for graph < hyper, 303 for graph > hyper
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
             ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             Graph graph = new Graph().transformToGraph(testGenerated,testGenerated.getSource().getId(),testGenerated.getTarget().getId());
             if(graph.getShortestDistance() != shortestPath.getCost()){
                 counter++;
+                //testGenerated.printHypergraph();
                 System.out.println("Graph: " + graph.getShortestDistance());
                 System.out.println("Hyper: " + shortestPath.getCost());
                 break;
             }
+
         }
         System.out.println(counter);
 

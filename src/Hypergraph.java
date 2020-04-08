@@ -151,8 +151,16 @@ public class Hypergraph {
      * Generates random graph by some given input.
      * */
     public Hypergraph generateRandomHypergraph(int maxNodes,int minNodes , int tailSize, int maxCost, int seed){
-        Random rand = new Random(seed);
+        Random rand;
+        if(seed >= 0){
+            rand = new Random(seed);
+        }else {
+            rand = new Random();
+        }
         int amountOfNodes = rand.nextInt((maxNodes - minNodes) + 1) + minNodes;
+        if(tailSize >= amountOfNodes){
+            tailSize = amountOfNodes-1;
+        }
         int randTailsize = rand.nextInt((tailSize - 1) + 1) + 1;
 
         int[][] matrix = new int[amountOfNodes][amountOfNodes-1];
@@ -197,6 +205,7 @@ public class Hypergraph {
             Vertices.addAll(h.getVertices());
             Edges.addAll(h.getEdges());
         }
+
 
         for (int row = 0; row < vertices; row++) {
             for (int col = 0; col < edges; col++) {

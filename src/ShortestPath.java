@@ -8,13 +8,13 @@ import java.util.*;
 public class ShortestPath {
     //Hypergraph er det samme som hyperpath
     //Class attributes
-/*    private PriorityQueue<Vertex> pq = new PriorityQueue<>(new Comparator<Vertex>() {
+    private PriorityQueue<Vertex> pq = new PriorityQueue<>(new Comparator<Vertex>() {
         @Override
         public int compare(Vertex o1, Vertex o2) {
             return Integer.compare(o1.getCost(), o2.getCost());
         }
-    });*/
-    private minPQ pq = new minPQ();
+    });
+    //private minPQ pq = new minPQ();
     private ArrayList<Edge> path = new ArrayList<>();
     private int cost = 0;
 
@@ -39,30 +39,33 @@ public class ShortestPath {
             edge.setKj(0);
         }
         source.setCost(0);
-        pq.insert(source);
+        pq.add(source);
         while (pq.size() > 0) {
             //debugPrintQueue();
-            Vertex u = pq.popMin(); //Retrieves and removes first element
+            Vertex u = pq.poll(); //Retrieves and removes first element
+            //System.out.println("Popped: " + (u.getId()+1));
+            //System.out.println("pq size: " + pq.size());
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
                 if(deletedEdges.contains(edge)){
                     continue;
                 }
                 edge.setKj(edge.getKj()+1);
-                if (edge.getKj() == edge.getTail().size()) {
+                if (edge.getKj() >= edge.getTail().size()) {
                     int f = minCostFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
+                    //System.out.println("Head: " + (y.getId()+1));
+                    //System.out.println("Head cost: " + y.getCost());
+                    //System.out.println("Costfunction: " + f);
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
+                        pq.remove(y);
                         y.setCost(f);
-                        if(pq.contains(y)){
-                            pq.decreaseValue(y.getId(),f);
-                        }else {
-                            pq.insert(y);
-                        }
                         y.setPredecessor(edge);
+                        pq.add(y);
                     }
                 }
             }
+            //System.out.println("________");
         }
 
         if(target.getCost() != Integer.MAX_VALUE){

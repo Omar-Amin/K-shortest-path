@@ -5,6 +5,7 @@ public class minPQ {
     private ArrayList<Vertex> heap;
     private HashMap<Integer, Integer> index;
     private int size;
+    private int decreaseWith = 0;
 
     public minPQ(){
         heap = new ArrayList<>();
@@ -13,16 +14,13 @@ public class minPQ {
     }
 
     public void minHeapify(int i){
-        if (this.heap.size() == 0){
-            return;
-        }
         int smallest = i;
         int lChild = i*2+1;
         int rChild = i*2+2;
-        if (lChild < this.size && heap.get(lChild).getCost() < heap.get(i).getCost()){
+        if (lChild < size && heap.get(lChild).getCost() < heap.get(i).getCost()){
             smallest = lChild;
         }
-        if (rChild < this.size && heap.get(rChild).getCost() < heap.get(smallest).getCost()){
+        if (rChild < size && heap.get(rChild).getCost() < heap.get(smallest).getCost()){
             smallest = rChild;
         }
         if (smallest != i){
@@ -34,23 +32,22 @@ public class minPQ {
     public void decreaseValue(int id, int value){
         int i = index.get(id);
         heap.get(i).setCost(value);
-        int parent = (int) Math.floor((i-1)/2);
+        int parent = (i-1)/2;
         while (i > 0 && heap.get(parent).getCost() > heap.get(i).getCost()){
             exchange(parent,i);
             i = parent;
-            parent = (int) Math.floor((i-1)/2);
+            parent = (i-1)/2;
         }
     }
 
     public void insert(Vertex obj){
-        int i = this.size++;
+        int i = size++;
         heap.add(obj);
-        index.put(obj.getId(),i);
-        int parentI = (int) Math.floor((i-1)/2);
-        while(i > 0 && heap.get(parentI).getCost() > obj.getCost()) {
-            exchange(i,parentI);
-            i = parentI;
-            parentI = (int) Math.floor((i - 1) / 2);
+        int parent = (i-1)/2;
+        while(i > 0 && heap.get(parent).getCost() > obj.getCost()) {
+            exchange(parent,i);
+            i = parent;
+            parent = (i-1)/2;
         }
     }
 
@@ -64,6 +61,7 @@ public class minPQ {
         } else {
             heap.remove(0);
         }
+
         size--;
         minHeapify(0);
         return ret;
@@ -80,9 +78,9 @@ public class minPQ {
         Vertex swap1Obj = heap.get(swap1);
         Vertex swap2Obj = heap.get(swap2);
         heap.set(swap1, swap2Obj);
-        index.put(swap1Obj.getId(),swap1);
+        index.put(swap1Obj.getId(),swap2);
         heap.set(swap2, swap1Obj);
-        index.put(swap2Obj.getId(),swap2);
+        index.put(swap2Obj.getId(),swap1);
     }
 
     public void checkTree(){
