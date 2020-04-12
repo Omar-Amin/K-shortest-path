@@ -32,6 +32,7 @@ public class minPQ {
         while (i > 0 && heap.get(parent)[1] > heap.get(i)[1]){
             exchange(parent,i);
             i = parent;
+            parent = (int) Math.floor((i-1)/2);
         }
         return true;
     }
@@ -56,7 +57,12 @@ public class minPQ {
     public int[] popMin(){
         if(size == 0) return null;
         int[] ret = heap.get(0);
-        if(size > 1)heap.set(0,heap.remove(size-1));
+        index.remove(ret[0]);
+        if(size > 1) {
+            int[] newLow = heap.remove(size-1);
+            heap.set(0, newLow);
+            index.put(newLow[0],0);
+        }
         else heap.remove(0);
         size--;
         minHeapify(0);
@@ -73,10 +79,10 @@ public class minPQ {
     public void exchange(int swap1, int swap2){
         int[] swap1Obj = heap.get(swap1);
         int[] swap2Obj = heap.get(swap2);
-        heap.set(swap1, swap2Obj);
-        index.put(swap1Obj[0],swap1);
         heap.set(swap2, swap1Obj);
-        index.put(swap2Obj[0],swap2);
+        heap.set(swap1, swap2Obj);
+        index.put(swap1Obj[0],swap2);
+        index.put(swap2Obj[0],swap1);
     }
 
     public void checkTree(){
@@ -86,6 +92,18 @@ public class minPQ {
             System.out.println(heap.get(i)[1]);
             if (rChild < size) System.out.println("lChild:" + heap.get(lChild)[1] + " rChild:" + heap.get(rChild)[1] + "\n");
             else if (lChild < size) System.out.println("lChild:" + heap.get(lChild)[1] + "\n");
+        }
+    }
+
+    public static void main(String[] args){
+        minPQ pq = new minPQ();
+        for (int i = 0; i < 10; i++) {
+            if (i == 5) pq.insert(new int[]{i, 11});
+            else pq.insert(new int[]{i, 10 - i});
+        }
+        for (int i = 0; i < 10; i++) {
+            int[] ret = pq.popMin();
+            System.out.println(ret[0]+" : "+ ret[1]);
         }
     }
 }
