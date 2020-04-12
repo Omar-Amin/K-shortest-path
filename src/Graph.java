@@ -64,10 +64,19 @@ public class Graph {
         }
     }
 
+
+    //Der skal nok kigges på om denne funktion kan optimeres
     protected void edgesInput(int[][] edges, int[] edgePrices){
+        int edgesCount = edges.length;
+        if(edgesCount != edgePrices.length) {
+            System.out.println("Defined input is not legal! There must be the same amount of edges as prices for each edge!");
+            return;
+        }
+        edgeLookup = new int[edgesCount];
         ArrayList<Integer> tempEdgeTable = new ArrayList<>();
         int max = -1;
-        for (int i = 0; i < edges.length; i++) {
+        for (int i = 0; i < edgesCount; i++) {
+            edgeLookup[i] = tempEdgeTable.size();
             int[] edge = edges[i];
             int head = edge[0];
             tempEdgeTable.add(head);
@@ -79,9 +88,42 @@ public class Graph {
                 if(tail>max) max = tail;
             }
         }
-        for (int edge = 0; edge < edges.length; edge++) {
-
+        //Er kun implementeret så det virker, er slet ikke optimeret:
+        vertexLookup = new int[max+1];
+        int count = 0;
+        int[] vertexIngoingCount = new int[max+1];
+        int[] vertexOutgoingCount= new int[max+1];
+        for (int i = 0; i < edgesCount; i++) {
+            int[] edge = edges[i];
+            vertexIngoingCount[edge[0]]++;
+            count += edge.length;
+            for (int j = 1; j < edge.length; j++) {
+                vertexOutgoingCount[edge[j]]++;
+            }
         }
+        //Setup vertexLookup table
+        vertexTable = new int[count + ((max+1)*2)];
+        for (int i = 0; i < max; i++) {
+            vertexLookup[i+1] = vertexLookup[i] + 2 + vertexIngoingCount[i] + vertexOutgoingCount[i];
+            vertexTable[vertexLookup[i]] = -1; //Set cost of vertex not initialized
+            vertexTable[vertexLookup[i]+1] = vertexIngoingCount[i];
+        }
+        vertexTable[vertexLookup[max]] = -1; //Set cost of vertex not initialized
+        vertexTable[vertexLookup[max]+1] = vertexIngoingCount[max];
+        //Fill in the vertexTable
+        for (int i = 0; i < edgesCount; i++) {
+            int[] edge = edges[i];
+            int head = edge[0];
+            vertexTable[vertexLookup[head]+2 + (--vertexIngoingCount[head])] = i;
+            for (int j = 1; j < edge.length; j++) {
+                int v = edge[j];
+                if(v >= max) {
+                    vertexTable[vertexTable.length - (vertexOutgoingCount[v]--)] = i;
+                }
+                else vertexTable[vertexLookup[v+1]-(vertexOutgoingCount[v]--)] = i;
+            }
+        }
+        this.edgeTable = HypergraphGenerator.convertListToArr(tempEdgeTable);
     }
 
     public int[] tail(int edge){

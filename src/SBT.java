@@ -20,12 +20,13 @@ public class SBT {
         for(int i = 0; i < g.vertexLookup.length;i++){
             g.setVertexCost(i,Integer.MAX_VALUE);
         }
-        int[] vertex = {0,0};
+        int[] vertex = {source,0};
         g.setVertexCost(vertex[0],vertex[1]);
         PQ.insert(vertex);
         while(PQ.size > 0){
             vertex = PQ.popMin();
             if(vertex[0] == target){
+                System.out.println("Shortest path from " + source + " to " + target + " costs: " + vertex[1]);
                 getPath(source, target);
                 return path;
             }
@@ -44,7 +45,6 @@ public class SBT {
                             PQ.decreaseValue(y,f);
                         }
                         this.predecessor[y] = edge;
-
                     }
                 }
             }
@@ -55,10 +55,11 @@ public class SBT {
     public void getPath(int source,int vertex){
         if(source == vertex) return;
         int edge = this.predecessor[vertex];
+        int[] tail = g.tail(edge);
         for (int v:g.tail(edge)){
             getPath(source,v);
         }
-        path.add(edge);
+        if(!path.contains(edge)) path.add(edge);
     }
 
     public boolean contains(int edge, int[] skip){
