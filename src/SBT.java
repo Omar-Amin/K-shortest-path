@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SBT {
     private minPQ PQ;
@@ -26,7 +27,6 @@ public class SBT {
         while(PQ.size > 0){
             vertex = PQ.popMin();
             if(vertex[0] == target){
-                System.out.println("Shortest path from " + source + " to " + target + " costs: " + vertex[1]);
                 getPath(source, target);
                 return path;
             }
@@ -55,11 +55,11 @@ public class SBT {
     public void getPath(int source,int vertex){
         if(source == vertex) return;
         int edge = this.predecessor[vertex];
-        int[] tail = g.tail(edge);
+        if(path.contains(edge)) return;
         for (int v:g.tail(edge)){
             getPath(source,v);
         }
-        if(!path.contains(edge)) path.add(edge);
+        path.add(edge);
     }
 
     public boolean contains(int edge, int[] skip){

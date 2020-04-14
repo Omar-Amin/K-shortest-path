@@ -9,21 +9,20 @@ public class HypergraphGenerator {
     }
     public static Graph HypergraphGenerator(int metaSize, int metaEdgeSize, Long seed){
         Random rand;
-        if(seed == null) {
+        if (seed == null) {
             rand = new Random();
             seed = rand.nextLong();
             rand.setSeed(seed);
-        }
-        else rand = new Random(seed);
+        } else rand = new Random(seed);
         int[] metaVertices = new int[metaSize];
         ArrayList<int[]> h2 = new ArrayList<>();
         ArrayList<Integer> cost = new ArrayList();
         //Generate meta graph
         ArrayList<int[]> metaGraph = generateMeta(metaSize, rand);
-        for (int[] metaEdge:metaGraph) {
-            Pair<ArrayList<int[]>,ArrayList<Integer>> ret = generateh2(metaVertices[metaEdge[0]],metaEdgeSize, rand);
-            int[] lastEdge = ret.getKey().get(ret.getKey().size()-1);
-            if(metaVertices[metaEdge[1]] == 0) metaVertices[metaEdge[1]] = lastEdge[0];
+        for (int[] metaEdge : metaGraph) {
+            Pair<ArrayList<int[]>, ArrayList<Integer>> ret = generateh2(metaVertices[metaEdge[0]], metaEdgeSize, rand);
+            int[] lastEdge = ret.getKey().get(ret.getKey().size() - 1);
+            if (metaVertices[metaEdge[1]] == 0) metaVertices[metaEdge[1]] = lastEdge[0];
             else {
                 lastEdge[0] = metaVertices[metaEdge[1]];
                 ID--;
@@ -32,8 +31,8 @@ public class HypergraphGenerator {
             cost.addAll(ret.getValue());
         }
         Graph g = new Graph();
-        g.edgesInput(convertListToArrArr(h2),convertListToArr(cost));
-        System.out.println("Generating random hypergraph with seed: " + seed);
+        g.edgesInput(convertListToArrArr(h2), convertListToArr(cost));
+        g.seed = seed;
         return g;
     }
 
@@ -62,7 +61,7 @@ public class HypergraphGenerator {
         ArrayList<Integer> cost = new ArrayList<>();
         ArrayList<int[]> h2 = new ArrayList<>();
         int vertices = (int) (rand.nextInt((int) ( size*0.5) ) + size*0.75);
-        int maxTailSize = rand.nextInt(size/2)+1;
+        int maxTailSize = rand.nextInt(5)+1;
         for (int i = 1; i <= vertices; i++) {
             int tailSize = maxTailSize;
             if(i-maxTailSize < 0) tailSize = maxTailSize + (i-maxTailSize);

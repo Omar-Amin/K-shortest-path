@@ -85,13 +85,9 @@ public class minPQ {
         index.put(swap2Obj[0],swap1);
     }
 
-    public void checkTree(){
-        for (int i = 0; i < size; i++) {
-            int lChild = i * 2 + 1;
-            int rChild = i * 2 + 2;
-            System.out.println(heap.get(i)[1]);
-            if (rChild < size) System.out.println("lChild:" + heap.get(lChild)[1] + " rChild:" + heap.get(rChild)[1] + "\n");
-            else if (lChild < size) System.out.println("lChild:" + heap.get(lChild)[1] + "\n");
+    public void checkTree(int[] poppedElement){
+        for (int[] i:heap) {
+            if(i[1] < poppedElement[1]) System.out.println("Error in minPQ");
         }
     }
 

@@ -5,6 +5,7 @@ public class Graph {
     int[] vertexLookup;
     int[] vertexTable;
     int[] edgeTable;
+    public Long seed;
 
     //Constructor for the graph class
     public Graph() {
@@ -170,6 +171,30 @@ public class Graph {
             ret[i] = edge;
         }
         return ret;
+    }
+
+    public Graph convertToNormalGraph(){
+        Graph g = new Graph();
+        ArrayList<int[]> edgeInput = new ArrayList<>();
+        ArrayList<Integer> cost = new ArrayList<>();
+        for (int i = 0; i < this.edgeLookup.length; i++) {
+            int startIndex = this.edgeLookup[i];
+            int nextIndex;
+            if (i == this.edgeLookup.length-1) {
+                nextIndex = this.edgeTable.length;
+            } else {
+                nextIndex = this.edgeLookup[i+1];
+            }
+            int head = edgeTable[startIndex];
+            int edgeCost = edgeTable[startIndex+1];
+            for (int j = startIndex+2; j < nextIndex; j++) {
+                int[] edge = {head,edgeTable[j]};
+                edgeInput.add(edge);
+                cost.add(edgeCost);
+            }
+        }
+        g.edgesInput(HypergraphGenerator.convertListToArrArr(edgeInput),HypergraphGenerator.convertListToArr(cost));
+        return g;
     }
 
     public int getVertexCost(int vertex){
