@@ -157,6 +157,7 @@ public class Hypergraph {
         }else {
             rand = new Random();
         }
+
         int amountOfNodes = rand.nextInt((maxNodes - minNodes) + 1) + minNodes;
         if(tailSize >= amountOfNodes){
             tailSize = amountOfNodes-1;
@@ -205,7 +206,6 @@ public class Hypergraph {
             Vertices.addAll(h.getVertices());
             Edges.addAll(h.getEdges());
         }
-
 
         for (int row = 0; row < vertices; row++) {
             for (int col = 0; col < edges; col++) {

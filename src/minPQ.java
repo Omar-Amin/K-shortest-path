@@ -24,7 +24,7 @@ public class minPQ {
             smallest = rChild;
         }
         if (smallest != i){
-            exchange(i,smallest);
+            exchange(smallest,i);
             minHeapify(smallest);
         }
     }
@@ -43,6 +43,7 @@ public class minPQ {
     public void insert(Vertex obj){
         int i = size++;
         heap.add(obj);
+        index.put(obj.getId(),i);
         int parent = (i-1)/2;
         while(i > 0 && heap.get(parent).getCost() > obj.getCost()) {
             exchange(parent,i);
@@ -58,6 +59,7 @@ public class minPQ {
         Vertex ret = heap.get(0);
         if(size > 1){
             heap.set(0,heap.remove(size-1));
+            index.put(heap.get(0).getId(),0);
         } else {
             heap.remove(0);
         }
@@ -78,18 +80,9 @@ public class minPQ {
         Vertex swap1Obj = heap.get(swap1);
         Vertex swap2Obj = heap.get(swap2);
         heap.set(swap1, swap2Obj);
-        index.put(swap1Obj.getId(),swap2);
         heap.set(swap2, swap1Obj);
+        index.put(swap1Obj.getId(),swap2);
         index.put(swap2Obj.getId(),swap1);
-    }
-
-    public void checkTree(){
-        Vertex smallest = heap.get(0);
-        for (Vertex v :heap) {
-            if(smallest.getCost() > v.getCost()){
-                System.out.println("error");
-            }
-        }
     }
 
     public int size(){

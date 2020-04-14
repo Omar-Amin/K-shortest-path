@@ -84,10 +84,11 @@ public class Main {
         //ArrayList<Edge> temp = sp.getShortestPath();
         //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
         //hg2.printHypergraph();
+        long startTime = System.nanoTime();
         int counter = 0;
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph2, 50,25,5,10,-100);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 50,25,5,10,-1000);
             // 59 for graph < hyper, 303 for graph > hyper
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
@@ -100,10 +101,10 @@ public class Main {
                 System.out.println("Hyper: " + shortestPath.getCost());
                 break;
             }
-
         }
         System.out.println(counter);
-
+        long stopTime = System.nanoTime();
+        //System.out.println((float) (stopTime - startTime)/1000000000);
     }
 
 }
