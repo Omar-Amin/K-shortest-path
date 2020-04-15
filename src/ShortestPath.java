@@ -49,17 +49,23 @@ public class ShortestPath {
                     continue;
                 }
                 edge.setKj(edge.getKj()+1);
-                if (edge.getKj() >= edge.getTail().size()) {
+                if (edge.getKj() == edge.getTail().size()) {
                     int f = minCostFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
-                        y.setCost(f);
                         if(!pq.contains(y)){
+                            // this line can be removed if we return immediately
+                            if(y.getCost() < Integer.MAX_VALUE){
+                                for (Edge e :y.getOutgoing_edges()) {
+                                    e.setKj(e.getKj()-1);
+                                }
+                            }
                             pq.insert(y);
                         }else {
                             pq.decreaseValue(y.getId(),y.getCost());
                         }
+                        y.setCost(f);
                         y.setPredecessor(edge);
                     }
                 }
@@ -136,7 +142,7 @@ public class ShortestPath {
     private final HashMap<Edge, Integer> edges = new HashMap<>();
     /**
      * Helper function that updates the "in" hashmap in order to
-     * perform topological sorting. 
+     * perform topological sorting.
      * */
     private void edgesInPath(Vertex source, Vertex target){
         if(edges.get(target.getPredecessor()) != null){

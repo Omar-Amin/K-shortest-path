@@ -89,7 +89,7 @@ public class Main {
         int counter = 0;
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 50,25,5,10,i);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 50,25,5,10,-1000);
             // 59 for graph < hyper, 303 for graph > hyper
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
