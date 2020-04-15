@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.PriorityQueue;
 
 public class Main {
 
     public static void main(String[] args) {
-/*        int[][] hypergraph = {
+        int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2}, //1
                 {1,-2,-1,-1,-2,-1,-2,-2,-1,-2,-2}, //2
                 {-2,1,-1,-2,-2,-2,-1,-2,-2,-2,-2}, //3
@@ -13,7 +14,7 @@ public class Main {
                 {-2,-2,-2,-2,1,-2,-2,-2,-1,-2,-2}, //6
                 {-2,-2,-2,-2,-2,1,1,-2,-2,-1,-2}, //7
                 {-2,-2,-2,-2,-2,-2,-2,1,1,1,-1}, //8
-                {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9*/
+                {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9
 /*          int[][] hypergraph = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2,-2}, //1
                 {1,-2,-1,-1,-2,-1,-2,-2,-1,-2,-2}, //2
@@ -24,7 +25,7 @@ public class Main {
                 {-2,-2,-2,-2,-2,3,4,-2,-2,-1,-2}, //7
                 {-2,-2,-2,-2,-2,-2,-2,4,3,1,-1}, //8
                 {-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,1}}; //9*/
-/*                int[][] hypergraph = {
+                int[][] hypergraph3 = {
                 {-1,-1,-2,-2,-2,-2,-2,-2,-2,-2},
                 {1,-2,-1,-1,-2,-1,-2,-1,-2,-2},
                 {-2,1,-1,-2,-2,-2,-2,-2,-2,-2},
@@ -33,8 +34,8 @@ public class Main {
                 {-2,-2,-2,-2,1,-2,-2,-1,-2,-2},
                 {-2,-2,-2,-2,-2,1,-2,-2,-1,-2},
                 {-2,-2,-2,-2,-2,-2,1,1,1,-1},
-                {-2,-2,-2,-2,-2,-2,-2,-2,-2,1}};*/
-/*        int[][] hypergraph = {
+                {-2,-2,-2,-2,-2,-2,-2,-2,-2,1}};
+        int[][] hypergraph2 = {
                 {-1,-1,-2,-2,-2,-2,-2,-2}, //1
                 {1,-2,-2,-1,-2,-1,-2,-2}, //2
                 {-2,1,-1,-1,-2,-2,-2,-2}, //3
@@ -42,7 +43,7 @@ public class Main {
                 {-2,-2,1,-2,-1,-2,-1,-2}, //5
                 {-2,-2,-2,-2,-2,1,-2,-1}, //6
                 {-2,-2,-2,-2,-2,-2,2,1}  //7
-        };*/
+        };
         int[][] metaGraph = {
                 {-1,-1,0,0},
                 {1,0,-1,0},
@@ -73,9 +74,9 @@ public class Main {
         //Hypergraph hg = new Hypergraph().generateRandomHypergraph(15000,15000,5,10);
         //Graph graph = new Graph().transformToGraph(hg);
 
-        //ShortestPath shortestPath = new ShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1));
+        //ShortestPath shortestPath = new ShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),new ArrayList<>());
         //System.out.println("Our algorithm:" + shortestPath.getCost());
-
+        //shortestPath.printPath();
         //shortestPath.printPath();
         //hg.printHypergraph();
         //KShortestPath kshortest = new KShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),2);
@@ -88,7 +89,7 @@ public class Main {
         int counter = 0;
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 50,25,5,10,-1000);
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 50,25,5,10,i);
             // 59 for graph < hyper, 303 for graph > hyper
             Hypergraph testGenerated = generator.getHypergraph();
             //testGenerated.printHypergraph();
@@ -104,7 +105,7 @@ public class Main {
         }
         System.out.println(counter);
         long stopTime = System.nanoTime();
-        //System.out.println((float) (stopTime - startTime)/1000000000);
+        System.out.println((float) (stopTime - startTime)/1000000000);
     }
 
 }

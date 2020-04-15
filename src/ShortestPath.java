@@ -21,7 +21,6 @@ public class ShortestPath {
     private int cost = 0;
 
     public void printPath(){
-        path.sort((o1, o2) -> o1.getId() - o2.getId());
         System.out.println("Graph printed:");
         for (Edge edge :path) {
             System.out.println("Edge id: " + (edge.getId()+1));
@@ -106,18 +105,53 @@ public class ShortestPath {
         return edgeCost + edgeTailCost;
     }
 
-    // not really good at finding a path maybe find a new method
+    private final HashMap<Vertex,Integer> in = new HashMap<>();
+
+    /**
+     * This method gets path by topological sorting.
+     * */
     private void getPath(Vertex source, Vertex target){
-        if(path.contains(target.getPredecessor())){
+        PriorityQueue<Vertex> zeroIn = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
+        zeroIn.add(target);
+        edgesInPath(source,target);
+        path.add(target.getPredecessor());
+        while (!zeroIn.isEmpty()){
+            Vertex vertex = zeroIn.poll();
+            if (vertex == source){
+                continue;
+            }
+            for (Vertex tail : vertex.getPredecessor().getTail()) {
+                // decrease each value for the vertex if the edge polled out
+                // is a part of its outgoing edge
+                in.put(tail,in.get(tail) - 1);
+                if(in.get(tail) <= 0 && tail != source){
+                    zeroIn.add(tail);
+                    path.add(tail.getPredecessor());
+                }
+            }
+
+        }
+    }
+
+    private final HashMap<Edge, Integer> edges = new HashMap<>();
+    /**
+     * Helper function that updates the "in" hashmap in order to
+     * perform topological sorting. 
+     * */
+    private void edgesInPath(Vertex source, Vertex target){
+        if(edges.get(target.getPredecessor()) != null){
             return;
         }
-        path.add(target.getPredecessor());
+        edges.put(target.getPredecessor(),0);
         if (target == source) {
             return;
         }
         for (Vertex vertex : target.getPredecessor().getTail()) {
+            // counts how many outgoing edges each vertex in the shortest path
+            in.computeIfAbsent(vertex, t -> 0);
+            in.put(vertex,in.get(vertex)+1);
             if (vertex.getPredecessor() != null) { // If the vertex doesn't have a predecessor it hasn't been visited.
-                getPath(source, vertex);
+                edgesInPath(source, vertex);
             }
         }
     }
