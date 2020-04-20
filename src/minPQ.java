@@ -57,6 +57,7 @@ public class minPQ {
             return null;
         }
         Vertex ret = heap.get(0);
+        index.remove(ret.getId());
         if(size > 1){
             heap.set(0,heap.remove(size-1));
             index.put(heap.get(0).getId(),0);
@@ -70,10 +71,7 @@ public class minPQ {
     }
 
     public boolean contains(Vertex obj){
-        for (Vertex vertex: heap) {
-            if(vertex.getId() == obj.getId()) return true;
-        }
-        return false;
+        return !(index.get(obj.getId()) == null);
     }
 
     private void exchange(int swap1, int swap2){

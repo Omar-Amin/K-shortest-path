@@ -1,11 +1,5 @@
-import com.sun.javafx.image.IntPixelGetter;
 import javafx.util.Pair;
-import sun.misc.Queue;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Parameter;
 import java.util.*;
-import java.util.concurrent.BlockingDeque;
 
 public class ShortestPath {
     //Hypergraph er det samme som hyperpath
@@ -44,7 +38,7 @@ public class ShortestPath {
         while (pq.size() > 0) {
             //debugPrintQueue();
             Vertex u = pq.popMin(); //Retrieves and removes first element
-            for (Edge edge : u.getOutgoing_edges()) { // FS(u) må være u's outgoing edges
+            for (Edge edge : u.getOutgoing_edges()) { // FS(u) is u's outgoing edges
                 if(deletedEdges.contains(edge)){
                     continue;
                 }
@@ -61,11 +55,12 @@ public class ShortestPath {
                                     e.setKj(e.getKj()-1);
                                 }
                             }
+                            y.setCost(f);
                             pq.insert(y);
                         }else {
+                            y.setCost(f);
                             pq.decreaseValue(y.getId(),y.getCost());
                         }
-                        y.setCost(f);
                         y.setPredecessor(edge);
                     }
                 }
