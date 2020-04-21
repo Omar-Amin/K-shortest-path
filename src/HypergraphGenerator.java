@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class HypergraphGenerator {
 
-    private Hypergraph hypergraph;
+    private final Hypergraph hypergraph;
 
     public HypergraphGenerator(int[][] metaGraph,int maxNodes,int minNodes , int tailSize, int maxCost, int seed){
         Hypergraph hg = new Hypergraph().generateRandomHypergraph(maxNodes,minNodes,tailSize,maxCost, seed);

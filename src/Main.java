@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 
 
@@ -84,24 +86,32 @@ public class Main {
         //ArrayList<Edge> temp = sp.getShortestPath();
         //Hypergraph hg2 = new Hypergraph().edgesInput(temp);
         //hg2.printHypergraph();
+
+        testWithRandom(metaGraph3);
+    }
+
+    private static void testWithRandom(int[][] metaGraph){
         long startTime = System.nanoTime();
         int counter = 0;
+        ShortestPath shortestPath = new ShortestPath();
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
-            HypergraphGenerator generator = new HypergraphGenerator(metaGraph3, 50,25,5,10,-1000);
-            // 59 for graph < hyper, 303 for graph > hyper
+            HypergraphGenerator generator = new HypergraphGenerator(metaGraph, 50,25,5,10,-1000);
             Hypergraph testGenerated = generator.getHypergraph();
-            //testGenerated.printHypergraph();
-            ShortestPath shortestPath = new ShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
-            Graph graph = new Graph().transformToGraph(testGenerated,testGenerated.getSource().getId(),testGenerated.getTarget().getId());
-            if(graph.getShortestDistance() != shortestPath.getCost()){
+            Pair<ArrayList<Edge>,Integer> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+
+            Graph graph = new Graph().transformToGraph(testGenerated);
+            graph.runDijkstra(testGenerated.getSource().getId(),testGenerated.getTarget().getId());
+
+            if(graph.getShortestDistance() != shortest.getValue()){
                 counter++;
                 //testGenerated.printHypergraph();
                 System.out.println("Graph: " + graph.getShortestDistance());
-                System.out.println("Hyper: " + shortestPath.getCost());
+                System.out.println("Hyper: " + shortest.getValue());
                 break;
             }
         }
+
         System.out.println(counter);
         long stopTime = System.nanoTime();
         System.out.println((float) (stopTime - startTime)/1000000000);

@@ -2,10 +2,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class minPQ {
-    private ArrayList<Vertex> heap;
-    private HashMap<Integer, Integer> index;
+    private final ArrayList<Vertex> heap;
+    private final HashMap<Integer, Integer> index;
     private int size;
-    private int decreaseWith = 0;
 
     public minPQ(){
         heap = new ArrayList<>();

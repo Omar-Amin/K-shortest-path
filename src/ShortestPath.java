@@ -1,34 +1,22 @@
 import javafx.util.Pair;
+
 import java.util.*;
 
 public class ShortestPath {
-    //Hypergraph er det samme som hyperpath
-    //Class attributes
-/*    private PriorityQueue<Vertex> pq = new PriorityQueue<>(new Comparator<Vertex>() {
-        @Override
-        public int compare(Vertex o1, Vertex o2) {
-            return Integer.compare(o1.getCost(), o2.getCost());
-        }
-    });*/
-    private minPQ pq = new minPQ();
-    private ArrayList<Edge> path = new ArrayList<>();
-    private int cost = 0;
 
-    public void printPath(){
-        System.out.println("Graph printed:");
-        for (Edge edge :path) {
-            System.out.println("Edge id: " + (edge.getId()+1));
-            System.out.println("Cost of edge: " + edge.getCost());
-        }
+    public ShortestPath(){
     }
 
-    public ShortestPath(Hypergraph hypergraph, Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
-        SBT(hypergraph,source,target,deletedEdges);
-    }
-
-    private ArrayList<Edge> SBT(Hypergraph hypergraph, Vertex source, Vertex target,ArrayList<Edge> deletedEdges){
+    /**
+     * SBT is an algorithm from "Directed hypergraphs and applications", which acts like Dijkstra.
+     *
+     * @return Pair(Path,Cost), where path is a list of edges and cost is an integer (cost of the path)
+     * */
+    public Pair<ArrayList<Edge>, Integer> SBT(Hypergraph hypergraph, Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
+        minPQ pq = new minPQ();
         for (Vertex vertex : hypergraph.getVertices()) {
             vertex.setCost(Integer.MAX_VALUE);
+            vertex.setPredecessor(null);
         }
         for (Edge edge : hypergraph.getEdges()) {
             edge.setKj(0);
@@ -68,9 +56,7 @@ public class ShortestPath {
         }
 
         if(target.getId() != Integer.MAX_VALUE){
-            cost = target.getCost();
-            getPath(source, target); // Array of a path of edges, perhaps return it?
-            return path;
+            return getPath(source, target);
         }
 
         return null;
@@ -106,15 +92,22 @@ public class ShortestPath {
         return edgeCost + edgeTailCost;
     }
 
-    private final HashMap<Vertex,Integer> in = new HashMap<>();
-
     /**
      * This method gets path by topological sorting.
-     * */
-    private void getPath(Vertex source, Vertex target){
+     *
+     * @return Pair object which consist of the path and a cost
+     * NOTE: The path is an array of edges */
+    private Pair<ArrayList<Edge>, Integer> getPath(Vertex source, Vertex target){
+        // a map for checking if the edge is visited
+        HashMap<Edge, Integer> edges = new HashMap<>();
+        // counter for ingoing for each vertex
+        HashMap<Vertex,Integer> in = new HashMap<>();
+        edgesInPath(source,target,edges,in);
+        // queue which sorts by ID in order to get the same topological order for the same path
         PriorityQueue<Vertex> zeroIn = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
         zeroIn.add(target);
-        edgesInPath(source,target);
+        ArrayList<Edge> path = new ArrayList<>();
+        int cost = target.getCost();
         path.add(target.getPredecessor());
         while (!zeroIn.isEmpty()){
             Vertex vertex = zeroIn.poll();
@@ -130,16 +123,16 @@ public class ShortestPath {
                     path.add(tail.getPredecessor());
                 }
             }
-
         }
+
+        return new Pair<>(path,cost);
     }
 
-    private final HashMap<Edge, Integer> edges = new HashMap<>();
     /**
      * Helper function that updates the "in" hashmap in order to
      * perform topological sorting.
      * */
-    private void edgesInPath(Vertex source, Vertex target){
+    private void edgesInPath(Vertex source, Vertex target,HashMap<Edge, Integer> edges,HashMap<Vertex, Integer> in){
         if(edges.get(target.getPredecessor()) != null){
             return;
         }
@@ -149,35 +142,12 @@ public class ShortestPath {
         }
         for (Vertex vertex : target.getPredecessor().getTail()) {
             // counts how many outgoing edges each vertex in the shortest path
-            in.computeIfAbsent(vertex, t -> 0);
+            in.putIfAbsent(vertex, 0);
             in.put(vertex,in.get(vertex)+1);
             if (vertex.getPredecessor() != null) { // If the vertex doesn't have a predecessor it hasn't been visited.
-                edgesInPath(source, vertex);
+                edgesInPath(source, vertex,edges, in);
             }
         }
     }
-
-    public Pair<ArrayList<Edge>, Integer> getShortestPath(){
-        return new Pair<>(path,cost);
-    }
-
-    public void sortPath(){
-        path.sort((o1, o2) -> o1.getId() - o2.getId());
-    }
-
-    public int getCost(){
-        return cost;
-    }
-
-/*    private void debugPrintQueue(){
-        ArrayList<Vertex> tmp = new ArrayList<>();
-        while (pq.size() > 0){
-            Vertex v = pq.poll();
-            //System.out.println("Vertex id: " + (v.getId()+1));
-            //System.out.println("Cost: " + v.getCost());
-            tmp.add(v);
-        }
-        pq.addAll(tmp);
-    }*/
 
 }

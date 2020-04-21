@@ -9,34 +9,8 @@ Modified a bit to translate it from and into hypergraphs easier.
  */
 
 public class Dijkstra{
-    //Argument @lengthOfMeta - Length of meta graph
+
     public Dijkstra(){
-        //initialize the graph base on the Romania map
-        /*
-        Node n1 = new Node("Arad");
-        n1.adjacencies = new Edge[]{
-			new Edge(n2,75),
-			new Edge(n4,140),
-			new Edge(n8,118)
-		};
-        n14.adjacencies = new Edge[]{
-                new Edge(n13,90)
-        };
-
-        //compute paths
-        computePaths(n1);
-
-        //print shortest paths
-		/*
-		for(Node n: nodes){
-			System.out.println("Distance to " +
-				n + ": " + n.shortestDistance);
-    		List<Node> path = getShortestPathTo(n);
-    		System.out.println("Path: " + path);
-		}*/
-        //List<Node> path = getShortestPathTo(n13);
-        //System.out.println("Path: " + path);
-
     }
 
     public void computePaths(Node source){

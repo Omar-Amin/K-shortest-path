@@ -137,11 +137,11 @@ public class Hypergraph {
         for (Edge edge:Edges) {
             System.out.println("Edge id: " + (edge.getId()+1));
             System.out.println("Edge out-going: " + (edge.getHead().getId()+1));
-            String s = "";
+            StringBuilder s = new StringBuilder();
             for (Vertex vertex :edge.getTail()) {
-                s += (vertex.getId()+1) + ", ";
+                s.append(vertex.getId() + 1).append(", ");
             }
-            s = s.substring(0,s.length()-2);
+            s = new StringBuilder(s.substring(0, s.length() - 2));
             System.out.println("Edge in-going " + s);
             System.out.println("____________________");
         }
@@ -170,11 +170,14 @@ public class Hypergraph {
             Arrays.fill(ints, -2);
         }
 
+        // first we fill it the matrix diagonally with random values (as outgoing edges)
         for (int row = 1; row < amountOfNodes; row++) {
             int randCost = rand.nextInt((maxCost - 1) + 1) + 1;
             matrix[row][row-1] = randCost;
         }
 
+        // depending on the tail size, we fill it with -1 diagonally so
+        // each edge has the amount of -1 as the tail size
         for (int j = 0; j < randTailsize; j++) {
             for (int i = 0; i < amountOfNodes-(1+j); i++) {
                 matrix[i][i+j] = -1;
@@ -184,10 +187,16 @@ public class Hypergraph {
         return matrixInput(matrix);
     }
 
+    /**
+     * Connect hyperedges into a hypergraph from a list of hyperpaths and a metagraph.
+     * */
     public Hypergraph connectHyperedges(int[][] metaGraph,ArrayList<Hypergraph> hyperedges){
         int edges = metaGraph[0].length;
         int vertices = metaGraph.length;
 
+        // we connect an edge from vertex to the start of the hyperedge
+        // and an edge to the end of the hyperedge, thus we need
+        // twice as many edges
         for (int i = 0; i < edges*2; i++) {
             Edge edge = new Edge(amountOfEdges++);
             edge.setCost(0);
@@ -202,6 +211,7 @@ public class Hypergraph {
         this.source = Vertices.get(0);
         this.target = Vertices.get(vertices-1);
 
+        // adding all vertices and edges from the hyperedges to the list
         for (Hypergraph h :hyperedges) {
             Vertices.addAll(h.getVertices());
             Edges.addAll(h.getEdges());
@@ -219,6 +229,7 @@ public class Hypergraph {
                 // connect for ingoing edges
                 if(metaGraph[row][col] == 1){
                     Vertices.get(row).addIngoingEdges(Edges.get(edges+col));
+                    // edges+col is the position for the edge on the end of hyperedge
                     Edges.get(edges+col).setHead(Vertices.get(row));
                     int size = hyperedges.get(col).getVertices().size();
                     Edges.get(edges+col).addToTail(hyperedges.get(col).getVertices().get(size-1));

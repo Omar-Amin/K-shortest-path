@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Graph {
 
-    private ArrayList<Node> nodes = new ArrayList<>();
+    private final ArrayList<Node> nodes = new ArrayList<>();
     private int shortestDistance = 0;
     private int getPathSize;
 
@@ -11,7 +11,7 @@ public class Graph {
 
     }
 
-    public Graph transformToGraph(Hypergraph hypergraph,int source, int target){
+    public Graph transformToGraph(Hypergraph hypergraph){
         ArrayList<Vertex> vertices = hypergraph.getVertices();
         ArrayList<Edge> edges = hypergraph.getEdges();
         for (int i = 0; i < hypergraph.getAmountOfVertices(); i++) {
@@ -29,7 +29,10 @@ public class Graph {
                 nodes.get(v2.getId()).adjacencies.add(new GEdge(nodes.get(v.getId()),e.getCost()));
             }
         }
+        return this;
+    }
 
+    public void runDijkstra(int source, int target){
         Dijkstra dijkstra = new Dijkstra();
         dijkstra.computePaths(nodes.get(source));
         List<Node> path = dijkstra.getShortestPathTo(nodes.get(target));
@@ -40,8 +43,6 @@ public class Graph {
             }
         }
         getPathSize = path.size();
-
-        return this;
     }
 
     public int getShortestDistance(){
