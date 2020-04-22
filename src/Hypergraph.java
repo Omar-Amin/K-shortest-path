@@ -26,14 +26,8 @@ public class Hypergraph {
         int vertices = matrix.length;
 
         //Give edges and verticies an identifier number, and add to lists
-        for (int id = 0; id < edges; id++) {
-            Edge edge = new Edge(amountOfEdges++);
-            Edges.add(edge);
-        }
-        for (int id = 0; id < vertices; id++) {
-            Vertex vertex = new Vertex(amountOfVertices++);
-            Vertices.add(vertex);
-        }
+        makeEdges(edges);
+        makeVertices(vertices);
 
         return setupHypergraph(matrix);
     }
@@ -150,7 +144,7 @@ public class Hypergraph {
     /**
      * Generates random graph by some given input.
      * */
-    public Hypergraph generateRandomHypergraph(int maxNodes,int minNodes , int tailSize, int maxCost, int seed){
+    public Hypergraph generateRandomHyperpath(int maxNodes, int minNodes , int tailSize, int maxCost, int seed){
         Random rand;
         if(seed >= 0){
             rand = new Random(seed);
@@ -197,16 +191,8 @@ public class Hypergraph {
         // we connect an edge from vertex to the start of the hyperedge
         // and an edge to the end of the hyperedge, thus we need
         // twice as many edges
-        for (int i = 0; i < edges*2; i++) {
-            Edge edge = new Edge(amountOfEdges++);
-            edge.setCost(0);
-            Edges.add(edge);
-        }
-
-        for (int i = 0; i < vertices; i++) {
-            Vertex vertex = new Vertex(amountOfVertices++);
-            Vertices.add(vertex);
-        }
+        makeEdges(edges*2);
+        makeVertices(vertices);
 
         this.source = Vertices.get(0);
         this.target = Vertices.get(vertices-1);
@@ -239,6 +225,69 @@ public class Hypergraph {
         }
 
         return this;
+    }
+
+    /**
+     * Making random hypergraph inspired by a wikipedia article:
+     * https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
+     * */
+    public Hypergraph generateRandomHypergraph(int nodes, int tailSize, int maxCost, double p,int maxdepth, int seed){
+        Random rand = new Random();
+        if(seed > 0){
+            rand = new Random(seed);
+        }
+
+        makeVertices(nodes);
+
+        for (int i = amountOfVertices-1; i > 0; i--) {
+            int counter = 0;
+            for (int j = i-1; j >= 0; j--) {
+                double q = rand.nextDouble();
+                if (counter == maxdepth){
+                    continue;
+                }
+                if(q <= p){
+                    counter++;
+                    Edge edge = new Edge(amountOfEdges++);
+                    int randCost = rand.nextInt((maxCost - 1) + 1) + 1;
+                    edge.setCost(randCost);
+                    edge.addToTail(Vertices.get(j));
+                    edge.setHead(Vertices.get(i));
+                    Vertices.get(j).addOutgoingEdges(edge);
+                    Vertices.get(i).addIngoingEdges(edge);
+
+                    double newp = tailSize/((double)j);
+
+                    for (int k = j-1; k >= 0; k--) {
+                        double newq = rand.nextDouble();
+                        if (newq <= newp){
+                            edge.addToTail(Vertices.get(k));
+                            Vertices.get(k).addOutgoingEdges(edge);
+                        }
+                    }
+                    Edges.add(edge);
+                }
+            }
+        }
+
+        this.source = Vertices.get(0);
+        this.target = Vertices.get(amountOfVertices-1);
+
+        return this;
+    }
+
+    private void makeVertices(int amount){
+        for (int id = 0; id < amount; id++) {
+            Vertex vertex = new Vertex(amountOfVertices++);
+            Vertices.add(vertex);
+        }
+    }
+
+    private void makeEdges(int amount){
+        for (int id = 0; id < amount; id++) {
+            Edge edge = new Edge(amountOfEdges++);
+            Edges.add(edge);
+        }
     }
 
 

@@ -32,7 +32,7 @@ public class ShortestPath {
                 }
                 edge.setKj(edge.getKj()+1);
                 if (edge.getKj() == edge.getTail().size()) {
-                    int f = minCostFunction(edge); // Some cost function
+                    int f = costFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
@@ -55,7 +55,7 @@ public class ShortestPath {
             }
         }
 
-        if(target.getId() != Integer.MAX_VALUE){
+        if(target.getCost() != Integer.MAX_VALUE){
             return getPath(source, target);
         }
 
