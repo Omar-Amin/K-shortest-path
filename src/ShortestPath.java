@@ -12,10 +12,10 @@ public class ShortestPath {
      *
      * @return Pair(Path,Cost), where path is a list of edges and cost is an integer (cost of the path)
      * */
-    public Pair<ArrayList<Edge>, Integer> SBT(Hypergraph hypergraph, Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
+    public Pair<ArrayList<Edge>, Double> SBT(Hypergraph hypergraph, Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
         minPQ pq = new minPQ();
         for (Vertex vertex : hypergraph.getVertices()) {
-            vertex.setCost(Integer.MAX_VALUE);
+            vertex.setCost(Double.MAX_VALUE);
             vertex.setPredecessor(null);
         }
         for (Edge edge : hypergraph.getEdges()) {
@@ -32,7 +32,7 @@ public class ShortestPath {
                 }
                 edge.setKj(edge.getKj()+1);
                 if (edge.getKj() == edge.getTail().size()) {
-                    int f = costFunction(edge); // Some cost function
+                    double f = costFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
@@ -55,7 +55,7 @@ public class ShortestPath {
             }
         }
 
-        if(target.getCost() != Integer.MAX_VALUE){
+        if(target.getCost() != Double.MAX_VALUE){
             return getPath(source, target);
         }
 
@@ -69,9 +69,9 @@ public class ShortestPath {
      *
      * @param edge: The edge to find the cost
      * */
-    private int costFunction(Edge edge){
-        int edgeCost = edge.getCost();
-        int edgeTailCost = 0;
+    private double costFunction(Edge edge){
+        double edgeCost = edge.getCost();
+        double edgeTailCost = 0;
         for (Vertex v : edge.getTail()) {
             edgeTailCost += v.getCost();
         }
@@ -81,9 +81,9 @@ public class ShortestPath {
     /**
      * Minimum cost function.
      * */
-    private int minCostFunction(Edge edge){
-        int edgeCost = edge.getCost();
-        int edgeTailCost = Integer.MAX_VALUE;
+    private double minCostFunction(Edge edge){
+        double edgeCost = edge.getCost();
+        double edgeTailCost = Integer.MAX_VALUE;
         for (Vertex v : edge.getTail()) {
             if(v.getCost() < edgeTailCost){
                 edgeTailCost = v.getCost();
@@ -97,7 +97,7 @@ public class ShortestPath {
      *
      * @return Pair object which consist of the path and a cost
      * NOTE: The path is an array of edges */
-    private Pair<ArrayList<Edge>, Integer> getPath(Vertex source, Vertex target){
+    private Pair<ArrayList<Edge>, Double> getPath(Vertex source, Vertex target){
         // a map for checking if the edge is visited
         HashMap<Edge, Integer> edges = new HashMap<>();
         // counter for ingoing for each vertex
@@ -107,7 +107,7 @@ public class ShortestPath {
         PriorityQueue<Vertex> zeroIn = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
         zeroIn.add(target);
         ArrayList<Edge> path = new ArrayList<>();
-        int cost = target.getCost();
+        double cost = target.getCost();
         path.add(target.getPredecessor());
         while (!zeroIn.isEmpty()){
             Vertex vertex = zeroIn.poll();

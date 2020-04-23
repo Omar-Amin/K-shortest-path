@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Edge {
     //Class attributes
     private int id;
-    private int cost;
+    private double cost;
     private int kj = 0; // number of nodes belonging to the tail of this edge
     private Vertex predecessor;
     private ArrayList<Vertex> tail = new ArrayList<>();
@@ -30,11 +30,11 @@ public class Edge {
         this.id = id;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(double cost) {
         this.cost = cost;
     }
 

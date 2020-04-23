@@ -94,14 +94,12 @@ public class Main {
 
     private static void testWithRandomHyper(){
         long startTime = System.nanoTime();
-        int counter = 0;
         ShortestPath shortestPath = new ShortestPath();
         HypergraphGenerator generator = new HypergraphGenerator();
         for (int i = 0; i < 10; i++) {
             System.out.println("Iteration: " + i);
             Hypergraph testGenerated = generator.generateRandomHypergraph(1000,10,5,0.7,20, -1);
-            System.out.println("he");
-            Pair<ArrayList<Edge>,Integer> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Pair<ArrayList<Edge>,Double> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             if(shortest != null){
                 System.out.println(shortest.getValue());
                 System.out.println(shortest.getKey().size());
@@ -119,7 +117,7 @@ public class Main {
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
             Hypergraph testGenerated = generator.generateFromMetagraph(metaGraph, 50,25,5,10,-1000);
-            Pair<ArrayList<Edge>,Integer> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Pair<ArrayList<Edge>,Double> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             Graph graph = new Graph().transformToGraph(testGenerated);
             graph.runDijkstra(testGenerated.getSource().getId(),testGenerated.getTarget().getId());
             if(graph.getShortestDistance() != shortest.getValue()){

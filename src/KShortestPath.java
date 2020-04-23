@@ -6,14 +6,14 @@ public class KShortestPath {
 
     public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K)  {
         ShortestPath sp = new ShortestPath();
-        Pair<ArrayList<Edge>, Integer> pair = sp.SBT(H,s,t,new ArrayList<>());
+        Pair<ArrayList<Edge>, Double> pair = sp.SBT(H,s,t,new ArrayList<>());
         ArrayList<Edge> hp = pair.getKey();
         System.out.println(pair.getValue());
 
         ArrayList<ArrayList<Edge>> listOfRemovedEdges = backBranching(new ArrayList<>(),hp);
 
         ShortestPath sp2 = new ShortestPath();
-        Pair<ArrayList<Edge>, Integer> pair2 = sp2.SBT(H,s,t,listOfRemovedEdges.get(0));
+        Pair<ArrayList<Edge>, Double> pair2 = sp2.SBT(H,s,t,listOfRemovedEdges.get(0));
 
         listOfRemovedEdges = backBranching(listOfRemovedEdges.get(0),pair2.getKey());
 

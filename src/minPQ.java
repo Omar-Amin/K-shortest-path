@@ -28,7 +28,7 @@ public class minPQ {
         }
     }
 
-    public void decreaseValue(int id, int value){
+    public void decreaseValue(int id, double value){
         int i = index.get(id);
         heap.get(i).setCost(value);
         int parent = (i-1)/2;

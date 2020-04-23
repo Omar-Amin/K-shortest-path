@@ -4,7 +4,7 @@ import java.util.List;
 public class Graph {
 
     private final ArrayList<Node> nodes = new ArrayList<>();
-    private int shortestDistance = 0;
+    private double shortestDistance = 0;
     private int getPathSize;
 
     public Graph(){
@@ -45,7 +45,7 @@ public class Graph {
         getPathSize = path.size();
     }
 
-    public int getShortestDistance(){
+    public double getShortestDistance(){
         return shortestDistance;
     }
 
