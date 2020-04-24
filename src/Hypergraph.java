@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class Hypergraph {
     //Class attributes
@@ -30,6 +28,30 @@ public class Hypergraph {
         makeVertices(vertices);
 
         return setupHypergraph(matrix);
+    }
+
+    public Hypergraph arraylistInput(ArrayList<Integer[]> edges, ArrayList<Integer> cost){
+        int maxVertex = 0;
+        for (Integer[] edge :edges) {
+            for (Integer i :edge) {
+                if(maxVertex < i){
+                    maxVertex = i;
+                }
+            }
+        }
+        makeVertices(maxVertex+1);
+
+        for (int i = 0; i < edges.size(); i++) {
+            Integer[] edge = edges.get(i);
+            Edge edge1 = new Edge(amountOfEdges++);
+            edge1.setCost(cost.get(i));
+            edge1.setHead(Vertices.get(edge[0]));
+            for (Integer v :edge) {
+                edge1.addToTail(Vertices.get(v));
+            }
+        }
+
+        return this;
     }
 
     /**
@@ -238,7 +260,6 @@ public class Hypergraph {
         }
 
         makeVertices(nodes);
-
         for (int i = amountOfVertices-1; i > 0; i--) {
             int counter = 0;
             for (int j = i-1; j >= 0; j--) {
@@ -289,7 +310,6 @@ public class Hypergraph {
             Edges.add(edge);
         }
     }
-
 
     //Getter and setters
     public int getAmountOfEdges() {

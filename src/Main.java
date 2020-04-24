@@ -98,7 +98,7 @@ public class Main {
         HypergraphGenerator generator = new HypergraphGenerator();
         for (int i = 0; i < 10; i++) {
             System.out.println("Iteration: " + i);
-            Hypergraph testGenerated = generator.generateRandomHypergraph(1000,10,5,0.7,20, -1);
+            Hypergraph testGenerated = generator.generateRandomHypergraph(1000,5,5,0.7,20, -1);
             Pair<ArrayList<Edge>,Double> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             if(shortest != null){
                 System.out.println(shortest.getValue());
