@@ -8,6 +8,7 @@ public class HypergraphGenerator {
         return HypergraphGenerator(metaSize,metaEdgeSize, null);
     }
     public static Graph HypergraphGenerator(int metaSize, int metaEdgeSize, Long seed){
+        ID = 0;
         Random rand;
         if (seed == null) {
             rand = new Random();

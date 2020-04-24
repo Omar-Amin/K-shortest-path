@@ -70,9 +70,7 @@ public class minPQ {
     }
 
     public boolean contains(int obj){
-        for (int[] vertex: heap) {
-            if(vertex[0] == obj) return true;
-        }
+        if(index.get(obj) != null) return true;
         return false;
     }
 

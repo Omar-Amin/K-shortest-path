@@ -37,13 +37,18 @@ public class SBT {
                     int f = this.function.run(edge);
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
-                        g.setVertexCost(y,f);
                         if(!PQ.contains(y)){
                             int[] head = {y,f};
                             PQ.insert(head);
+                            if(g.getVertexCost(y) < Integer.MAX_VALUE){
+                                for (int tail:g.FS(y)) {
+                                    kj[tail]--;
+                                }
+                            }
                         } else {
                             PQ.decreaseValue(y,f);
                         }
+                        g.setVertexCost(y,f);
                         this.predecessor[y] = edge;
                     }
                 }
@@ -53,6 +58,7 @@ public class SBT {
     }
 
     public void getPath(int source,int vertex){
+
         if(source == vertex) return;
         int edge = this.predecessor[vertex];
         if(path.contains(edge)) return;
