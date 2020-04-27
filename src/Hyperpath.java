@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Hyperpath {
     private final ArrayList<Edge> path;
     private final double cost;
-    private final ArrayList<Edge> deletedEdges;
+    private final HashMap<Integer,Integer> deletedEdges;
 
-    public Hyperpath(ArrayList<Edge> path, double cost, ArrayList<Edge> deletedEdges ){
+    public Hyperpath(ArrayList<Edge> path, double cost, HashMap<Integer,Integer>deletedEdges ){
         this.path = path;
         this.cost = cost;
         this.deletedEdges = deletedEdges;
@@ -19,7 +20,7 @@ public class Hyperpath {
         return cost;
     }
 
-    public ArrayList<Edge> getDeletedEdges() {
+    public HashMap<Integer,Integer> getDeletedEdges() {
         return deletedEdges;
     }
 

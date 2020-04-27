@@ -12,7 +12,7 @@ public class ShortestPath {
      *
      * @return Pair(Path,Cost), where path is a list of edges and cost is an integer (cost of the path)
      * */
-    public Hyperpath SBT(Hypergraph hypergraph, Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
+    public Hyperpath SBT(Hypergraph hypergraph, Vertex source, Vertex target, HashMap<Integer,Integer> deletedEdges){
         minPQ pq = new minPQ();
         for (Vertex vertex : hypergraph.getVertices()) {
             vertex.setCost(Double.MAX_VALUE);
@@ -27,7 +27,7 @@ public class ShortestPath {
             //debugPrintQueue();
             Vertex u = pq.popMin(); //Retrieves and removes first element
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) is u's outgoing edges
-                if(deletedEdges.contains(edge)){
+                if(deletedEdges.get(edge.getId()) != null){
                     continue;
                 }
                 edge.setKj(edge.getKj()+1);
@@ -97,7 +97,7 @@ public class ShortestPath {
      *
      * @return Pair object which consist of the path and a cost
      * NOTE: The path is an array of edges */
-    private Hyperpath getPath(Vertex source, Vertex target, ArrayList<Edge> deletedEdges){
+    private Hyperpath getPath(Vertex source, Vertex target, HashMap<Integer,Integer> deletedEdges){
         // a map for checking if the edge is visited
         HashMap<Edge, Integer> edges = new HashMap<>();
         // counter for ingoing for each vertex

@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main {
@@ -105,7 +106,7 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             System.out.println("Iteration: " + i);
             Hypergraph testGenerated = generator.generateRandomHypergraph(1000,5,5,0.7,20, -1);
-            Hyperpath shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Hyperpath shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new HashMap<>());
             if(shortest != null){
                 System.out.println(shortest.getCost());
                 System.out.println(shortest.getPath().size());
@@ -123,7 +124,7 @@ public class Main {
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
             Hypergraph testGenerated = generator.generateFromMetagraph(metaGraph, 50,25,5,10,-1000);
-            Hyperpath shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Hyperpath shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new HashMap<>());
             Graph graph = new Graph().transformToGraph(testGenerated);
             graph.runDijkstra(testGenerated.getSource().getId(),testGenerated.getTarget().getId());
             if(graph.getShortestDistance() != shortest.getCost()){
