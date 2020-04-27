@@ -1,21 +1,29 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class KShortestPath {
 
     public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K)  {
-        ShortestPath sp = new ShortestPath();
-        Pair<ArrayList<Edge>, Double> pair = sp.SBT(H,s,t,new ArrayList<>());
-        ArrayList<Edge> hp = pair.getKey();
-        System.out.println(pair.getValue());
+        PriorityQueue<Hyperpath> L = new PriorityQueue<>(((o1, o2) -> Double.compare(o1.getCost(),o2.getCost())));
+        ShortestPath sbt = new ShortestPath();
+        L.add(sbt.SBT(H,s,t,new ArrayList<>()));
+        ArrayList<Hyperpath> paths = new ArrayList<>();
 
-        ArrayList<ArrayList<Edge>> listOfRemovedEdges = backBranching(new ArrayList<>(),hp);
-
-        ShortestPath sp2 = new ShortestPath();
-        Pair<ArrayList<Edge>, Double> pair2 = sp2.SBT(H,s,t,listOfRemovedEdges.get(0));
-
-        listOfRemovedEdges = backBranching(listOfRemovedEdges.get(0),pair2.getKey());
+        for (int k = 0; k < K; k++) {
+            if(L.isEmpty()){
+                break;
+            }
+            Hyperpath path = L.poll();
+            paths.add(path);
+            for (ArrayList<Edge> removed :backBranching(path.getDeletedEdges(),path.getPath())) {
+                Hyperpath pi = sbt.SBT(H,s,t,removed);
+                if(pi != null){
+                    L.add(pi);
+                }
+            }
+        }
 
     }
 

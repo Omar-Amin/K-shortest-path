@@ -43,7 +43,7 @@ public class Main {
                 {-2,-2,-2,1,1,-1,-1,-2}, //4
                 {-2,-2,1,-2,-1,-2,-1,-2}, //5
                 {-2,-2,-2,-2,-2,1,-2,-1}, //6
-                {-2,-2,-2,-2,-2,-2,2,1}  //7
+                {-2,-2,-2,-2,-2,-2,1,1}  //7
         };
         int[][] metaGraph = {
                 {-1,-1,0,0},
@@ -71,7 +71,7 @@ public class Main {
                 {0,0,0,0,1,0,0,0,0,0,0,-1}, //7
                 {0,0,0,0,0,0,0,1,0,1,1,1}}; //8
 
-        //Hypergraph hg = new Hypergraph().matrixInput(hypergraph);
+        Hypergraph hg = new Hypergraph().matrixInput(hypergraph2);
         //Hypergraph hg = new Hypergraph().generateRandomHypergraph(15000,15000,5,10);
         //Graph graph = new Graph().transformToGraph(hg);
 
@@ -80,7 +80,13 @@ public class Main {
         //shortestPath.printPath();
         //shortestPath.printPath();
         //hg.printHypergraph();
-        //KShortestPath kshortest = new KShortestPath(hg,hg.getVertices().get(0),hg.getVertices().get(hg.getVertices().size()-1),2);
+
+        HypergraphGenerator generator = new HypergraphGenerator();
+        Hypergraph testGenerated = generator.generateRandomHypergraph(125,5,5,1,20, 100);
+        long startTime = System.nanoTime();
+        KShortestPath kshortest = new KShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),100);
+        long stopTime = System.nanoTime();
+        System.out.println((float) (stopTime - startTime)/1000000000);
 
         //kshortest.tempMethod();
         //ArrayList<Edge> temp = sp.getShortestPath();
@@ -89,7 +95,7 @@ public class Main {
 
         //testWithRandom(metaGraph3);
 
-        testWithRandomHyper();
+        //testWithRandomHyper();
     }
 
     private static void testWithRandomHyper(){
@@ -99,10 +105,10 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             System.out.println("Iteration: " + i);
             Hypergraph testGenerated = generator.generateRandomHypergraph(1000,5,5,0.7,20, -1);
-            Pair<ArrayList<Edge>,Double> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Hyperpath shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             if(shortest != null){
-                System.out.println(shortest.getValue());
-                System.out.println(shortest.getKey().size());
+                System.out.println(shortest.getCost());
+                System.out.println(shortest.getPath().size());
             }
         }
         long stopTime = System.nanoTime();
@@ -117,14 +123,14 @@ public class Main {
         for (int i = 0; i < 10000; i++) {
             System.out.println(i);
             Hypergraph testGenerated = generator.generateFromMetagraph(metaGraph, 50,25,5,10,-1000);
-            Pair<ArrayList<Edge>,Double> shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
+            Hyperpath shortest = shortestPath.SBT(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),new ArrayList<>());
             Graph graph = new Graph().transformToGraph(testGenerated);
             graph.runDijkstra(testGenerated.getSource().getId(),testGenerated.getTarget().getId());
-            if(graph.getShortestDistance() != shortest.getValue()){
+            if(graph.getShortestDistance() != shortest.getCost()){
                 counter++;
                 //testGenerated.printHypergraph();
                 System.out.println("Graph: " + graph.getShortestDistance());
-                System.out.println("Hyper: " + shortest.getValue());
+                System.out.println("Hyper: " + shortest.getCost());
                 break;
             }
         }
