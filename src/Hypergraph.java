@@ -49,6 +49,7 @@ public class Hypergraph {
             for (Integer v :edge) {
                 edge1.addToTail(Vertices.get(v));
             }
+            Edges.add(edge1);
         }
         this.source = Vertices.get(0);
         this.target = Vertices.get(maxVertex-1);
