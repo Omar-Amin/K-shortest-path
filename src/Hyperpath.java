@@ -6,7 +6,7 @@ public class Hyperpath {
     private final double cost;
     private final HashMap<Integer,Integer> deletedEdges;
 
-    public Hyperpath(ArrayList<Edge> path, double cost, HashMap<Integer,Integer>deletedEdges ){
+    public Hyperpath(ArrayList<Edge> path, double cost, HashMap<Integer,Integer> deletedEdges ){
         this.path = path;
         this.cost = cost;
         this.deletedEdges = deletedEdges;

@@ -83,7 +83,7 @@ public class Main {
         //hg.printHypergraph();
 
         HypergraphGenerator generator = new HypergraphGenerator();
-        Hypergraph testGenerated = generator.generateRandomHypergraph(125,5,5,1,20, 100);
+        Hypergraph testGenerated = generator.generateRandomHypergraph(200,5,5,1,20, 100);
         long startTime = System.nanoTime();
         KShortestPath kshortest = new KShortestPath(testGenerated,testGenerated.getSource(),testGenerated.getTarget(),100);
         long stopTime = System.nanoTime();

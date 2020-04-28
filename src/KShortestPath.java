@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
@@ -12,12 +10,15 @@ public class KShortestPath {
         L.add(sbt.SBT(H,s,t,new HashMap<>()));
         ArrayList<Hyperpath> paths = new ArrayList<>();
 
-        for (int k = 0; k < K; k++) {
+        for (int k = 1; k <= K; k++) {
             if(L.isEmpty()){
                 break;
             }
             Hyperpath path = L.poll();
             paths.add(path);
+            if(k == K){
+                break;
+            }
             for (HashMap<Integer,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath())) {
                 Hyperpath pi = sbt.SBT(H,s,t,removed);
                 if(pi != null){
