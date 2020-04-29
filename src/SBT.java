@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class SBT {
     private minPQ PQ;
@@ -57,15 +56,50 @@ public class SBT {
         return null;
     }
 
-    public void getPath(int source,int vertex){
+    public void getPath(int source,int target){
+        HashMap<Integer, Integer> in = edgesInPath(source,target);
 
-        if(source == vertex) return;
-        int edge = this.predecessor[vertex];
-        if(path.contains(edge)) return;
-        for (int v:g.tail(edge)){
-            getPath(source,v);
+        PriorityQueue<Integer> zeroIn = new PriorityQueue<>();
+        zeroIn.add(target);
+        path.add(this.predecessor[target]);
+        while (!zeroIn.isEmpty()){
+            int vertex = zeroIn.poll();
+            if (vertex == source){
+                continue;
+            }
+            for (int tail : g.tail(this.predecessor[vertex])) {
+                // decrease each value for the vertex if the edge polled out
+                // is a part of its outgoing edge
+                in.put(tail,in.get(tail) - 1);
+                if(in.get(tail) <= 0 && tail != source){
+                    zeroIn.add(tail);
+                    path.add(this.predecessor[tail]);
+                }
+            }
         }
-        path.add(edge);
+    }
+
+    private HashMap<Integer, Integer> edgesInPath(int source, int target){
+        HashMap<Integer, Integer> in = new HashMap<>();
+        HashMap<Integer, Integer> edges = new HashMap<>();
+
+        ArrayDeque<Integer> stack = new ArrayDeque<>();
+        stack.push(target);
+        while (!stack.isEmpty()){
+            target = stack.pop();
+            if(source == target) continue;
+            int edge = this.predecessor[target];
+            if(edges.get(edge) != null) continue;
+            edges.put(edge,1);
+            for (int v:g.tail(edge)){
+                in.putIfAbsent(v,0);
+                in.put(v,in.get(v)+1);
+                stack.add(v);
+            }
+
+        }
+
+        return in;
     }
 
     public boolean contains(int edge, int[] skip){
