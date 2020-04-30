@@ -30,10 +30,10 @@ public class Hypergraph {
         return setupHypergraph(matrix);
     }
 
-    public Hypergraph arraylistInput(ArrayList<int[]> edges, ArrayList<Integer> cost){
+    public Hypergraph arraylistInput(int[][] edges, int[] cost){
         int maxVertex = 0;
         for (int[] edge :edges) {
-            for (Integer i :edge) {
+            for (int i :edge) {
                 if(maxVertex < i){
                     maxVertex = i;
                 }
@@ -41,13 +41,15 @@ public class Hypergraph {
         }
         makeVertices(maxVertex+1);
 
-        for (int i = 0; i < edges.size(); i++) {
-            int[] edge = edges.get(i);
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
             Edge edge1 = new Edge(amountOfEdges++);
-            edge1.setCost(cost.get(i));
+            edge1.setCost(cost[i]);
             edge1.setHead(Vertices.get(edge[0]));
-            for (Integer v :edge) {
-                edge1.addToTail(Vertices.get(v));
+            Vertices.get(edge[0]).addIngoingEdges(edge1);
+            for (int j = 1; j < edge.length; j++) {
+                edge1.addToTail(Vertices.get(edge[j]));
+                Vertices.get(edge[j]).addOutgoingEdges(edge1);
             }
             Edges.add(edge1);
         }
