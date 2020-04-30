@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 import java.util.*;
 
 public class ShortestPath {
@@ -99,10 +97,8 @@ public class ShortestPath {
      * NOTE: The path is an array of edges */
     private Hyperpath getPath(Vertex source, Vertex target, HashMap<Integer,Integer> deletedEdges){
         // a map for checking if the edge is visited
-        HashMap<Edge, Integer> edges = new HashMap<>();
         // counter for ingoing for each vertex
-        HashMap<Vertex,Integer> in = new HashMap<>();
-        edgesInPath(source,target,edges,in);
+        HashMap<Vertex,Integer> in = edgesInPath(source,target);
         // queue which sorts by ID in order to get the same topological order for the same path
         PriorityQueue<Vertex> zeroIn = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
         zeroIn.add(target);
@@ -134,22 +130,29 @@ public class ShortestPath {
      * Helper function that updates the "in" hashmap in order to
      * perform topological sorting.
      * */
-    private void edgesInPath(Vertex source, Vertex target,HashMap<Edge, Integer> edges,HashMap<Vertex, Integer> in){
-        if(edges.get(target.getPredecessor()) != null){
-            return;
-        }
-        edges.put(target.getPredecessor(),0);
-        if (target == source) {
-            return;
-        }
-        for (Vertex vertex : target.getPredecessor().getTail()) {
-            // counts how many outgoing edges each vertex in the shortest path
-            in.putIfAbsent(vertex, 0);
-            in.put(vertex,in.get(vertex)+1);
-            if (vertex.getPredecessor() != null) { // If the vertex doesn't have a predecessor it hasn't been visited.
-                edgesInPath(source, vertex,edges, in);
+    private HashMap<Vertex, Integer> edgesInPath(Vertex source, Vertex target){
+        HashMap<Vertex, Integer> in = new HashMap<>();
+        HashMap<Edge, Integer> edges = new HashMap<>();
+
+        ArrayDeque<Vertex> stack = new ArrayDeque<>();
+        stack.push(target);
+        while (!stack.isEmpty()){
+            target = stack.pop();
+            if(edges.get(target.getPredecessor()) != null){
+                continue;
+            }
+            edges.put(target.getPredecessor(),0);
+            for (Vertex vertex : target.getPredecessor().getTail()) {
+                // counts how many outgoing edges each vertex in the shortest path
+                in.putIfAbsent(vertex, 0);
+                in.put(vertex,in.get(vertex)+1);
+                if (vertex.getPredecessor() != null) { // If the vertex doesn't have a predecessor it hasn't been visited.
+                    stack.push(vertex);
+                }
             }
         }
+
+        return in;
     }
 
 }
