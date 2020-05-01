@@ -4,9 +4,17 @@ import java.util.*;
 
 public class randomGenerator {
     public static Pair<int[][], int[]> normalGenerator(int amountEdges, int verticesWidth, int verticesHeight, int locality, boolean topological){
+        return normalGenerator(amountEdges, verticesWidth, verticesHeight, locality, topological,-1L);
+    }
+
+    public static Pair<int[][], int[]> normalGenerator(int amountEdges, int verticesWidth, int verticesHeight, int locality, boolean topological, Long seed){
         int[][] graph = new int[amountEdges][];
         int[] cost = new int[amountEdges];
         Random rand = new Random();
+        if(seed ==-1)
+            seed = rand.nextLong();
+        System.out.println("Running with seed: " + seed);
+        rand = new Random(seed);
         for (int i = 0; i < amountEdges; i++) {
             int tail = rand.nextInt(3)+1;
             graph[i] = new int[tail+1];
@@ -123,15 +131,14 @@ public class randomGenerator {
         int row = vertex/verticesWidth;
         int fromCol = Math.max(0,col-radius);
         int fromRow = Math.max(0,row-radius);
-        int toCol,toRow;
+        int toRow;
+        int toCol = Math.min(verticesWidth - 1, col + radius);
+        int newCol = rand.nextInt(toCol-fromCol+1)+fromCol;
         if(topological){
-            toCol = col;
-            toRow = row;
+            toRow = Math.min(verticesHeight,fromRow+2*radius-(newCol-fromCol));
         } else {
-            toCol = Math.min(verticesWidth - 1, col + radius);
             toRow = Math.min(verticesHeight - 1, row + radius);
         }
-        int newCol = rand.nextInt(toCol-fromCol+1)+fromCol;
         int newRow = rand.nextInt(toRow-fromRow+1) + fromRow;
         if(newCol == col && newRow == row)
             return getLocalVertex(vertex, verticesWidth, verticesHeight, radius, rand, topological);

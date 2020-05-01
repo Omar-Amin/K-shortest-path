@@ -13,15 +13,8 @@ public class Main {
     private static void testWithRandomHyper(){
         ShortestPath shortestPath = new ShortestPath();
         //Pair<int[][], int[]> p = randomGenerator.metaGenerator(50, 1000,121453412454L);
-        //Hypergraph h = new Hypergraph().arraylistInput(p.getKey(),p.getValue());
-        Pair<int[][], int[]> p = randomGenerator.normalGenerator(1000,4,4,2,true);
+        Pair<int[][], int[]> p = randomGenerator.normalGenerator(70000,1000,100,2,true,-6606397267175329844L);
         Hypergraph h = new Hypergraph().arraylistInput(p.getKey(),p.getValue());
-        long startTime = System.nanoTime();
         Hyperpath shortest = shortestPath.SBT(h,h.getSource(),h.getTarget(),new HashMap<>());
-        long stopTime = System.nanoTime();
-        if(shortest != null){
-            System.out.println(shortest.getCost());
-        }
-        System.out.println((float) (stopTime - startTime)/1000000000);
     }
 }
