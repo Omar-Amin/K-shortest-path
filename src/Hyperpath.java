@@ -5,11 +5,13 @@ public class Hyperpath {
     private final ArrayList<Edge> path;
     private final double cost;
     private final HashMap<Integer,Integer> deletedEdges;
+    private int version;
 
     public Hyperpath(ArrayList<Edge> path, double cost, HashMap<Integer,Integer> deletedEdges ){
         this.path = path;
         this.cost = cost;
         this.deletedEdges = deletedEdges;
+        this.version = path.size()-1;
     }
 
     public ArrayList<Edge> getPath() {
@@ -32,5 +34,13 @@ public class Hyperpath {
         for (Edge e :path) {
             System.out.println("ID: " + (e.getId()+1));
         }
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

@@ -27,6 +27,9 @@ public class Hypergraph {
         makeEdges(edges);
         makeVertices(vertices);
 
+        this.source = Vertices.get(0);
+        this.target = Vertices.get(vertices-1);
+
         return setupHypergraph(matrix);
     }
 
