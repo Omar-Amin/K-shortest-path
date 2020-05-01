@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ShortestPath {
 
@@ -98,11 +99,11 @@ public class ShortestPath {
     private Hyperpath getPath(Vertex source, Vertex target, HashMap<Integer,Integer> deletedEdges){
         // a map for checking if the edge is visited
         // counter for ingoing for each vertex
-        HashMap<Vertex,Integer> in = edgesInPath(source,target);
+        ArrayList<Edge> path = new ArrayList<>();
+        HashMap<Vertex,Integer> in = edgesInPath(target);
         // queue which sorts by ID in order to get the same topological order for the same path
         PriorityQueue<Vertex> zeroIn = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
         zeroIn.add(target);
-        ArrayList<Edge> path = new ArrayList<>();
         double cost = target.getCost();
         path.add(target.getPredecessor());
         while (!zeroIn.isEmpty()){
@@ -130,7 +131,7 @@ public class ShortestPath {
      * Helper function that updates the "in" hashmap in order to
      * perform topological sorting.
      * */
-    private HashMap<Vertex, Integer> edgesInPath(Vertex source, Vertex target){
+    private HashMap<Vertex, Integer> edgesInPath(Vertex target){
         HashMap<Vertex, Integer> in = new HashMap<>();
         HashMap<Edge, Integer> edges = new HashMap<>();
 
