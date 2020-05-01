@@ -124,7 +124,7 @@ public class Graph {
                 else vertexTable[vertexLookup[v+1]-(vertexOutgoingCount[v]--)] = i;
             }
         }
-        this.edgeTable = HypergraphGenerator.convertListToArr(tempEdgeTable);
+        this.edgeTable = randomGenerator.convertListToArr(tempEdgeTable);
     }
 
     public int[] tail(int edge){
@@ -193,7 +193,7 @@ public class Graph {
                 cost.add(edgeCost);
             }
         }
-        g.edgesInput(HypergraphGenerator.convertListToArrArr(edgeInput),HypergraphGenerator.convertListToArr(cost));
+        g.edgesInput(randomGenerator.convertListToArrArr(edgeInput),randomGenerator.convertListToArr(cost));
         return g;
     }
 
