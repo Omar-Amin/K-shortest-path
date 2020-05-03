@@ -3,7 +3,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ShortestPath {
 
-    public ShortestPath(){
+    WeightingFunctions functions;
+
+    public ShortestPath(function toUse){
+        this.functions = new WeightingFunctions(toUse);
     }
 
     /**
@@ -11,7 +14,7 @@ public class ShortestPath {
      *
      * @return Pair(Path,Cost), where path is a list of edges and cost is an integer (cost of the path)
      * */
-    public Hyperpath SBT(Hypergraph hypergraph, Vertex source, Vertex target, HashMap<Integer,Integer> deletedEdges){
+    public Hyperpath SBT(Hypergraph hypergraph, Vertex source, Vertex target, HashMap<Integer,Integer> deletedEdges,boolean runUntilEmpty){
         minPQ pq = new minPQ();
         for (Vertex vertex : hypergraph.getVertices()) {
             vertex.setCost(Double.MAX_VALUE);
@@ -25,13 +28,16 @@ public class ShortestPath {
         while (pq.size() > 0) {
             //debugPrintQueue();
             Vertex u = pq.popMin(); //Retrieves and removes first element
+            if(target == u && functions.getFunctionType() != function.min && !runUntilEmpty){
+                return getPath(source, target, deletedEdges);
+            }
             for (Edge edge : u.getOutgoing_edges()) { // FS(u) is u's outgoing edges
                 if(deletedEdges.get(edge.getId()) != null){
                     continue;
                 }
                 edge.setKj(edge.getKj()+1);
                 if (edge.getKj() == edge.getTail().size()) {
-                    double f = costFunction(edge); // Some cost function
+                    double f = functions.costFunction(edge); // Some cost function
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
@@ -61,35 +67,6 @@ public class ShortestPath {
         return null;
     }
 
-    /**
-     * Function that takes in an edge and find the cost value for
-     * the given edge, by getting the cost of all of its tail vertices
-     * and adding its own cost.
-     *
-     * @param edge: The edge to find the cost
-     * */
-    private double costFunction(Edge edge){
-        double edgeCost = edge.getCost();
-        double edgeTailCost = 0;
-        for (Vertex v : edge.getTail()) {
-            edgeTailCost += v.getCost();
-        }
-        return edgeCost + edgeTailCost;
-    }
-
-    /**
-     * Minimum cost function.
-     * */
-    private double minCostFunction(Edge edge){
-        double edgeCost = edge.getCost();
-        double edgeTailCost = Integer.MAX_VALUE;
-        for (Vertex v : edge.getTail()) {
-            if(v.getCost() < edgeTailCost){
-                edgeTailCost = v.getCost();
-            }
-        }
-        return edgeCost + edgeTailCost;
-    }
 
     /**
      * This method gets path by topological sorting.

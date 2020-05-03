@@ -6,35 +6,21 @@ import java.util.PriorityQueue;
 
 public class KShortestPath {
 
-    private final ArrayList<Hyperpath> paths;
-
-    /**
-     * This is the algorithm running for finding the k-shortest graph.
-     *
-     * @param runUntilEmpty: True if you want to run the code until the queue is empty, meaning
-     *                       that we have calculated the weight for all nodes
-     * @param H: Hypergraph that you want to run K-shortestpath
-     * @param toUse: Which weighting function you want to use
-     * */
-    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty)  {
+    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K)  {
         PriorityQueue<Hyperpath> L = new PriorityQueue<>(((o1, o2) -> Double.compare(o1.getCost(),o2.getCost())));
-        ShortestPath sbt = new ShortestPath(toUse);
-        L.add(sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty));
-        paths = new ArrayList<>();
+        ShortestPath sbt = new ShortestPath();
+        L.add(sbt.SBT(H,s,t,new HashMap<>()));
+        ArrayList<Hyperpath> paths = new ArrayList<>();
 
-        for (int k = 1; k <= K; k++) {
+        for (int k = 0; k < K; k++) {
             if(L.isEmpty()){
                 break;
             }
             Hyperpath path = L.poll();
             paths.add(path);
-            if(k == K){
-                break;
-            }
-            for (Pair<HashMap<Integer,Integer>,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath(),path.getVersion())) {
-                Hyperpath pi = sbt.SBT(H,s,t,removed.getKey(),runUntilEmpty);
+            for (HashMap<Integer,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath())) {
+                Hyperpath pi = sbt.SBT(H,s,t,removed);
                 if(pi != null){
-                    pi.setVersion(pi.getVersion()-removed.getValue());
                     L.add(pi);
                 }
             }
@@ -47,10 +33,10 @@ public class KShortestPath {
      *
      * @param alreadyDeletedEdges: Edges that have already been deleted.
      * */
-    private ArrayList<Pair<HashMap<Integer,Integer>,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Edge> hyperpath, int startFrom) {
-        ArrayList<Pair<HashMap<Integer,Integer>,Integer>> setOfHypergraphs = new ArrayList<>();
-        int counter = 0;
-        for (int i = startFrom; i >= 0; i--) {
+    private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Edge> hyperpath) {
+        ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
+
+        for (int i = hyperpath.size()-1; i >= 0; i--) {
             HashMap<Integer,Integer> edgesRemoved = new HashMap<>(alreadyDeletedEdges);
 
             Edge edge = hyperpath.get(i);
@@ -78,15 +64,10 @@ public class KShortestPath {
             System.out.println("____________");*/
             // DEBUG
 
-            setOfHypergraphs.add(new Pair<>(edgesRemoved,counter));
-            counter++;
+            setOfHypergraphs.add(edgesRemoved);
         }
 
         return setOfHypergraphs;
-    }
-
-    public ArrayList<Hyperpath> getPaths(){
-        return paths;
     }
 
 }
