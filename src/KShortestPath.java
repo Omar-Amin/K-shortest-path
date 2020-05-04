@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
@@ -17,7 +18,7 @@ public class KShortestPath {
      * @param toUse: Which weighting function you want to use
      * */
     public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty)  {
-        PriorityQueue<Hyperpath> L = new PriorityQueue<>(((o1, o2) -> Double.compare(o1.getCost(),o2.getCost())));
+        PriorityQueue<Hyperpath> L = new PriorityQueue<>((Comparator.comparingDouble(Hyperpath::getCost)));
         ShortestPath sbt = new ShortestPath(toUse);
         L.add(sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty));
         paths = new ArrayList<>();
@@ -31,15 +32,16 @@ public class KShortestPath {
             if(k == K){
                 break;
             }
-            for (Pair<HashMap<Integer,Integer>,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath(),path.getVersion())) {
-                Hyperpath pi = sbt.SBT(H,s,t,removed.getKey(),runUntilEmpty);
+            for (HashMap<Integer,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath(),path.getVersion())) {
+                Hyperpath pi = sbt.SBT(H,s,t,removed,runUntilEmpty);
                 if(pi != null){
-                    pi.setVersion(pi.getVersion()-removed.getValue());
+                    // the version is stored in key -1
+                    pi.setVersion(pi.getVersion()-removed.get(-1));
                     L.add(pi);
                 }
             }
         }
-
+        
     }
 
     /**
@@ -47,8 +49,8 @@ public class KShortestPath {
      *
      * @param alreadyDeletedEdges: Edges that have already been deleted.
      * */
-    private ArrayList<Pair<HashMap<Integer,Integer>,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Edge> hyperpath, int startFrom) {
-        ArrayList<Pair<HashMap<Integer,Integer>,Integer>> setOfHypergraphs = new ArrayList<>();
+    private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Edge> hyperpath, int startFrom) {
+        ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
         int counter = 0;
         for (int i = startFrom; i >= 0; i--) {
             HashMap<Integer,Integer> edgesRemoved = new HashMap<>(alreadyDeletedEdges);
@@ -64,6 +66,7 @@ public class KShortestPath {
                 edgesFromPath.put(hyperpath.get(j).getId(),1);
             }
 
+            // fix the edge by adding the deleted edges
             for (Edge e :ingoingFromPath) {
                 if(edgesFromPath.get(e.getId()) == null){
                     edgesRemoved.put(e.getId(),1);
@@ -77,8 +80,8 @@ public class KShortestPath {
             }
             System.out.println("____________");*/
             // DEBUG
-
-            setOfHypergraphs.add(new Pair<>(edgesRemoved,counter));
+            edgesRemoved.put(-1,counter);
+            setOfHypergraphs.add(edgesRemoved);
             counter++;
         }
 

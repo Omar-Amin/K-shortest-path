@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ShortestPath {
 
@@ -116,11 +115,12 @@ public class ShortestPath {
         stack.push(target);
         while (!stack.isEmpty()){
             target = stack.pop();
-            if(edges.get(target.getPredecessor()) != null){
+            Edge predecessor = target.getPredecessor();
+            if(edges.get(predecessor) != null){
                 continue;
             }
-            edges.put(target.getPredecessor(),0);
-            for (Vertex vertex : target.getPredecessor().getTail()) {
+            edges.put(predecessor,0);
+            for (Vertex vertex : predecessor.getTail()) {
                 // counts how many outgoing edges each vertex in the shortest path
                 in.putIfAbsent(vertex, 0);
                 in.put(vertex,in.get(vertex)+1);
