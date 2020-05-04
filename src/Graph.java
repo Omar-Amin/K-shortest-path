@@ -134,8 +134,9 @@ public class Graph {
         else nextIndex = edgeTable.length;
         int size = nextIndex - startIndex;
         int[] ret = new int[size];
+        // idk why i did this, but now it prints out the same as our class implementation
         for(int i = 0; i<size;i++){
-            ret[i] = edgeTable[startIndex+i];
+            ret[i] = edgeTable[startIndex+size-1-i];
         }
         return ret;
     }
