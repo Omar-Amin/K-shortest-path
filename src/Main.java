@@ -9,11 +9,14 @@ public class Main {
         int[] skip = {};
         for (int i = 0; i < 1; i++) {
             Graph g = new Graph();
-            //Pair<int[][], int[]> p = randomGenerator.metaGenerator(50, 1000,121453412454L);
-            Pair<int[][], int[]> p = randomGenerator.normalGenerator(70000,1000,100,2,false,-6606397267175329844L);
+            Pair<int[][], int[]> p = randomGenerator.metaGenerator(50, 1000,-5437924817408659363L);
+            //Pair<int[][], int[]> p = randomGenerator.normalGenerator(70000,1000,100,2,true,-6606397267175329844L);
             g.edgesInput(p.getKey(),p.getValue());
             SBT sbt = new SBT(g,function.sum);
+            long starttime = System.nanoTime();
             sbt.run(0,g.vertexLookup.length-1,skip);
+            long endtime = System.nanoTime();
+            System.out.println((float) (endtime - starttime)/1000000);
         }
     }
 

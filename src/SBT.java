@@ -5,13 +5,13 @@ public class SBT {
     private ArrayList<Integer> path;
     Graph g;
     int[] predecessor;
-    WeightingFunctions function;
+    WeightingFunctions costFunction;
 
     public SBT(Graph g, function toUse){
         this.PQ = new minPQ();
         this.path = new ArrayList<>();
         this.g = g;
-        function = new WeightingFunctions(g,toUse);
+        costFunction = new WeightingFunctions(g,toUse);
     }
 
     public ArrayList<Integer> run(int source, int target, int[] skip){
@@ -25,15 +25,17 @@ public class SBT {
         PQ.insert(vertex);
         while(PQ.size > 0){
             vertex = PQ.popMin();
-            if(vertex[0] == target){
-                getPath(source, target);
-                return path;
+            if(costFunction.functionType != function.min) {
+                if (vertex[0] == target) {
+                    getPath(source, target);
+                    return path;
+                }
             }
             for (int edge:g.FS(vertex[0])) {
                 if(contains(edge,skip)) continue;
                 kj[edge]++;
                 if(kj[edge] == g.tail(edge).length){
-                    int f = this.function.run(edge);
+                    int f = this.costFunction.run(edge);
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
                         if(!PQ.contains(y)){
