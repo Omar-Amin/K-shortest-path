@@ -42,7 +42,7 @@ public class ShortestPath {
                         // if pq doesn't contain head of current edge
                         if(!pq.contains(y)){
                             // this line can be removed if we return immediately
-                            if(y.getCost() < Integer.MAX_VALUE){
+                            if(y.getCost() < Double.MAX_VALUE){
                                 for (Edge e :y.getOutgoing_edges()) {
                                     e.setKj(e.getKj()-1);
                                 }

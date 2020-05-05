@@ -57,7 +57,7 @@ public class Hypergraph {
             Edges.add(edge1);
         }
         this.source = Vertices.get(0);
-        this.target = Vertices.get(maxVertex-1);
+        this.target = Vertices.get(maxVertex);
         return this;
     }
 
