@@ -94,8 +94,7 @@ public class Graph {
         int count = 0;
         int[] vertexIngoingCount = new int[max+1];
         int[] vertexOutgoingCount= new int[max+1];
-        for (int i = 0; i < edgesCount; i++) {
-            int[] edge = edges[i];
+        for (int[] edge : edges) {
             vertexIngoingCount[edge[0]]++;
             count += edge.length;
             for (int j = 1; j < edge.length; j++) {

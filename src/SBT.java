@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class SBT {
-    private final minPQ PQ;
     private Graph g;
     private int[] predecessor;
     private final WeightingFunctions function;
@@ -9,12 +8,12 @@ public class SBT {
     private int deletedPosition = 0;
 
     public SBT(Graph g, function toUse){
-        this.PQ = new minPQ();
         this.g = g;
         function = new WeightingFunctions(g,toUse);
     }
 
     public ArrayList<Integer> run(int source, int target, HashMap<Integer,Integer> skip){
+        minPQ PQ = new minPQ();
         deleted = skip;
         int[] kj = new int[g.edgeLookup.length];
         this.predecessor = new int[g.vertexLookup.length];
@@ -27,7 +26,6 @@ public class SBT {
         while(PQ.size > 0){
             vertex = PQ.popMin();
             if(vertex[0] == target){
-                PQ.clear();
                 return getPath(source, target);
             }
             for (int edge:g.FS(vertex[0])) {

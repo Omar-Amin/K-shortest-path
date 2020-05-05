@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 import java.util.*;
 
 public class KShortestPath {
@@ -76,6 +74,10 @@ public class KShortestPath {
         }
 
         return setOfHypergraphs;
+    }
+
+    public ArrayList<ArrayList<Integer>> getPaths(){
+        return paths;
     }
 
 }
