@@ -6,6 +6,7 @@ public class minPQ {
     HashMap<Integer, Integer> index;
     int size;
 
+
     public minPQ(){
         heap = new ArrayList<>();
         index = new HashMap<>();
@@ -25,29 +26,27 @@ public class minPQ {
         }
     }
 
-    public boolean decreaseValue(int id, int value){
+    public void decreaseValue(int id, int value){
         int i = index.get(id);
         heap.get(i)[1] = value;
-        int parent = (int) Math.floor((i-1)/2);
+        int parent = (i-1)/2;
         while (i > 0 && heap.get(parent)[1] > heap.get(i)[1]){
             exchange(parent,i);
             i = parent;
-            parent = (int) Math.floor((i-1)/2);
+            parent = (i-1)/2;
         }
-        return true;
     }
 
-    public boolean insert(int[] obj){
+    public void insert(int[] obj){
         int i = this.size++;
         heap.add(obj);
         index.put(obj[0],i);
-        int parentI = (int) Math.floor((i-1)/2);
-        while(i > 0 && heap.get(parentI)[1] > heap.get(i)[1]) {
-            exchange(i,parentI);
-            i = parentI;
-            parentI = (int) Math.floor((i - 1) / 2);
+        int parent = (i-1)/2;
+        while(i > 0 && heap.get(parent)[1] > heap.get(i)[1]) {
+            exchange(i,parent);
+            i = parent;
+            parent = (i-1)/2;
         }
-        return true;
     }
 
     public int[] getMin(){
@@ -59,9 +58,8 @@ public class minPQ {
         int[] ret = heap.get(0);
         index.remove(ret[0]);
         if(size > 1) {
-            int[] newLow = heap.remove(size-1);
-            heap.set(0, newLow);
-            index.put(newLow[0],0);
+            heap.set(0, heap.remove(size-1));
+            index.put(heap.get(0)[0],0);
         }
         else heap.remove(0);
         size--;
@@ -70,8 +68,7 @@ public class minPQ {
     }
 
     public boolean contains(int obj){
-        if(index.get(obj) != null) return true;
-        return false;
+        return index.get(obj) != null;
     }
 
     public void exchange(int swap1, int swap2){
@@ -89,15 +86,4 @@ public class minPQ {
         }
     }
 
-    public static void main(String[] args){
-        minPQ pq = new minPQ();
-        for (int i = 0; i < 10; i++) {
-            if (i == 5) pq.insert(new int[]{i, 11});
-            else pq.insert(new int[]{i, 10 - i});
-        }
-        for (int i = 0; i < 10; i++) {
-            int[] ret = pq.popMin();
-            System.out.println(ret[0]+" : "+ ret[1]);
-        }
-    }
 }

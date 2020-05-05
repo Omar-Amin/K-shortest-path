@@ -1,20 +1,20 @@
 import java.util.*;
 
 public class SBT {
-    private minPQ PQ;
-    private ArrayList<Integer> path;
-    Graph g;
-    int[] predecessor;
-    WeightingFunctions costFunction;
+    private Graph g;
+    private int[] predecessor;
+    private final WeightingFunctions function;
+    private HashMap<Integer,Integer> deleted;
+    private int deletedPosition = 0;
 
     public SBT(Graph g, function toUse){
-        this.PQ = new minPQ();
-        this.path = new ArrayList<>();
         this.g = g;
-        costFunction = new WeightingFunctions(g,toUse);
+        function = new WeightingFunctions(g,toUse);
     }
 
-    public ArrayList<Integer> run(int source, int target, int[] skip){
+    public ArrayList<Integer> run(int source, int target, HashMap<Integer,Integer> skip){
+        minPQ PQ = new minPQ();
+        deleted = skip;
         int[] kj = new int[g.edgeLookup.length];
         this.predecessor = new int[g.vertexLookup.length];
         for(int i = 0; i < g.vertexLookup.length;i++){
@@ -25,27 +25,24 @@ public class SBT {
         PQ.insert(vertex);
         while(PQ.size > 0){
             vertex = PQ.popMin();
-            if(costFunction.functionType != function.min) {
-                if (vertex[0] == target) {
-                    getPath(source, target);
-                    return path;
-                }
+            if(vertex[0] == target){
+                return getPath(source, target);
             }
             for (int edge:g.FS(vertex[0])) {
-                if(contains(edge,skip)) continue;
+                if(skip.get(edge) != null) continue;
                 kj[edge]++;
                 if(kj[edge] == g.tail(edge).length){
-                    int f = this.costFunction.run(edge);
+                    int f = this.function.run(edge);
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
                         if(!PQ.contains(y)){
-                            int[] head = {y,f};
-                            PQ.insert(head);
                             if(g.getVertexCost(y) < Integer.MAX_VALUE){
                                 for (int tail:g.FS(y)) {
                                     kj[tail]--;
                                 }
                             }
+                            int[] head = {y,f};
+                            PQ.insert(head);
                         } else {
                             PQ.decreaseValue(y,f);
                         }
@@ -58,9 +55,9 @@ public class SBT {
         return null;
     }
 
-    public void getPath(int source,int target){
-        HashMap<Integer, Integer> in = edgesInPath(source,target);
-
+    public ArrayList<Integer> getPath(int source,int target){
+        HashMap<Integer, Integer> in = edgesInPath(target);
+        ArrayList<Integer> path = new ArrayList<>();
         PriorityQueue<Integer> zeroIn = new PriorityQueue<>();
         zeroIn.add(target);
         path.add(this.predecessor[target]);
@@ -79,9 +76,13 @@ public class SBT {
                 }
             }
         }
+        Collections.reverse(path);
+        path.add(g.getVertexCost(target));
+        path.add(deletedPosition++);
+        return path;
     }
 
-    private HashMap<Integer, Integer> edgesInPath(int source, int target){
+    private HashMap<Integer, Integer> edgesInPath(int target){
         HashMap<Integer, Integer> in = new HashMap<>();
         HashMap<Integer, Integer> edges = new HashMap<>();
 
@@ -89,10 +90,9 @@ public class SBT {
         stack.push(target);
         while (!stack.isEmpty()){
             target = stack.pop();
-            if(source == target) continue;
             int edge = this.predecessor[target];
             if(edges.get(edge) != null) continue;
-            edges.put(edge,1);
+            edges.put(edge,0);
             for (int v:g.tail(edge)){
                 in.putIfAbsent(v,0);
                 in.put(v,in.get(v)+1);
@@ -102,6 +102,10 @@ public class SBT {
         }
 
         return in;
+    }
+
+    public HashMap<Integer,Integer> getDeleted(){
+        return deleted;
     }
 
     public boolean contains(int edge, int[] skip){
