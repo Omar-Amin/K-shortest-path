@@ -1,19 +1,28 @@
 import javafx.util.Pair;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
         Graph g = new Graph();
-        Pair<int[][], int[]> p = randomGenerator.metaGenerator(50, 100,222L);
+        //System.out.println(sbt.run(0,g.vertexLookup.length-1,new HashMap<>()));
+        // langsommere
+        //Pair<int[][], int[]> p = randomGenerator.normalGenerator(10000,25,25,2,false,1222L);
+        // hurtigere
+        //Pair<int[][], int[]> p = randomGenerator.metaGenerator(2500, 5,222L);
+        Pair<int[][], int[]> p = randomGenerator.metaGenerator(200, 5,222L);
         g.edgesInput(p.getKey(),p.getValue());
         long startTime = System.nanoTime();
-        SBT sbt = new SBT(g,function.sum);
-        sbt.run(0,g.vertexLookup.length-1,new HashMap<>());
+        //SBT sbt = new SBT(g,function.sum);
+        //sbt.run(0,g.vertexLookup.length-1, new HashMap<>());
+        KShortestPath kShortestPath = new KShortestPath(g,0,g.vertexLookup.length-1,100,function.sum,false);
         long stopTime = System.nanoTime();
+        System.gc();
         System.out.println((float) (stopTime - startTime)/1000000000);
+        ArrayList<ArrayList<Integer>> path = kShortestPath.getPaths();
+        System.out.println(path);
     }
 
     public void dijkVsbt(){
