@@ -1,15 +1,15 @@
 import java.util.*;
 
 public class SBT {
-    private Graph g;
+    private final Graph g;
     private int[] predecessor;
-    private final WeightingFunctions function;
+    private final WeightingFunctions costFunction;
     private HashMap<Integer,Integer> deleted;
     private int deletedPosition = 0;
 
     public SBT(Graph g, function toUse){
         this.g = g;
-        function = new WeightingFunctions(g,toUse);
+        costFunction = new WeightingFunctions(g,toUse);
     }
 
     public ArrayList<Integer> run(int source, int target, HashMap<Integer,Integer> skip){
@@ -25,14 +25,14 @@ public class SBT {
         PQ.insert(vertex);
         while(PQ.size > 0){
             vertex = PQ.popMin();
-            if(vertex[0] == target){
+            if(vertex[0] == target && costFunction.functionType != function.min){
                 return getPath(source, target);
             }
             for (int edge:g.FS(vertex[0])) {
                 if(skip.get(edge) != null) continue;
                 kj[edge]++;
                 if(kj[edge] == g.tail(edge).length){
-                    int f = this.function.run(edge);
+                    int f = this.costFunction.run(edge);
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
                         if(!PQ.contains(y)){
@@ -51,6 +51,9 @@ public class SBT {
                     }
                 }
             }
+        }
+        if(g.getVertexCost(g.vertexLookup.length-1) != Integer.MAX_VALUE){
+            return getPath(source,target);
         }
         return null;
     }
@@ -108,9 +111,4 @@ public class SBT {
         return deleted;
     }
 
-    public boolean contains(int edge, int[] skip){
-        for (int edgeSkip:skip)
-            if(edge == edgeSkip) return true;
-        return false;
-    }
 }

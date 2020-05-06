@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class KShortestPath {
-    private Graph H;
+    private final Graph H;
     private final ArrayList<ArrayList<Integer>> paths;
 
     public KShortestPath(Graph H, int s, int t, int K, function toUse, boolean runUntilEmpty)  {
