@@ -16,7 +16,6 @@ public class KShortestPath {
         deletedEdges.add(sbt.getDeleted());
         //NOTE: Each path returned has a cost for the path in the second last element, and the last
         // element is the index of where the deletedEdges is stored for that path in the arraylist
-
         for (int k = 1; k <= K; k++) {
             if(L.isEmpty()){
                 break;
@@ -41,7 +40,7 @@ public class KShortestPath {
 
     private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Integer> hyperpath, int startFrom) {
         ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
-        int counter = 0;
+        int counter = (hyperpath.size()-3)-startFrom;
         for (int i = startFrom; i >= 0; i--) {
             HashMap<Integer,Integer> edgesRemoved = new HashMap<>(alreadyDeletedEdges);
 
@@ -52,7 +51,7 @@ public class KShortestPath {
             HashMap<Integer,Integer> edgesFromPath = new HashMap<>();
 
             // starting for size-3 because the last two elements are edges in the path but indexes of something else (explained above)
-            for (int j = hyperpath.size()-3; j >= i+1 ; j--) {
+            for (int j = startFrom; j >= i+1 ; j--) {
                 int head = H.head(hyperpath.get(j));
                 for (int e : H.BS(head)){
                     ingoingFromPath.add(e);
