@@ -49,7 +49,7 @@ public class KShortestPath {
      * */
     private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Edge> hyperpath, int startFrom) {
         ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
-        int counter = 0;
+        int counter = (hyperpath.size()-1)-startFrom;;
         for (int i = startFrom; i >= 0; i--) {
             HashMap<Integer,Integer> edgesRemoved = new HashMap<>(alreadyDeletedEdges);
 
@@ -59,7 +59,7 @@ public class KShortestPath {
             ArrayList<Edge> ingoingFromPath = new ArrayList<>();
             HashMap<Integer,Integer> edgesFromPath = new HashMap<>();
 
-            for (int j = hyperpath.size()-1; j >= i+1 ; j--) {
+            for (int j = startFrom; j >= i+1 ; j--) {
                 ingoingFromPath.addAll(hyperpath.get(j).getHead().getIngoing_edges());
                 edgesFromPath.put(hyperpath.get(j).getId(),1);
             }
