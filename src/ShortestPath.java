@@ -25,7 +25,6 @@ public class ShortestPath {
         source.setCost(0);
         pq.insert(source);
         while (pq.size() > 0) {
-            //debugPrintQueue();
             Vertex u = pq.popMin(); //Retrieves and removes first element
             if(target == u && functions.getFunctionType() != function.min && !runUntilEmpty){
                 return getPath(source, target, deletedEdges);
@@ -78,7 +77,7 @@ public class ShortestPath {
         ArrayList<Edge> path = new ArrayList<>();
         HashMap<Vertex,Integer> in = edgesInPath(target);
         // queue which sorts by ID in order to get the same topological order for the same path
-        PriorityQueue<Vertex> zeroIn = new PriorityQueue<>((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
+        PriorityQueue<Vertex> zeroIn = new PriorityQueue<>(Comparator.comparingInt(Vertex::getId));
         zeroIn.add(target);
         double cost = target.getCost();
         path.add(target.getPredecessor());

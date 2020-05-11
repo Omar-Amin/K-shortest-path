@@ -4,15 +4,13 @@ public class Hypergraph {
     //Class attributes
     private int amountOfEdges = 0;
     private int amountOfVertices = 0;
-    private ArrayList<Edge> Edges = new ArrayList<>();
-    private ArrayList<Vertex> Vertices = new ArrayList<>();
+    private final ArrayList<Edge> Edges = new ArrayList<>();
+    private final ArrayList<Vertex> Vertices = new ArrayList<>();
     private Vertex source;
     private Vertex target;
 
-    // constructor
     public Hypergraph(){
     }
-
 
     /**
      * Create hypergraph by taking a matrix as input
@@ -339,16 +337,8 @@ public class Hypergraph {
         return Edges;
     }
 
-    public void setEdges(ArrayList<Edge> edges) {
-        Edges = edges;
-    }
-
     public ArrayList<Vertex> getVertices() {
         return Vertices;
-    }
-
-    public void setVertices(ArrayList<Vertex> vertices) {
-        Vertices = vertices;
     }
 
     public Vertex getSource() {

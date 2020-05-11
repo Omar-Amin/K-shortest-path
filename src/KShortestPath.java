@@ -49,7 +49,8 @@ public class KShortestPath {
      * */
     private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Edge> hyperpath, int startFrom) {
         ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
-        int counter = (hyperpath.size()-1)-startFrom;;
+        // counter in order to know which version to start from
+        int counter = (hyperpath.size()-1)-startFrom;
         for (int i = startFrom; i >= 0; i--) {
             HashMap<Integer,Integer> edgesRemoved = new HashMap<>(alreadyDeletedEdges);
 
@@ -59,25 +60,19 @@ public class KShortestPath {
             ArrayList<Edge> ingoingFromPath = new ArrayList<>();
             HashMap<Integer,Integer> edgesFromPath = new HashMap<>();
 
+            // back-fixing the edge
             for (int j = startFrom; j >= i+1 ; j--) {
                 ingoingFromPath.addAll(hyperpath.get(j).getHead().getIngoing_edges());
                 edgesFromPath.put(hyperpath.get(j).getId(),1);
             }
 
-            // fix the edge by adding the deleted edges
+            // adding all of the deleted edges (from back-fixing)
             for (Edge e :ingoingFromPath) {
                 if(edgesFromPath.get(e.getId()) == null){
                     edgesRemoved.put(e.getId(),1);
                 }
             }
 
-            // DEBUG
-/*            System.out.println("ITERATION: " + i);
-            for (Edge e :edgesRemoved) {
-                System.out.println(e.getId()+1);
-            }
-            System.out.println("____________");*/
-            // DEBUG
             edgesRemoved.put(-1,counter);
             setOfHypergraphs.add(edgesRemoved);
             counter++;

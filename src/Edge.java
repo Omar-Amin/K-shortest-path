@@ -2,10 +2,9 @@ import java.util.ArrayList;
 
 public class Edge {
     //Class attributes
-    private int id;
+    private final int id;
     private double cost;
-    private int kj = 0; // number of nodes belonging to the tail of this edge
-    private Vertex predecessor;
+    private int kj = 0;
     private ArrayList<Vertex> tail = new ArrayList<>();
     private Vertex head = null;
 
@@ -13,7 +12,7 @@ public class Edge {
     //TODO: Add a cost in the near future (as argument to the object)
     public Edge(int identifier){
         this.id = identifier;
-        this.cost = 0; // Skal nok ændres, magter bare ikke til vi skal skrive en random cost ind hver gang
+        this.cost = 0;
     }
 
     //Functions for Edge
@@ -24,10 +23,6 @@ public class Edge {
     // Getter and setters for Edge
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public double getCost() {
@@ -58,7 +53,4 @@ public class Edge {
 
     public void setKj(int kj) { this.kj = kj; }
 
-    public Vertex getPredecessor() { return predecessor; }
-
-    public void setPredecessor(Vertex predecessor) { this.predecessor = predecessor; }
 }

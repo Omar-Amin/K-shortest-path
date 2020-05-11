@@ -26,16 +26,6 @@ public class Hyperpath {
         return deletedEdges;
     }
 
-    /**
-     * Debugging purpose
-     * */
-    public void printPath(){
-        System.out.println("Printing path...");
-        for (Edge e :path) {
-            System.out.println("ID: " + (e.getId()+1));
-        }
-    }
-
     public int getVersion() {
         return version;
     }

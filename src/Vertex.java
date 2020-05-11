@@ -3,14 +3,13 @@ import java.util.ArrayList;
 public class Vertex{
 
     // Class attributes
-    private int id;
+    private final int id;
     private double cost;
     private Edge predecessor;
-    private ArrayList<Edge> ingoing_edges = new ArrayList<>();
-    private ArrayList<Edge> outgoing_edges = new ArrayList<>();
+    private final ArrayList<Edge> ingoing_edges = new ArrayList<>();
+    private final ArrayList<Edge> outgoing_edges = new ArrayList<>();
 
     //Class constructor
-    //TODO: In the future add a cost to the object input
     public Vertex(int identifier) {
         this.id = identifier;
         this.cost = 0;
@@ -30,24 +29,12 @@ public class Vertex{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public ArrayList<Edge> getIngoing_edges() {
         return ingoing_edges;
     }
 
-    public void setIngoing_edges(ArrayList<Edge> ingoing_edges) {
-        this.ingoing_edges = ingoing_edges;
-    }
-
     public ArrayList<Edge> getOutgoing_edges() {
         return outgoing_edges;
-    }
-
-    public void setOutgoing_edges(ArrayList<Edge> outgoing_edges) {
-        this.outgoing_edges = outgoing_edges;
     }
 
     public double getCost() {
