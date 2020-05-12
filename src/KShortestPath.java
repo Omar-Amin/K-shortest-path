@@ -47,23 +47,14 @@ public class KShortestPath {
             int edge = hyperpath.get(i);
             edgesRemoved.put(edge,1);
 
-            ArrayList<Integer> ingoingFromPath = new ArrayList<>();
-            HashMap<Integer,Integer> edgesFromPath = new HashMap<>();
-
             // starting for size-3 because the last two elements are edges in the path but indexes of something else (explained above)
             for (int j = startFrom; j >= i+1 ; j--) {
+                int fixedEdge = hyperpath.get(j);
                 int head = H.head(hyperpath.get(j));
                 for (int e : H.BS(head)){
-                    ingoingFromPath.add(e);
-                }
-                edgesFromPath.put(hyperpath.get(j),1);
-            }
-
-            // fix the edge by adding the deleted edges
-            // if it is not in edgesFromPath it adds it as deleted edge
-            for (int e :ingoingFromPath) {
-                if(edgesFromPath.get(e) == null){
-                    edgesRemoved.put(e,1);
+                    if(e != fixedEdge){
+                        edgesRemoved.put(e,1);
+                    }
                 }
             }
 
