@@ -57,19 +57,13 @@ public class KShortestPath {
             Edge edge = hyperpath.get(i);
             edgesRemoved.put(edge.getId(),1);
 
-            ArrayList<Edge> ingoingFromPath = new ArrayList<>();
-            HashMap<Integer,Integer> edgesFromPath = new HashMap<>();
-
             // back-fixing the edge
             for (int j = startFrom; j >= i+1 ; j--) {
-                ingoingFromPath.addAll(hyperpath.get(j).getHead().getIngoing_edges());
-                edgesFromPath.put(hyperpath.get(j).getId(),1);
-            }
-
-            // adding all of the deleted edges (from back-fixing)
-            for (Edge e :ingoingFromPath) {
-                if(edgesFromPath.get(e.getId()) == null){
-                    edgesRemoved.put(e.getId(),1);
+                Edge fixedEdge = hyperpath.get(j);
+                for (Edge e :fixedEdge.getHead().getIngoing_edges()) {
+                    if(e != fixedEdge){
+                        edgesRemoved.put(e.getId(),1);
+                    }
                 }
             }
 
