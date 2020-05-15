@@ -85,6 +85,9 @@ public class randomGenerator {
                 int[] metaEdge = new int[2];
                 metaEdge[0] = i;
                 metaEdge[1] = v;
+                if(metaArray.size() == metaSize){
+                    return metaArray;
+                }
                 metaArray.add(metaEdge);
             }
         }
@@ -94,9 +97,8 @@ public class randomGenerator {
     private static Pair<ArrayList<int[]>,ArrayList<Integer>> generateh2(int sourceIndex, int size, Random rand){
         ArrayList<Integer> cost = new ArrayList<>();
         ArrayList<int[]> h2 = new ArrayList<>();
-        int vertices = (int) (rand.nextInt((int) ( size*0.5) ) + size*0.75);
         int maxTailSize = rand.nextInt(5)+1;
-        for (int i = 1; i <= vertices; i++) {
+        for (int i = 1; i <= size; i++) {
             int tailSize = maxTailSize;
             if(i-maxTailSize < 0) tailSize = maxTailSize + (i-maxTailSize);
             int[] edge = new int[1+tailSize];
@@ -108,7 +110,7 @@ public class randomGenerator {
             }
             h2.add(edge);
         }
-        ID += vertices;
+        ID += size;
 
         return new Pair<>(h2, cost);
     }
