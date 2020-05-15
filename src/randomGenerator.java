@@ -142,7 +142,7 @@ public class randomGenerator {
         int newRow = rand.nextInt(toRow-fromRow+1) + fromRow;
         if(newCol == col && newRow == row)
             return getLocalVertex(vertex, verticesWidth, verticesHeight, radius, rand, topological);
-        return newCol*verticesWidth + newRow;
+        return newRow*verticesWidth + newCol;
     }
 
     public static int[] convertListToArr(ArrayList<Integer> o1){
