@@ -55,6 +55,7 @@ public class randomGenerator {
         ArrayList<Integer> cost = new ArrayList();
         //Generate meta graph
         ArrayList<int[]> metaGraph = generateMeta(metaSize, rand);
+        System.out.println("Number of metaEdges: "+metaGraph.size());
         for (int[] metaEdge : metaGraph) {
             Pair<ArrayList<int[]>, ArrayList<Integer>> ret = generateh2(metaVertices[metaEdge[0]], metaEdgeSize, rand);
             int[] lastEdge = ret.getKey().get(ret.getKey().size() - 1);
@@ -75,19 +76,18 @@ public class randomGenerator {
         for (int i = 0; i < metaSize-1; i++) {
             int[] ret;
             if(i == 0){
-                int amount = rand.nextInt(metaSize-3)+2; //Atleast two outgoing
+                //int amount = rand.nextInt(metaSize-3)+2; //Atleast two outgoing
+                int amount = rand.nextInt(4)+2; //Atleast two outgoing
                 ret = getRandom(i+1,metaSize, amount, rand);
             } else {
-                int amount = rand.nextInt(metaSize-i-1)+1; //Atleast one outgoing
+                //int amount = rand.nextInt(metaSize-i-1)+1
+                int amount = rand.nextInt(Math.min(4,metaSize-i-1))+1; //Atleast one outgoing
                 ret = getRandom(i+1,metaSize, amount, rand);
             }
             for (int v: ret) {
                 int[] metaEdge = new int[2];
                 metaEdge[0] = i;
                 metaEdge[1] = v;
-                if(metaArray.size() == metaSize){
-                    return metaArray;
-                }
                 metaArray.add(metaEdge);
             }
         }
@@ -137,7 +137,7 @@ public class randomGenerator {
         int toCol = Math.min(verticesWidth - 1, col + radius);
         int newCol = rand.nextInt(toCol-fromCol+1)+fromCol;
         if(topological){
-            toRow = Math.min(verticesHeight,fromRow+2*radius-(newCol-fromCol));
+            toRow = Math.min(verticesHeight-1,fromRow+2*radius-(newCol-fromCol));
         } else {
             toRow = Math.min(verticesHeight - 1, row + radius);
         }
