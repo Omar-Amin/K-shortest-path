@@ -4,15 +4,20 @@ public class KShortestPath {
     private final Graph H;
     private final ArrayList<ArrayList<Integer>> paths;
 
-    public KShortestPath(Graph H, int s, int t, int K, function toUse, boolean runUntilEmpty)  {
+    public KShortestPath(Graph H)  {
         this.H = H;
         paths = new ArrayList<>();
+    }
+
+    public boolean run(int s, int t, int K, function toUse, boolean runUntilEmpty){
         SBT sbt = new SBT(H,toUse);
         PriorityQueue<ArrayList<Integer>> L = new PriorityQueue<>((Comparator.comparingInt(o -> o.get(o.size() - 2))));
         ArrayList<HashMap<Integer,Integer>> deletedEdges = new ArrayList<>();
         HashMap<Integer,Integer> skip = new HashMap<>();
         skip.put(-1,0);
-        L.add(sbt.run(s,t,skip));
+        ArrayList<Integer> pi = sbt.run(s,t,skip);
+        if(pi == null) return false; //No path found
+        L.add(pi);
         deletedEdges.add(sbt.getDeleted());
         //NOTE: Each path returned has a cost for the path in the second last element, and the last
         // element is the index of where the deletedEdges is stored for that path in the arraylist
@@ -28,16 +33,15 @@ public class KShortestPath {
             HashMap<Integer,Integer> alreadyDeleted = deletedEdges.get(path.get(path.size()-1));
             // size - 3 because the last element is index for hashmap and 2. last element is for cost
             for (HashMap<Integer,Integer> removed :backBranching(alreadyDeleted,path,(path.size()-3) - alreadyDeleted.get(-1))) {
-                ArrayList<Integer> pi = sbt.run(s,t,removed);
+                pi = sbt.run(s,t,removed);
                 if(pi != null){
                     L.add(pi);
                     deletedEdges.add(sbt.getDeleted());
                 }
             }
         }
-
+        return true;
     }
-
     private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Integer> hyperpath, int startFrom) {
         ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
         int counter = (hyperpath.size()-3)-startFrom;
