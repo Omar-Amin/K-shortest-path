@@ -7,6 +7,10 @@ public class KShortestPath {
 
     private final ArrayList<Hyperpath> paths;
 
+    public KShortestPath()  {
+        paths = new ArrayList<>();
+    }
+
     /**
      * This is the algorithm running for finding the k-shortest graph.
      *
@@ -15,12 +19,12 @@ public class KShortestPath {
      * @param H: Hypergraph that you want to run K-shortestpath
      * @param toUse: Which weighting function you want to use
      * */
-    public KShortestPath(Hypergraph H, Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty)  {
+    public boolean run(Hypergraph H, Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty){
         PriorityQueue<Hyperpath> L = new PriorityQueue<>((Comparator.comparingDouble(Hyperpath::getCost)));
         ShortestPath sbt = new ShortestPath(toUse);
-        L.add(sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty));
-        paths = new ArrayList<>();
-
+        Hyperpath pi = sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty);
+        if(pi == null) return false; //No path exists
+        L.add(pi);
         for (int k = 1; k <= K; k++) {
             if(L.isEmpty()){
                 break;
@@ -31,7 +35,7 @@ public class KShortestPath {
                 break;
             }
             for (HashMap<Integer,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath(),path.getVersion())) {
-                Hyperpath pi = sbt.SBT(H,s,t,removed,runUntilEmpty);
+                pi = sbt.SBT(H,s,t,removed,runUntilEmpty);
                 if(pi != null){
                     // the version is stored in key -1
                     pi.setVersion(pi.getVersion()-removed.get(-1));
@@ -39,7 +43,7 @@ public class KShortestPath {
                 }
             }
         }
-
+        return true;
     }
 
     /**
