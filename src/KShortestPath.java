@@ -39,7 +39,6 @@ public class KShortestPath {
                 if(pi != null){
                     Object[] newPathObj = {pi,sbt.getPathCost()};
                     L.insert(newPathObj);
-                    System.out.println(sbt.getPathCost());
                     deletedEdges.add(sbt.getDeleted());
                 }
             }

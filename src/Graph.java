@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Graph {
     int[] edgeLookup;
@@ -132,7 +134,7 @@ public class Graph {
         else nextIndex = edgeTable.length;
         int size = nextIndex - startIndex;
         int[] ret = new int[size];
-        for(int i = 0; i<size;i++){
+        for(int i = size-1; i>=0;i--){
             ret[i] = edgeTable[startIndex+size-1-i];
         }
         return ret;

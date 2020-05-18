@@ -20,6 +20,7 @@ public class SBT {
         this.predecessor = new int[g.vertexLookup.length];
         for(int i = 0; i < g.vertexLookup.length;i++){
             g.setVertexCost(i,Double.MAX_VALUE);
+            this.predecessor[i] = -1;
         }
         Object[] vertex = {source,0};
         g.setVertexCost(source,0);
@@ -62,11 +63,12 @@ public class SBT {
     public ArrayList<Integer> getPath(int source,int target){
         HashMap<Integer, Integer> in = edgesInPath(target);
         ArrayList<Integer> path = new ArrayList<>();
-        PriorityQueue<Integer> zeroIn = new PriorityQueue<>();
-        zeroIn.add(target);
+        minPQ zeroIn = new minPQ();
+        Object[] obj = {target,(double) target};
+        zeroIn.insert(obj);
         path.add(this.predecessor[target]);
-        while (!zeroIn.isEmpty()){
-            int vertex = zeroIn.poll();
+        while (zeroIn.size != 0){
+            int vertex = (int) zeroIn.popMin()[0];
             if (vertex == source){
                 continue;
             }
@@ -75,7 +77,7 @@ public class SBT {
                 // is a part of its outgoing edge
                 in.put(tail,in.get(tail) - 1);
                 if(in.get(tail) <= 0 && tail != source){
-                    zeroIn.add(tail);
+                    zeroIn.insert(new Object[] {tail,(double) tail});
                     path.add(this.predecessor[tail]);
                 }
             }
@@ -100,7 +102,10 @@ public class SBT {
             for (int v:g.tail(edge)){
                 in.putIfAbsent(v,0);
                 in.put(v,in.get(v)+1);
-                stack.add(v);
+                if(this.predecessor[v] != -1) {
+                    stack.push(v);
+                }
+
             }
 
         }
