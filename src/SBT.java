@@ -6,6 +6,7 @@ public class SBT {
     private final WeightingFunctions costFunction;
     private HashMap<Integer,Integer> deleted;
     private int deletedPosition = 0;
+    private double pathCost;
 
     public SBT(Graph g, function toUse){
         this.g = g;
@@ -18,21 +19,25 @@ public class SBT {
         int[] kj = new int[g.edgeLookup.length];
         this.predecessor = new int[g.vertexLookup.length];
         for(int i = 0; i < g.vertexLookup.length;i++){
-            g.setVertexCost(i,Integer.MAX_VALUE);
+            g.setVertexCost(i,Double.MAX_VALUE);
         }
-        int[] vertex = {source,0};
-        g.setVertexCost(vertex[0],vertex[1]);
+        Number[] vertex = {source,0};
+        g.setVertexCost(source,0);
         PQ.insert(vertex);
         while(PQ.size > 0){
             vertex = PQ.popMin();
-            if(vertex[0] == target && costFunction.functionType != function.min){
+            if((Integer) vertex[0] == 422){
+                System.out.println("Lets go!");
+            }
+            System.out.println(vertex[0] + ": " + PQ.size);
+            if((int) vertex[0] == target && costFunction.functionType != function.min){
                 return getPath(source, target);
             }
-            for (int edge:g.FS(vertex[0])) {
+            for (int edge:g.FS((int) vertex[0])) {
                 if(skip.get(edge) != null) continue;
                 kj[edge]++;
                 if(kj[edge] == g.tail(edge).length){
-                    int f = this.costFunction.run(edge);
+                    double f = this.costFunction.run(edge);
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
                         if(!PQ.contains(y)){
@@ -41,7 +46,7 @@ public class SBT {
                                     kj[tail]--;
                                 }
                             }
-                            int[] head = {y,f};
+                            Number[] head = {y,f};
                             PQ.insert(head);
                         } else {
                             PQ.decreaseValue(y,f);
@@ -80,7 +85,7 @@ public class SBT {
             }
         }
         Collections.reverse(path);
-        path.add(g.getVertexCost(target));
+        this.pathCost = g.getVertexCost(target);
         path.add(deletedPosition++);
         return path;
     }
@@ -111,4 +116,7 @@ public class SBT {
         return deleted;
     }
 
+    public double getPathCost() {
+        return pathCost;
+    }
 }

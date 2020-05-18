@@ -13,7 +13,7 @@ public class WeightingFunctions {
         this.functionType = toUse;
     }
 
-    public int run(int edge){
+    public double run(int edge){
         if(functionType == function.sum){
             return sumFunction(edge);
         } else if (functionType == function.distance) {
@@ -24,25 +24,25 @@ public class WeightingFunctions {
         return -1;
     }
 
-    private int sumFunction(int edge){
-        int sum = graph.getEdgeCost(edge);
+    private double sumFunction(int edge){
+        double sum = graph.getEdgeCost(edge);
         for (int vertex: graph.tail(edge)) {
             sum += graph.getVertexCost(vertex);
         }
         return sum;
     }
-    private int distanceFunction(int edge){
-        int max = -1;
+    private double distanceFunction(int edge){
+        double max = -1;
         for (int vertex: graph.tail(edge)) {
-            int vertexPrice = graph.getVertexCost(vertex);
+            double vertexPrice = graph.getVertexCost(vertex);
             if(max < vertexPrice || max == -1) max = vertexPrice;
         }
         return max + graph.getEdgeCost(edge);
     }
-    private int minFunction(int edge){
-        int min = -1;
+    private double minFunction(int edge){
+        double min = -1;
         for (int vertex: graph.tail(edge)) {
-            int vertexPrice = graph.getVertexCost(vertex);
+            double vertexPrice = graph.getVertexCost(vertex);
             if(min > vertexPrice || min == -1) min = vertexPrice;
         }
         return min + graph.getEdgeCost(edge);

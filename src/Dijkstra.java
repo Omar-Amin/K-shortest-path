@@ -18,21 +18,21 @@ public class Dijkstra {
             if(i == source) g.setVertexCost(i,0);
             else g.setVertexCost(i, Integer.MAX_VALUE);
         }
-        int[] s = {source,0};
+        Number[] s = {source,0};
         PQ.insert(s);
 
         while(PQ.size > 0){
-            int[] u = PQ.popMin();
-            if(u[0] == target){
+            Number[] u = PQ.popMin();
+            if((int) u[0] == target){
                 getPath(source,target);
                 return path;
             }
-            for (int e:g.FS(u[0])) {
+            for (int e:g.FS((int) u[0])) {
                 int v = g.head(e);
-                int weight = g.getVertexCost(u[0])+g.getEdgeCost(e);
+                double weight = g.getVertexCost((int) u[0])+g.getEdgeCost(e);
                 if(weight < g.getVertexCost(v)){
                     if(!PQ.contains(v)){
-                        int[] insert = {v,weight};
+                        Number[] insert = {v,weight};
                         PQ.insert(insert);
                     } else {
                         PQ.decreaseValue(v,weight);

@@ -6,7 +6,7 @@ public class KShortestPath {
 
     public KShortestPath(Graph H)  {
         this.H = H;
-        paths = new ArrayList<>();
+        this.paths = new ArrayList<>();
     }
 
     public boolean run(int s, int t, int K, function toUse, boolean runUntilEmpty){

@@ -5,11 +5,11 @@ public class Graph {
     int[] vertexLookup;
     int[] vertexTable;
     int[] edgeTable;
+    private double[] vertexCost;
     public Long seed;
 
     //Constructor for the graph class
-    public Graph() {
-    }
+    public Graph() {}
     public void matrixInput(int[][] Matrix, int[] edgePrices){
         int verticesCount = Matrix.length;
         int edgesCount = Matrix[0].length;
@@ -91,6 +91,7 @@ public class Graph {
         }
         //Er kun implementeret så det virker, er slet ikke optimeret:
         vertexLookup = new int[max+1];
+        vertexCost = new double[max+1];
         int count = 0;
         int[] vertexIngoingCount = new int[max+1];
         int[] vertexOutgoingCount= new int[max+1];
@@ -105,10 +106,8 @@ public class Graph {
         vertexTable = new int[count + ((max+1)*2)];
         for (int i = 0; i < max; i++) {
             vertexLookup[i+1] = vertexLookup[i] + 2 + vertexIngoingCount[i] + vertexOutgoingCount[i];
-            vertexTable[vertexLookup[i]] = -1; //Set cost of vertex not initialized
             vertexTable[vertexLookup[i]+1] = vertexIngoingCount[i];
         }
-        vertexTable[vertexLookup[max]] = -1; //Set cost of vertex not initialized
         vertexTable[vertexLookup[max]+1] = vertexIngoingCount[max];
         //Fill in the vertexTable
         for (int i = 0; i < edgesCount; i++) {
@@ -197,14 +196,14 @@ public class Graph {
         return g;
     }
 
-    public int getVertexCost(int vertex){
-        return vertexTable[vertexLookup[vertex]];
+    public double getVertexCost(int vertex){
+        return vertexCost[vertex];
     }
     public int getEdgeCost(int edge){
         return edgeTable[edgeLookup[edge]+1];
     }
 
-    public void setVertexCost(int vertex, int newcost){
-        vertexTable[vertexLookup[vertex]] = newcost;
+    public void setVertexCost(int vertex, double newcost){
+        vertexCost[vertex] = newcost;
     }
 }
