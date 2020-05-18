@@ -35,10 +35,11 @@ public class KShortestPath {
             HashMap<Integer,Integer> alreadyDeleted = deletedEdges.get(path.get(path.size()-1));
             // size - 3 because the last element is index for hashmap and 2. last element is for cost
             for (HashMap<Integer,Integer> removed :backBranching(alreadyDeleted,path,(path.size()-2) - alreadyDeleted.get(-1))) {
-                pi = sbt.run(s,t,removed);
+                pi = sbt.run(s, t, removed);
                 if(pi != null){
-                    pathObj[0] = pi; pathObj[1] = sbt.getPathCost();
-                    L.insert(pathObj);
+                    Object[] newPathObj = {pi,sbt.getPathCost()};
+                    L.insert(newPathObj);
+                    System.out.println(sbt.getPathCost());
                     deletedEdges.add(sbt.getDeleted());
                 }
             }
