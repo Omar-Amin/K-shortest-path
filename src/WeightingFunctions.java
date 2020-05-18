@@ -60,11 +60,10 @@ public class WeightingFunctions {
      * */
     private double sumCostFunction(Edge edge){
         double edgeCost = edge.getCost();
-        double edgeTailCost = 0;
         for (Vertex v : edge.getTail()) {
-            edgeTailCost += v.getCost();
+            edgeCost += v.getCost();
         }
-        return edgeCost + edgeTailCost;
+        return edgeCost;
     }
 
     public function getFunctionType(){

@@ -33,9 +33,7 @@ public class Edge {
         this.cost = cost;
     }
 
-    public ArrayList<Vertex> getTail() {
-        return tail;
-    }
+    public ArrayList<Vertex> getTail() { return tail; }
 
     public void setTail(ArrayList<Vertex> tail) {
         this.tail = tail;
