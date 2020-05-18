@@ -2,40 +2,43 @@ import java.util.*;
 
 public class KShortestPath {
     private final Graph H;
-    private final ArrayList<ArrayList<Integer>> paths;
+    private ArrayList<Object[]> paths;
 
     public KShortestPath(Graph H)  {
         this.H = H;
-        this.paths = new ArrayList<>();
     }
 
     public boolean run(int s, int t, int K, function toUse, boolean runUntilEmpty){
+        this.paths = new ArrayList<>(K);
         SBT sbt = new SBT(H,toUse);
-        PriorityQueue<ArrayList<Integer>> L = new PriorityQueue<>((Comparator.comparingInt(o -> o.get(o.size() - 2))));
+        minPQ L = new minPQ();
         ArrayList<HashMap<Integer,Integer>> deletedEdges = new ArrayList<>();
         HashMap<Integer,Integer> skip = new HashMap<>();
         skip.put(-1,0);
         ArrayList<Integer> pi = sbt.run(s,t,skip);
         if(pi == null) return false; //No path found
-        L.add(pi);
+        Object[] pathObj = {pi,sbt.getPathCost()};
+        L.insert(pathObj);
         deletedEdges.add(sbt.getDeleted());
         //NOTE: Each path returned has a cost for the path in the second last element, and the last
         // element is the index of where the deletedEdges is stored for that path in the arraylist
         for (int k = 1; k <= K; k++) {
-            if(L.isEmpty()){
+            if(L.size == 0){
                 break;
             }
-            ArrayList<Integer> path = L.poll();
-            paths.add(path);
+            pathObj = L.popMin();
+            paths.add(pathObj);
+            ArrayList<Integer> path = (ArrayList<Integer>) pathObj[0];
             if(k == K){
                 break;
             }
             HashMap<Integer,Integer> alreadyDeleted = deletedEdges.get(path.get(path.size()-1));
             // size - 3 because the last element is index for hashmap and 2. last element is for cost
-            for (HashMap<Integer,Integer> removed :backBranching(alreadyDeleted,path,(path.size()-3) - alreadyDeleted.get(-1))) {
+            for (HashMap<Integer,Integer> removed :backBranching(alreadyDeleted,path,(path.size()-2) - alreadyDeleted.get(-1))) {
                 pi = sbt.run(s,t,removed);
                 if(pi != null){
-                    L.add(pi);
+                    pathObj[0] = pi; pathObj[1] = sbt.getPathCost();
+                    L.insert(pathObj);
                     deletedEdges.add(sbt.getDeleted());
                 }
             }
@@ -70,7 +73,7 @@ public class KShortestPath {
         return setOfHypergraphs;
     }
 
-    public ArrayList<ArrayList<Integer>> getPaths(){
+    public ArrayList<Object[]> getPaths(){
         return paths;
     }
 

@@ -21,7 +21,7 @@ public class SBT {
         for(int i = 0; i < g.vertexLookup.length;i++){
             g.setVertexCost(i,Double.MAX_VALUE);
         }
-        Number[] vertex = {source,0};
+        Object[] vertex = {source,0};
         g.setVertexCost(source,0);
         PQ.insert(vertex);
         while(PQ.size > 0){
