@@ -23,13 +23,14 @@ public class ShortestPath {
             edge.setKj(0);
         }
         source.setCost(0);
-        pq.insert(source);
-        while (pq.size() > 0) {
-            Vertex u = pq.popMin(); //Retrieves and removes first element
-            if(target == u && functions.getFunctionType() != function.min && !runUntilEmpty){
+        Object[] first = {source.getId(),source.getCost(),source};
+        pq.insert(first);
+        while (pq.size > 0) {
+            Object[] u = pq.popMin(); //Retrieves and removes first element
+            if(target == u[2] && functions.getFunctionType() != function.min && !runUntilEmpty){
                 return getPath(source, target, deletedEdges);
             }
-            for (Edge edge : u.getOutgoing_edges()) { // FS(u) is u's outgoing edges
+            for (Edge edge : ((Vertex) u[2]).getOutgoing_edges()) { // FS(u) is u's outgoing edges
                 if(deletedEdges.get(edge.getId()) != null){
                     continue;
                 }
@@ -39,7 +40,7 @@ public class ShortestPath {
                     Vertex y = edge.getHead();
                     if(y.getCost() > f){
                         // if pq doesn't contain head of current edge
-                        if(!pq.contains(y)){
+                        if(!pq.contains(y.getId())){
                             // this line can be removed if we return immediately
                             if(y.getCost() < Double.MAX_VALUE){
                                 for (Edge e :y.getOutgoing_edges()) {
@@ -47,7 +48,8 @@ public class ShortestPath {
                                 }
                             }
                             y.setCost(f);
-                            pq.insert(y);
+                            Object[] head = {y.getId(),f,y};
+                            pq.insert(head);
                         }else {
                             y.setCost(f);
                             pq.decreaseValue(y.getId(),y.getCost());

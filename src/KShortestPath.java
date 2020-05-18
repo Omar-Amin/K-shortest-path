@@ -21,15 +21,16 @@ public class KShortestPath {
      * */
     public boolean run(Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty){
         ShortestPath sbt = new ShortestPath(toUse);
-        PriorityQueue<Hyperpath> L = new PriorityQueue<>((Comparator.comparingDouble(Hyperpath::getCost)));
+       minPQ L = new minPQ();
         Hyperpath pi = sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty);
         if(pi == null) return false; //No path exists
-        L.add(pi);
+        Object[] newPi = {pi,pi.getCost()};
+        L.insert(newPi);
         for (int k = 1; k <= K; k++) {
-            if(L.isEmpty()){
+            if(L.size == 0){
                 break;
             }
-            Hyperpath path = L.poll();
+            Hyperpath path = (Hyperpath) L.popMin()[0];
             paths.add(path);
             if(k == K){
                 break;
@@ -39,7 +40,8 @@ public class KShortestPath {
                 if(pi != null){
                     // the version is stored in key -1
                     pi.setVersion(pi.getVersion()-removed.get(-1));
-                    L.add(pi);
+                    Object[] pi2 = {pi,pi.getCost()};
+                    L.insert(pi2);
                 }
             }
         }
