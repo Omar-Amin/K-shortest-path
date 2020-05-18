@@ -48,10 +48,6 @@ public class minPQ {
         }
     }
 
-    public Object[] getMin(){
-        return heap.get(0);
-    }
-
     public Object[] popMin(){
         if(size == 0) return null;
         Object[] ret = heap.get(0);
@@ -77,12 +73,6 @@ public class minPQ {
         heap.set(swap1, swap2Obj);
         index.put(swap1Obj[0],swap2);
         index.put(swap2Obj[0],swap1);
-    }
-
-    public void checkTree(int[] poppedElement){
-        for (Object[] i:heap) {
-            if((double) i[1] < (double) poppedElement[1]) System.out.println("Error in minPQ");
-        }
     }
 
 }

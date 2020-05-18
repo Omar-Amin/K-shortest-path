@@ -52,7 +52,7 @@ public class ShortestPath {
                             pq.insert(head);
                         }else {
                             y.setCost(f);
-                            pq.decreaseValue(y.getId(),y.getCost());
+                            pq.decreaseValue(y.getId(),f);
                         }
                         y.setPredecessor(edge);
                     }
