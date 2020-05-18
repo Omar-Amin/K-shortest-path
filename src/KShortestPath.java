@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 
 public class KShortestPath {
-
+    private final Hypergraph H;
     private final ArrayList<Hyperpath> paths;
 
-    public KShortestPath()  {
-        paths = new ArrayList<>();
+    public KShortestPath(Hypergraph H)  {
+        this.H = H;
+        this.paths = new ArrayList<>();
     }
 
     /**
@@ -16,12 +17,11 @@ public class KShortestPath {
      *
      * @param runUntilEmpty: True if you want to run the code until the queue is empty, meaning
      *                       that we have calculated the weight for all nodes
-     * @param H: Hypergraph that you want to run K-shortestpath
      * @param toUse: Which weighting function you want to use
      * */
-    public boolean run(Hypergraph H, Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty){
-        PriorityQueue<Hyperpath> L = new PriorityQueue<>((Comparator.comparingDouble(Hyperpath::getCost)));
+    public boolean run(Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty){
         ShortestPath sbt = new ShortestPath(toUse);
+        PriorityQueue<Hyperpath> L = new PriorityQueue<>((Comparator.comparingDouble(Hyperpath::getCost)));
         Hyperpath pi = sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty);
         if(pi == null) return false; //No path exists
         L.add(pi);

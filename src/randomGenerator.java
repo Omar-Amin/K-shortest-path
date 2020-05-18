@@ -55,6 +55,7 @@ public class randomGenerator {
         ArrayList<Integer> cost = new ArrayList();
         //Generate meta graph
         ArrayList<int[]> metaGraph = generateMeta(metaSize, rand);
+        System.out.println("Number of metaEdges: "+metaGraph.size());
         for (int[] metaEdge : metaGraph) {
             Pair<ArrayList<int[]>, ArrayList<Integer>> ret = generateh2(metaVertices[metaEdge[0]], metaEdgeSize, rand);
             int[] lastEdge = ret.getKey().get(ret.getKey().size() - 1);
@@ -75,10 +76,12 @@ public class randomGenerator {
         for (int i = 0; i < metaSize-1; i++) {
             int[] ret;
             if(i == 0){
-                int amount = rand.nextInt(metaSize-3)+2; //Atleast two outgoing
+                //int amount = rand.nextInt(metaSize-3)+2; //Atleast two outgoing
+                int amount = rand.nextInt(4)+2; //Atleast two outgoing
                 ret = getRandom(i+1,metaSize, amount, rand);
             } else {
-                int amount = rand.nextInt(metaSize-i-1)+1; //Atleast one outgoing
+                //int amount = rand.nextInt(metaSize-i-1)+1
+                int amount = rand.nextInt(Math.min(4,metaSize-i-1))+1; //Atleast one outgoing
                 ret = getRandom(i+1,metaSize, amount, rand);
             }
             for (int v: ret) {
@@ -94,21 +97,20 @@ public class randomGenerator {
     private static Pair<ArrayList<int[]>,ArrayList<Integer>> generateh2(int sourceIndex, int size, Random rand){
         ArrayList<Integer> cost = new ArrayList<>();
         ArrayList<int[]> h2 = new ArrayList<>();
-        int vertices = (int) (rand.nextInt((int) ( size*0.5) ) + size*0.75);
         int maxTailSize = rand.nextInt(5)+1;
-        for (int i = 1; i <= vertices; i++) {
+        for (int i = 1; i <= size; i++) {
             int tailSize = maxTailSize;
             if(i-maxTailSize < 0) tailSize = maxTailSize + (i-maxTailSize);
             int[] edge = new int[1+tailSize];
             edge[0] = ID+i;
-            cost.add(rand.nextInt(100)+1);
+            cost.add(rand.nextInt(4)+1);
             for (int j = 1; j <= tailSize; j++) {
                 if(i-j == 0) edge[j] = sourceIndex;
                 else edge[j] = ID+(i-j);
             }
             h2.add(edge);
         }
-        ID += vertices;
+        ID += size;
 
         return new Pair<>(h2, cost);
     }
@@ -135,14 +137,14 @@ public class randomGenerator {
         int toCol = Math.min(verticesWidth - 1, col + radius);
         int newCol = rand.nextInt(toCol-fromCol+1)+fromCol;
         if(topological){
-            toRow = Math.min(verticesHeight,fromRow+2*radius-(newCol-fromCol));
+            toRow = Math.min(verticesHeight-1,fromRow+2*radius-(newCol-fromCol));
         } else {
             toRow = Math.min(verticesHeight - 1, row + radius);
         }
         int newRow = rand.nextInt(toRow-fromRow+1) + fromRow;
         if(newCol == col && newRow == row)
             return getLocalVertex(vertex, verticesWidth, verticesHeight, radius, rand, topological);
-        return newCol*verticesWidth + newRow;
+        return newRow*verticesWidth + newCol;
     }
 
     public static int[] convertListToArr(ArrayList<Integer> o1){
@@ -160,5 +162,4 @@ public class randomGenerator {
         }
         return ret;
     }
-
 }
