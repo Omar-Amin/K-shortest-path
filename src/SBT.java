@@ -26,10 +26,6 @@ public class SBT {
         PQ.insert(vertex);
         while(PQ.size > 0){
             vertex = PQ.popMin();
-            if((Integer) vertex[0] == 422){
-                System.out.println("Lets go!");
-            }
-            System.out.println(vertex[0] + ": " + PQ.size);
             if((int) vertex[0] == target && costFunction.functionType != function.min){
                 return getPath(source, target);
             }

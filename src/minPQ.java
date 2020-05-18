@@ -68,9 +68,6 @@ public class minPQ {
     }
 
     public boolean contains(int obj){
-        if(obj == 423) {
-            System.out.println("Lets Go!");
-        }
         return index.get(obj) != null;
     }
 
