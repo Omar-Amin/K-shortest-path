@@ -22,7 +22,7 @@ public class Dijkstra {
         PQ.insert(s);
 
         while(PQ.size > 0){
-            Number[] u = PQ.popMin();
+            Object[] u = PQ.popMin();
             if((int) u[0] == target){
                 getPath(source,target);
                 return path;

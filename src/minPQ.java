@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class minPQ {
-    ArrayList<Number[]> heap;
-    HashMap<Integer, Integer> index;
+    ArrayList<Object[]> heap;
+    HashMap<Object, Integer> index;
     int size;
 
 
@@ -26,7 +26,7 @@ public class minPQ {
         }
     }
 
-    public void decreaseValue(int id, double value){
+    public void decreaseValue(Object id, double value){
         int i = index.get(id);
         heap.get(i)[1] = value;
         int parent = (i-1)/2;
@@ -37,10 +37,10 @@ public class minPQ {
         }
     }
 
-    public void insert(Number[] obj){
+    public void insert(Object[] obj){
         int i = this.size++;
         heap.add(obj);
-        index.put((Integer) obj[0],i);
+        index.put(obj[0],i);
         int parent = (i-1)/2;
         while(i > 0 && (double) heap.get(parent)[1] > (double) heap.get(i)[1]) {
             exchange(i,parent);
@@ -49,17 +49,17 @@ public class minPQ {
         }
     }
 
-    public Number[] getMin(){
+    public Object[] getMin(){
         return heap.get(0);
     }
 
-    public Number[] popMin(){
+    public Object[] popMin(){
         if(size == 0) return null;
-        Number[] ret = heap.get(0);
+        Object[] ret = heap.get(0);
         index.remove(ret[0]);
         if(size > 1) {
             heap.set(0, heap.remove(size-1));
-            index.put((Integer) heap.get(0)[0],0);
+            index.put(heap.get(0)[0],0);
         }
         else heap.remove(0);
         size--;
@@ -72,16 +72,16 @@ public class minPQ {
     }
 
     public void exchange(int swap1, int swap2){
-        Number[] swap1Obj = heap.get(swap1);
-        Number[] swap2Obj = heap.get(swap2);
+        Object[] swap1Obj = heap.get(swap1);
+        Object[] swap2Obj = heap.get(swap2);
         heap.set(swap2, swap1Obj);
         heap.set(swap1, swap2Obj);
-        index.put((Integer) swap1Obj[0],swap2);
-        index.put((Integer) swap2Obj[0],swap1);
+        index.put(swap1Obj[0],swap2);
+        index.put(swap2Obj[0],swap1);
     }
 
     public void checkTree(int[] poppedElement){
-        for (Number[] i:heap) {
+        for (Object[] i:heap) {
             if((double) i[1] < (double) poppedElement[1]) System.out.println("Error in minPQ");
         }
     }
