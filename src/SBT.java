@@ -37,7 +37,7 @@ public class SBT {
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
                         if(!PQ.contains(y)){
-                            if(g.getVertexCost(y) < Integer.MAX_VALUE){
+                            if(g.getVertexCost(y) < Double.MAX_VALUE){
                                 for (int tail:g.FS(y)) {
                                     kj[tail]--;
                                 }
@@ -53,7 +53,7 @@ public class SBT {
                 }
             }
         }
-        if(g.getVertexCost(g.vertexLookup.length-1) != Integer.MAX_VALUE){
+        if(g.getVertexCost(g.vertexLookup.length-1) != Double.MAX_VALUE){
             return getPath(source,target);
         }
         return null;
