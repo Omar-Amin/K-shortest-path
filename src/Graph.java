@@ -1,17 +1,18 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.nio.ByteBuffer;
 
 public class Graph {
     int[] edgeLookup;
     int[] vertexLookup;
-    int[] vertexTable;
+    byte[] vertexTable;
     int[] edgeTable;
-    private double[] vertexCost;
     public Long seed;
 
     //Constructor for the graph class
     public Graph() {}
+    /*
     public void matrixInput(int[][] Matrix, int[] edgePrices){
         int verticesCount = Matrix.length;
         int edgesCount = Matrix[0].length;
@@ -39,7 +40,8 @@ public class Graph {
             }
         }
         edgeTable = new int[count+edgesCount]; //[Head, Cost, Tail,...]
-        vertexTable = new int[count+(verticesCount*2)]; //[cost,IngoingCount,Ingoingedges, outgoing]
+        vertexTable = new byte[Double.BYTES * count + Integer.BYTES*verticesCount*2]; //[IngoingCount,Ingoingedges, outgoing]
+        //vertexTable = new int[count+verticesCount*2]; //[Cost, IngoingCount, Ingoingedges, outgoing]
         for (int i = 1; i < edgesCount; i++) {
             edgeLookup[i] = edgeLookup[i-1] + edgeIndicatorCount[i-1] + 2;
         }
@@ -49,6 +51,7 @@ public class Graph {
             vertexLookup[vertex] = outgoingWriteIndex;
             ingoingCount = vertexIngoingCount[vertex];
             vertexTable[outgoingWriteIndex] = -1; //Set cost to not initialized value (-1)
+            Integer.toBinaryString(ingoingCount);
             vertexTable[outgoingWriteIndex+1] = ingoingCount; //Set the number of ingoing edges to this vertex
             outgoingWriteIndex += ingoingCount+2;
             for (int edge = 0; edge < edgesCount; edge++) {
@@ -65,7 +68,7 @@ public class Graph {
                 }
             }
         }
-    }
+    }*/
 
 
     //Der skal nok kigges på om denne funktion kan optimeres
@@ -93,7 +96,6 @@ public class Graph {
         }
         //Er kun implementeret så det virker, er slet ikke optimeret:
         vertexLookup = new int[max+1];
-        vertexCost = new double[max+1];
         int count = 0;
         int[] vertexIngoingCount = new int[max+1];
         int[] vertexOutgoingCount= new int[max+1];
@@ -105,26 +107,51 @@ public class Graph {
             }
         }
         //Setup vertexLookup table
-        vertexTable = new int[count + ((max+1)*2)];
+        vertexTable = new byte[(max+1)*(8+4)+count*4];
         for (int i = 0; i < max; i++) {
-            vertexLookup[i+1] = vertexLookup[i] + 2 + vertexIngoingCount[i] + vertexOutgoingCount[i];
-            vertexTable[vertexLookup[i]+1] = vertexIngoingCount[i];
+            vertexLookup[i+1] = vertexLookup[i] + 8 + 4 + vertexIngoingCount[i]*4 + vertexOutgoingCount[i]*4;
+            //Write ingoing count for vertex
+            writeInt(vertexTable,vertexIngoingCount[i],vertexLookup[i]+8);
         }
-        vertexTable[vertexLookup[max]+1] = vertexIngoingCount[max];
+        //Write ingoing count for vertex
+        writeInt(vertexTable,vertexIngoingCount[max],vertexLookup[max]+8);
         //Fill in the vertexTable
         for (int i = 0; i < edgesCount; i++) {
             int[] edge = edges[i];
             int head = edge[0];
-            vertexTable[vertexLookup[head]+2 + (--vertexIngoingCount[head])] = i;
+            //add ingoing edge to vertex
+            writeInt(vertexTable,i,vertexLookup[head]+12+(--vertexIngoingCount[head])*4);
             for (int j = 1; j < edge.length; j++) {
                 int v = edge[j];
                 if(v >= max) {
-                    vertexTable[vertexTable.length - (vertexOutgoingCount[v]--)] = i;
+                    //Add outgoing edge to vertex
+                    writeInt(vertexTable,i,vertexTable.length-(vertexOutgoingCount[v]--)*4);
                 }
-                else vertexTable[vertexLookup[v+1]-(vertexOutgoingCount[v]--)] = i;
+                else {
+                    //Add outgoing edge to vertex
+                    writeInt(vertexTable,i,vertexLookup[v+1]-(vertexOutgoingCount[v]--)*4);
+                }
             }
         }
         this.edgeTable = randomGenerator.convertListToArr(tempEdgeTable);
+    }
+    
+    public void writeInt(byte[] b, int toWrite, int writeAt){
+        ByteBuffer buffer = ByteBuffer.wrap(b,writeAt,4);
+        buffer.putInt(toWrite);
+    }
+
+    public void writeDouble(byte[] b, double toWrite, int writeAt){
+        ByteBuffer buffer = ByteBuffer.wrap(b,writeAt,10);
+        buffer.putDouble(toWrite);
+    }
+
+    public int readInt(byte[] b,int readAt){
+        return ByteBuffer.wrap(b,readAt,4).getInt();
+    }
+
+    public double readDouble(byte[] b,int readAt){
+        return ByteBuffer.wrap(b,readAt,8).getDouble();
     }
 
     public int[] tail(int edge){
@@ -144,30 +171,53 @@ public class Graph {
         return edgeTable[edgeLookup[edge]];
     }
 
+    public void readVertex(int vertex){
+        int startIndex = vertexLookup[vertex];
+        double cost = readDouble(vertexTable,startIndex);
+        int ingoing = readInt(vertexTable,startIndex+8);
+        String in = "Into my bed [";
+        for (int i = 0; i < ingoing; i++) {
+            in  += readInt(vertexTable,startIndex+8+4+i*4) + ", ";
+        }
+        System.out.println(Arrays.toString(FS(vertex)));
+        int nextIndex;
+        if(vertex+1 < vertexLookup.length) nextIndex=vertexLookup[vertex+1];
+        else nextIndex = vertexTable.length;
+        int outgoing = ((nextIndex -startIndex - ingoing*4 - 8 - 4)/4);
+        String out = "Out of my swamp! [";
+        for (int i = 0; i < outgoing; i++) {
+            out += readInt(vertexTable,startIndex + ingoing*4 + 8 + 4 + i*4) + ", ";
+        }
+        System.out.println(cost);
+        System.out.println(out);
+        System.out.println(in);
+    }
+
     public int[] FS(int vertex){
         int startIndex = vertexLookup[vertex];
         int nextIndex;
         if(vertex+1 < vertexLookup.length) nextIndex=vertexLookup[vertex+1];
         else nextIndex = vertexTable.length;
         int size = nextIndex - startIndex;
-        int ingoingEdges = vertexTable[startIndex+1];
-        int outgoingEdges = size - ingoingEdges - 2;
+        int ingoingEdges = readInt(vertexTable,startIndex+8);
+        int outgoingEdges = (size - ingoingEdges*4 - 8 - 4)/4;
         int[] ret = new int[outgoingEdges];
-        startIndex += ingoingEdges+2;
+        startIndex += ingoingEdges*4+4+8;
         int edge;
         for(int i = 0; i<outgoingEdges;i++){
-            edge = vertexTable[startIndex+i];
+            edge = readInt(vertexTable,startIndex+i*4);
             ret[i] = edge;
         }
         return ret;
     }
+
     public int[] BS(int vertex){
         int startIndex = vertexLookup[vertex];
-        int ingoingEdges = vertexTable[startIndex+1];
+        int ingoingEdges = readInt(vertexTable,startIndex+8);
         int[] ret = new int[ingoingEdges];
         int edge;
         for (int i = 0; i < ingoingEdges; i++) {
-            edge = vertexTable[startIndex+2+i];
+            edge = readInt(vertexTable,startIndex+8+4+i*4);
             ret[i] = edge;
         }
         return ret;
@@ -198,13 +248,13 @@ public class Graph {
     }
 
     public double getVertexCost(int vertex){
-        return vertexCost[vertex];
+        return readDouble(vertexTable,vertexLookup[vertex]);
     }
     public int getEdgeCost(int edge){
         return edgeTable[edgeLookup[edge]+1];
     }
 
     public void setVertexCost(int vertex, double newcost){
-        vertexCost[vertex] = newcost;
+        writeDouble(vertexTable,newcost,vertexLookup[vertex]);
     }
 }
