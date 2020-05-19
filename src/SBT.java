@@ -5,7 +5,6 @@ public class SBT {
     private int[] predecessor;
     private final WeightingFunctions costFunction;
     private HashMap<Integer,Integer> deleted;
-    private int deletedPosition = 0;
     private double pathCost;
 
     public SBT(Graph g, function toUse){
@@ -84,7 +83,6 @@ public class SBT {
         }
         Collections.reverse(path);
         this.pathCost = g.getVertexCost(target);
-        path.add(deletedPosition++);
         return path;
     }
 

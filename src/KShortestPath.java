@@ -17,43 +17,44 @@ public class KShortestPath {
         skip.put(-1,0);
         ArrayList<Integer> pi = sbt.run(s,t,skip);
         if(pi == null) return false; //No path found
-        Object[] pathObj = {pi,sbt.getPathCost()};
+        Object[] pathObj = {pi,sbt.getPathCost(),0};
         L.insert(pathObj);
         deletedEdges.add(sbt.getDeleted());
         //NOTE: Each path returned has a cost for the path in the second last element, and the last
         // element is the index of where the deletedEdges is stored for that path in the arraylist
+        int deletedPosition = 1;
         for (int k = 1; k <= K; k++) {
             if(L.size == 0){
                 break;
             }
             pathObj = L.popMin();
-            paths.add(pathObj);
             ArrayList<Integer> path = (ArrayList<Integer>) pathObj[0];
+            HashMap<Integer,Integer> alreadyDeleted = deletedEdges.get((int) pathObj[2]);
+            paths.add(new Object[] {path,pathObj[1]});
             if(k == K){
                 break;
             }
-            HashMap<Integer,Integer> alreadyDeleted = deletedEdges.get(path.get(path.size()-1));
             // size - 3 because the last element is index for hashmap and 2. last element is for cost
-            for (HashMap<Integer,Integer> removed :backBranching(alreadyDeleted,path,(path.size()-2) - alreadyDeleted.get(-1))) {
+            for (HashMap<Integer,Integer> removed :backBranching(alreadyDeleted,path,(path.size()-1) - alreadyDeleted.get(-1))) {
                 pi = sbt.run(s, t, removed);
                 if(pi != null){
-                    Object[] newPathObj = {pi,sbt.getPathCost()};
+                    Object[] newPathObj = {pi,sbt.getPathCost(),deletedPosition++};
                     L.insert(newPathObj);
-                    deletedEdges.add(sbt.getDeleted());
+                    deletedEdges.add(removed);
                 }
             }
         }
+
         return true;
     }
+
     private ArrayList<HashMap<Integer,Integer>> backBranching(HashMap<Integer,Integer> alreadyDeletedEdges, ArrayList<Integer> hyperpath, int startFrom) {
         ArrayList<HashMap<Integer,Integer>> setOfHypergraphs = new ArrayList<>();
-        int counter = (hyperpath.size()-2)-startFrom;
+        int counter = (hyperpath.size()-1)-startFrom;
         for (int i = startFrom; i >= 0; i--) {
             HashMap<Integer,Integer> edgesRemoved = new HashMap<>(alreadyDeletedEdges);
-
             int edge = hyperpath.get(i);
             edgesRemoved.put(edge,1);
-
             // starting for size-3 because the last two elements are edges in the path but indexes of something else (explained above)
             for (int j = startFrom; j >= i+1 ; j--) {
                 int fixedEdge = hyperpath.get(j);
