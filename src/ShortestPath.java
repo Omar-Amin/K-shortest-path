@@ -23,7 +23,7 @@ public class ShortestPath {
             edge.setKj(0);
         }
         source.setCost(0);
-        Object[] first = {source.getId(),source.getCost(),source};
+        Object[] first = {source.getId(),0,source};
         pq.insert(first);
         int count = 0;
         int lcount = 0;

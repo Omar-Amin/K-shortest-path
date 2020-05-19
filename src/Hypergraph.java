@@ -48,7 +48,7 @@ public class Hypergraph {
             edge1.setCost(cost[i]);
             edge1.setHead(Vertices.get(edge[0]));
             Vertices.get(edge[0]).addIngoingEdges(edge1);
-            for (int j = edge.length-1; j > 0 ; j--) {
+            for (int j = 1; j < edge.length ; j++) {
                 edge1.addToTail(Vertices.get(edge[j]));
                 Vertices.get(edge[j]).addOutgoingEdges(edge1);
             }

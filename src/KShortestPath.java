@@ -21,10 +21,10 @@ public class KShortestPath {
      * */
     public boolean run(Vertex s, Vertex t,int K, function toUse, boolean runUntilEmpty){
         ShortestPath sbt = new ShortestPath(toUse);
-       minPQ L = new minPQ();
-        Hyperpath pi = sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty);
-        if(pi == null) return false; //No path exists
-        Object[] newPi = {pi,pi.getCost()};
+        minPQ L = new minPQ();
+        Hyperpath first = sbt.SBT(H,s,t,new HashMap<>(),runUntilEmpty);
+        if(first == null) return false; //No path exists
+        Object[] newPi = {first,first.getCost()};
         L.insert(newPi);
         for (int k = 1; k <= K; k++) {
             if(L.size == 0){
@@ -36,7 +36,7 @@ public class KShortestPath {
                 break;
             }
             for (HashMap<Integer,Integer> removed :backBranching(path.getDeletedEdges(),path.getPath(),path.getVersion())) {
-                pi = sbt.SBT(H,s,t,removed,runUntilEmpty);
+                Hyperpath pi = sbt.SBT(H,s,t,removed,runUntilEmpty);
                 if(pi != null){
                     // the version is stored in key -1
                     pi.setVersion(pi.getVersion()-removed.get(-1));
