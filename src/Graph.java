@@ -161,9 +161,7 @@ public class Graph {
         else nextIndex = edgeTable.length;
         int size = nextIndex - startIndex;
         int[] ret = new int[size];
-        for(int i = size-1; i>=0;i--){
-            ret[i] = edgeTable[startIndex+size-1-i];
-        }
+        System.arraycopy(edgeTable,startIndex,ret,0,size);
         return ret;
     }
 
