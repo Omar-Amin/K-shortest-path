@@ -61,7 +61,7 @@ public class KShortestPath {
                 int head = H.head(hyperpath.get(j));
                 int[] index = H.BS(head);
                 for (int k = 0; k < index[1]; k++) {
-                    int e = H.vertexTable[index[0]+2+k];
+                    int e = H.readInt(index[0]+2+k);
                     if(e != fixedEdge){
                         edgesRemoved.put(e,1);
                     }
