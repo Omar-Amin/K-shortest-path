@@ -26,23 +26,26 @@ public class WeightingFunctions {
 
     private double sumFunction(int edge){
         double sum = graph.getEdgeCost(edge);
-        for (int vertex: graph.tail(edge)) {
-            sum += graph.getVertexCost(vertex);
+        int[] index = graph.tail(edge);
+        for (int i = 0; i < index[1]; i++) {
+            sum += graph.getVertexCost(graph.edgeTable[index[0]+i]);
         }
         return sum;
     }
     private double distanceFunction(int edge){
         double max = -1;
-        for (int vertex: graph.tail(edge)) {
-            double vertexPrice = graph.getVertexCost(vertex);
+        int[] index = graph.tail(edge);
+        for (int i = 0; i < index[1]; i++) {
+            double vertexPrice = graph.getVertexCost(graph.edgeTable[index[0]+i]);
             if(max < vertexPrice || max == -1) max = vertexPrice;
         }
         return max + graph.getEdgeCost(edge);
     }
     private double minFunction(int edge){
         double min = -1;
-        for (int vertex: graph.tail(edge)) {
-            double vertexPrice = graph.getVertexCost(vertex);
+        int[] index = graph.tail(edge);
+        for (int i = 0; i < index[1]; i++) {
+            double vertexPrice = graph.getVertexCost(graph.edgeTable[index[0]+i]);
             if(min > vertexPrice || min == -1) min = vertexPrice;
         }
         return min + graph.getEdgeCost(edge);

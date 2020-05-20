@@ -21,24 +21,29 @@ public class SBT {
             g.setVertexCost(i,Double.MAX_VALUE);
             this.predecessor[i] = -1;
         }
-        Object[] vertex = {source,0};
-        g.setVertexCost(source,0);
-        PQ.insert(vertex);
+        Object[] vertexObj = {source,0.0};
+        g.setVertexCost(source,0.0);
+        PQ.insert(vertexObj);
         while(PQ.size > 0){
-            vertex = PQ.popMin();
-            if((int) vertex[0] == target && costFunction.functionType != function.min){
+            vertexObj = PQ.popMin();
+            int vertex = (int) vertexObj[0];
+            if(vertex == target && costFunction.functionType != function.min){
                 return getPath(source, target);
             }
-            for (int edge:g.FS((int) vertex[0])) {
+            int[] indexes = g.FS(vertex);
+            for (int i = 0; i < indexes[1]; i++) {
+                int edge = g.vertexTable[indexes[0]+i];
                 if(skip.get(edge) != null) continue;
                 kj[edge]++;
-                if(kj[edge] == g.tail(edge).length){
+                if(kj[edge] == g.tail(edge)[1]){
                     double f = this.costFunction.run(edge);
                     int y = g.head(edge);
                     if (g.getVertexCost(y) > f){
                         if(!PQ.contains(y)){
                             if(g.getVertexCost(y) < Double.MAX_VALUE){
-                                for (int tail:g.FS(y)) {
+                                int[] yfs = g.FS(y);
+                                for (int j = 0; j < yfs[1]; j++) {
+                                    int tail = g.vertexTable[yfs[0]+i];
                                     kj[tail]--;
                                 }
                             }
@@ -71,9 +76,9 @@ public class SBT {
             if (vertex == source){
                 continue;
             }
-            for (int tail : g.tail(this.predecessor[vertex])) {
-                // decrease each value for the vertex if the edge polled out
-                // is a part of its outgoing edge
+            int[] index = g.tail(this.predecessor[vertex]);
+            for (int i = 0; i < index[1]; i++) {
+                int tail = g.edgeTable[index[0]+i];
                 in.put(tail,in.get(tail) - 1);
                 if(in.get(tail) <= 0 && tail != source){
                     zeroIn.insert(new Object[] {tail,(double) tail});
@@ -97,7 +102,9 @@ public class SBT {
             int edge = this.predecessor[target];
             if(edges.get(edge) != null) continue;
             edges.put(edge,0);
-            for (int v:g.tail(edge)){
+            int[] index = g.tail(this.predecessor[target]);
+            for (int i = 0; i < index[1]; i++) {
+                int v = g.edgeTable[index[0]+i];
                 in.putIfAbsent(v,0);
                 in.put(v,in.get(v)+1);
                 if(this.predecessor[v] != -1) {
