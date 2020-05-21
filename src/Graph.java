@@ -107,8 +107,8 @@ public class Graph {
         //Setup vertexLookup table
         vertexTable = new int[count + ((max+1)*2)];
         for (int i = 0; i < max; i++) {
-            vertexLookup[i+1] = vertexLookup[i] + 2 + vertexIngoingCount[i] + vertexOutgoingCount[i];
-            vertexTable[vertexLookup[i]+1] = vertexIngoingCount[i];
+            vertexLookup[i+1] = vertexLookup[i] + 8 + 4 + vertexIngoingCount[i]*4 + vertexOutgoingCount[i]*4;
+            writeInt(vertexLookup[i]+8,vertexIngoingCount[i]);
         }
         vertexTable[vertexLookup[max]+1] = vertexIngoingCount[max];
         //Fill in the vertexTable
@@ -152,8 +152,8 @@ public class Graph {
         return new int[]{startIndex,outgoingEdges};
     }
     public int[] BS(int vertex){
-        int startIndex = vertexLookup[vertex];
-        int ingoingEdges = vertexTable[startIndex+1];
+        int startIndex = vertexLookup[vertex]+12;
+        int ingoingEdges = readInt(startIndex-4);
         return new int[]{startIndex,ingoingEdges};
     }
 
