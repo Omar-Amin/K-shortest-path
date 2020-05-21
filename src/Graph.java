@@ -110,7 +110,7 @@ public class Graph {
         //vertexTable = new byte[(max+1)*(8+4)+count*4];
         for (int i = 0; i < max; i++) {
             vertexLookup[i+1] = vertexLookup[i] + 8 + 4 + vertexIngoingCount[i]*4 + vertexOutgoingCount[i]*4;
-            //Write ingoing count for vertex
+            writeInt(vertexLookup[i]+8,vertexIngoingCount[i]);
         }
         //Write ingoing count for vertex
         writeInt(vertexLookup[max]+8,vertexIngoingCount[max]);
@@ -176,8 +176,8 @@ public class Graph {
         return new int[]{startIndex,outgoingEdges};
     }
     public int[] BS(int vertex){
-        int startIndex = vertexLookup[vertex];
-        int ingoingEdges = readInt(startIndex+8);
+        int startIndex = vertexLookup[vertex]+12;
+        int ingoingEdges = readInt(startIndex-4);
         return new int[]{startIndex,ingoingEdges};
     }
 
