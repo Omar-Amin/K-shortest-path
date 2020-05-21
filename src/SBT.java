@@ -32,7 +32,7 @@ public class SBT {
             }
             int[] indexes = g.FS(vertex);
             for (int i = 0; i < indexes[1]; i++) {
-                int edge = g.readInt(indexes[0]+i*4);
+                int edge = g.vertexTable[indexes[0]+i];
                 if(skip.get(edge) != null) continue;
                 kj[edge]++;
                 if(kj[edge] == g.tail(edge)[1]){
@@ -43,7 +43,7 @@ public class SBT {
                             if(g.getVertexCost(y) < Double.MAX_VALUE){
                                 int[] yfs = g.FS(y);
                                 for (int j = 0; j < yfs[1]; j++) {
-                                    int tail = g.readInt(yfs[0]+i*4);
+                                    int tail = g.vertexTable[yfs[0]+i];
                                     kj[tail]--;
                                 }
                             }
