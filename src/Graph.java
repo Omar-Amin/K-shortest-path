@@ -39,7 +39,7 @@ public class Graph {
             }
         }
         edgeTable = new int[count+edgesCount]; //[Head, Cost, Tail,...]
-        vertexTable = new int[count+(verticesCount*2)]; //[cost,IngoingCount,Ingoingedges, outgoing]
+        vertexTable = new int[count+(verticesCount)]; //[IngoingCount,Ingoingedges, outgoing]
         for (int i = 1; i < edgesCount; i++) {
             edgeLookup[i] = edgeLookup[i-1] + edgeIndicatorCount[i-1] + 2;
         }
@@ -48,9 +48,8 @@ public class Graph {
         for(int vertex = 0; vertex < verticesCount;vertex++) {
             vertexLookup[vertex] = outgoingWriteIndex;
             ingoingCount = vertexIngoingCount[vertex];
-            vertexTable[outgoingWriteIndex] = -1; //Set cost to not initialized value (-1)
-            vertexTable[outgoingWriteIndex+1] = ingoingCount; //Set the number of ingoing edges to this vertex
-            outgoingWriteIndex += ingoingCount+2;
+            vertexTable[outgoingWriteIndex] = ingoingCount; //Set the number of ingoing edges to this vertex
+            outgoingWriteIndex += ingoingCount+1;
             for (int edge = 0; edge < edgesCount; edge++) {
                 int indicator = Matrix[vertex][edge];
                 if (indicator == 1) {
@@ -91,7 +90,6 @@ public class Graph {
                 if(tail>max) max = tail;
             }
         }
-        //Er kun implementeret så det virker, er slet ikke optimeret:
         vertexLookup = new int[max+1];
         vertexCost = new double[max+1];
         int count = 0;
@@ -105,17 +103,17 @@ public class Graph {
             }
         }
         //Setup vertexLookup table
-        vertexTable = new int[count + ((max+1)*2)];
+        vertexTable = new int[count + ((max+1))];
         for (int i = 0; i < max; i++) {
-            vertexLookup[i+1] = vertexLookup[i] + 2 + vertexIngoingCount[i] + vertexOutgoingCount[i];
-            vertexTable[vertexLookup[i]+1] = vertexIngoingCount[i];
+            vertexLookup[i+1] = vertexLookup[i] + 1 + vertexIngoingCount[i] + vertexOutgoingCount[i];
+            vertexTable[vertexLookup[i]] = vertexIngoingCount[i];
         }
-        vertexTable[vertexLookup[max]+1] = vertexIngoingCount[max];
+        vertexTable[vertexLookup[max]] = vertexIngoingCount[max];
         //Fill in the vertexTable
         for (int i = 0; i < edgesCount; i++) {
             int[] edge = edges[i];
             int head = edge[0];
-            vertexTable[vertexLookup[head]+2 + (--vertexIngoingCount[head])] = i;
+            vertexTable[vertexLookup[head]+1 + (--vertexIngoingCount[head])] = i;
             for (int j = 1; j < edge.length; j++) {
                 int v = edge[j];
                 if(v >= max) {
@@ -146,15 +144,15 @@ public class Graph {
         if(vertex+1 < vertexLookup.length) nextIndex=vertexLookup[vertex+1];
         else nextIndex = vertexTable.length;
         int size = nextIndex - startIndex;
-        int ingoingEdges = vertexTable[startIndex+1];
-        int outgoingEdges = size - ingoingEdges - 2;
-        startIndex += ingoingEdges+2;
+        int ingoingEdges = vertexTable[startIndex];
+        int outgoingEdges = size - ingoingEdges - 1;
+        startIndex += ingoingEdges+1;
         return new int[]{startIndex,outgoingEdges};
     }
     public int[] BS(int vertex){
         int startIndex = vertexLookup[vertex];
-        int ingoingEdges = vertexTable[startIndex+1];
-        return new int[]{startIndex,ingoingEdges};
+        int ingoingEdges = vertexTable[startIndex];
+        return new int[]{startIndex+1,ingoingEdges};
     }
 
     public Graph convertToNormalGraph(){
