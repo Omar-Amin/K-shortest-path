@@ -3,11 +3,11 @@ import javafx.util.Pair;
 import java.util.*;
 
 public class randomGenerator {
-    public static Pair<int[][], int[]> normalGenerator(int amountEdges, int verticesWidth, int verticesHeight, int locality, boolean topological){
-        return normalGenerator(amountEdges, verticesWidth, verticesHeight, locality, topological,-1L);
+    public static Pair<int[][], int[]> uniformGenerator(int amountEdges, int verticesWidth, int verticesHeight, int locality, boolean topological){
+        return uniformGenerator(amountEdges, verticesWidth, verticesHeight, locality, topological,-1L);
     }
 
-    public static Pair<int[][], int[]> normalGenerator(int amountEdges, int verticesWidth, int verticesHeight, int locality, boolean topological, Long seed){
+    public static Pair<int[][], int[]> uniformGenerator(int amountEdges, int verticesWidth, int verticesHeight, int locality, boolean topological, Long seed){
         int[][] graph = new int[amountEdges][];
         int[] cost = new int[amountEdges];
         Random rand = new Random();
