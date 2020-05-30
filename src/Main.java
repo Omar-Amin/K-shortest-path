@@ -33,7 +33,7 @@ public class Main {
     }
 
     public static void sbtTest(){
-        Pair<int[][], int[]> p = randomGenerator.normalGenerator(500000,3000,50,5,false, 2337978380381156462L);
+        Pair<int[][], int[]> p = randomGenerator.uniformGenerator(500000,3000,50,5,false, 2337978380381156462L);
         Hypergraph h = new Hypergraph().arraylistInput(p.getKey(),p.getValue());
         ShortestPath shortestPath = new ShortestPath(function.sum);
         Hyperpath pi = shortestPath.SBT(h,h.getSource(),h.getTarget(), new HashMap<>(),false);
@@ -52,7 +52,7 @@ public class Main {
     }
 
     private static void autoTestYen(){
-        Pair<int[][], int[]> p = randomGenerator.normalGenerator(40000,100,100,5,false,-1743747320800128377L);
+        Pair<int[][], int[]> p = randomGenerator.uniformGenerator(40000,100,100,5,false,-1743747320800128377L);
 
         Hypergraph h = new Hypergraph().arraylistInput(p.getKey(),p.getValue());
         int[] s = {15};
